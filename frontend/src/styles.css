@@ -442,6 +442,8 @@ h3 {
   display: flex;
   align-items: center;
   gap: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .brand-link {
@@ -452,6 +454,22 @@ h3 {
   font-size: 32px;
   letter-spacing: -1.5px;
   text-transform: lowercase;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .brand-link {
+    font-size: 24px;
+    letter-spacing: -1px;
+  }
+  .logo-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  .header .brand {
+    gap: 8px;
+  }
 }
 
 .brand-link:hover {
