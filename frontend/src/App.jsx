@@ -295,29 +295,27 @@ export default function App() {
       </a>
       <header className="header">
         <div className="inner">
-          <div className="header-top">
-            <div className="brand">
-              <span className="logo-box" aria-hidden="true">
-                K
-              </span>
-              <Link to="/" className="brand-link">
-                K-Statra
-              </Link>
-            </div>
-            <nav className="nav" aria-label="Primary">
-              {navItems.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.to === '/'}
-                  className={({ isActive }) => (isActive ? 'active' : undefined)}
-                  onClick={() => track('nav_click', { target: item.to })}
-                >
-                  {t(item.key)}
-                </NavLink>
-              ))}
-            </nav>
+          <div className="brand">
+            <span className="logo-box" aria-hidden="true">
+              K
+            </span>
+            <Link to="/" className="brand-link">
+              K-Statra
+            </Link>
           </div>
+          <nav className="nav" aria-label="Primary">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === '/'}
+                className={({ isActive }) => (isActive ? 'active' : undefined)}
+                onClick={() => track('nav_click', { target: item.to })}
+              >
+                {t(item.key)}
+              </NavLink>
+            ))}
+          </nav>
           <div className="controls-row">
             <div className="control-group" aria-label="Language selector">
               <span className="control-icon" aria-hidden="true">
