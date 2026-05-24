@@ -134,11 +134,16 @@ export class PartnersService {
       if (!skipLLM && hasRegion && (hasBuyerIntent || hasSellerIntent)) {
         forceWebSearch = true;
         try {
+          let timeoutId: NodeJS.Timeout;
           const intentPromise = this.extractSearchIntent(q);
-          const timeoutPromise = new Promise<null>((_, reject) =>
-            setTimeout(() => reject(new Error('LLM Timeout')), 4000),
-          );
-          intentData = await Promise.race([intentPromise, timeoutPromise]);
+          const timeoutPromise = new Promise<null>((_, reject) => {
+            timeoutId = setTimeout(() => reject(new Error('LLM Timeout')), 4000);
+          });
+          try {
+            intentData = await Promise.race([intentPromise, timeoutPromise]);
+          } finally {
+            clearTimeout(timeoutId!);
+          }
           tavilyQuery =
             intentData?.webQuery ?? buildTavilyQuery(q, detectedIntent);
         } catch {
@@ -295,14 +300,17 @@ export class PartnersService {
 
     if (shouldFallbackToWeb && q) {
       let webResults: { results: any[]; answer?: string } = { results: [] };
+      let timeoutId: NodeJS.Timeout;
       try {
         const tavilyPromise = this.searchWeb(tavilyQuery);
-        const timeoutPromise = new Promise<typeof webResults>((_, reject) =>
-          setTimeout(() => reject(new Error('Tavily Timeout')), 7000),
-        );
+        const timeoutPromise = new Promise<typeof webResults>((_, reject) => {
+          timeoutId = setTimeout(() => reject(new Error('Tavily Timeout')), 7000);
+        });
         webResults = await Promise.race([tavilyPromise, timeoutPromise]);
       } catch (err: any) {
         this.logger.error(`[Search] Tavily error: ${err.message}`);
+      } finally {
+        clearTimeout(timeoutId!);
       }
 
       const rawResults = webResults.results || [];

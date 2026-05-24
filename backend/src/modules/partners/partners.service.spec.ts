@@ -167,10 +167,14 @@ describe('PartnersService', () => {
       jest
         .spyOn(service as any, 'searchWeb')
         .mockRejectedValue(new Error('Tavily Timeout'));
+      
+      const loggerSpy = jest.spyOn((service as any).logger, 'error').mockImplementation(() => {});
 
       await expect(
         service.search({ q: '미국 수입업체' }),
       ).resolves.toBeDefined();
+      
+      loggerSpy.mockRestore();
     });
 
     it('자동차 관련 없는 웹 결과 → score 감점', async () => {

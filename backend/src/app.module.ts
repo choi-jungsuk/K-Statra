@@ -10,12 +10,15 @@ import { BuyersModule } from './modules/buyers/buyers.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { InsightsModule } from './modules/insights/insights.module';
 import { ConsultantsModule } from './modules/consultants/consultants.module';
+import { AgentModule } from './modules/agent/agent.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [envConfig],
+      envFilePath: '../.env',
     }),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
@@ -31,6 +34,8 @@ import { ConsultantsModule } from './modules/consultants/consultants.module';
     AdminModule,
     InsightsModule,
     ConsultantsModule,
+    AgentModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

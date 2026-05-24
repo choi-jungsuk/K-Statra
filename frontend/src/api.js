@@ -9,6 +9,7 @@ async function http(path, { method = 'GET', headers = {}, body } = {}) {
       'Content-Type': 'application/json',
       ...headers,
     },
+    credentials: 'include',
     body: body ? JSON.stringify(body) : undefined,
   })
   if (!res.ok) {
@@ -99,6 +100,10 @@ export const api = {
   },
   createConsultation: (data) => http('/consultations', { method: 'POST', body: data }),
   updateConsultationStatus: (id, status) => http(`/consultations/${id}/status`, { method: 'PATCH', body: { status } }),
+  register: (data) => http('/auth/register', { method: 'POST', body: data }),
+  login: (data) => http('/auth/login', { method: 'POST', body: data }),
+  logout: () => http('/auth/logout', { method: 'POST' }),
+  getMe: () => http('/auth/me'),
 }
 
 export function newIdemKey() {

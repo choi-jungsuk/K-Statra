@@ -5,6 +5,7 @@ import { useI18n } from '../i18n/I18nProvider.jsx'
 import CompanyResultCard from '../ui/CompanyResultCard.jsx'
 import Modal from '../ui/Modal.jsx'
 import { track } from '../utils/analytics.js'
+import { useNavigate } from 'react-router-dom'
 
 const sidebarPresets = {
   partnership: [
@@ -55,7 +56,6 @@ const consultantServices = {
 }
 
 const consultantOptions = [
-  { value: 'export-agency', label: '수출대행 에이전트 (Export Agency)' },
   { value: 'regional-consulting', label: '지역전문가 컨설팅 (Regional Expert)' },
   { value: 'trade-document', label: '무역서류 지원 (Trade Documents)' },
 ]
@@ -225,6 +225,7 @@ async function searchPartners(payload) {
 }
 
 export default function PartnerSearch() {
+  const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [preview, setPreview] = useState([])
   const [loadingCompanies, setLoadingCompanies] = useState(false)
@@ -239,7 +240,7 @@ export default function PartnerSearch() {
   const [feedback, setFeedback] = useState({ rating: 0, comments: '' })
   const [feedbackStatus, setFeedbackStatus] = useState({ submitting: false, submitted: false, error: '' })
   const [consultModal, setConsultModal] = useState(false)
-  const [consultForm, setConsultForm] = useState({ name: '', email: '', details: '', serviceType: 'matching-assistant' })
+  const [consultForm, setConsultForm] = useState({ name: '', email: '', details: '', serviceType: 'regional-consulting' })
   const [consultStatus, setConsultStatus] = useState({ submitting: false, success: false, error: '' })
   const [selectedService, setSelectedService] = useState(consultantOptions[0].value)
 
@@ -459,7 +460,22 @@ export default function PartnerSearch() {
           <p style={lang === 'ko' ? { fontSize: '0.9rem', lineHeight: 1.4, marginBottom: '2rem', color: '#FFFFFF', wordBreak: 'keep-all', whiteSpace: 'nowrap' } : { fontSize: '0.9rem', marginBottom: '2rem', color: '#FFFFFF', whiteSpace: 'nowrap' }}>
             {t('dashboard_subtitle')}
           </p>
-          <div className="search-bar-container">
+          <div className="search-bar-container" style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="search-agent-pill">
+              <div className="search-agent-avatar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+                  <rect width="16" height="12" x="4" y="8" rx="2" />
+                  <path d="M12 8V4H8" />
+                  <path d="M9 13h.01" />
+                  <path d="M15 13h.01" />
+                  <path d="M10 17h4" />
+                </svg>
+                <span className="search-agent-pulse"></span>
+              </div>
+              <span className="search-agent-text">
+                {lang === 'ko' ? '비즈 파트너 발굴 에이전트' : 'B2B Matching Agent'}
+              </span>
+            </div>
             <textarea
               value={search}
               onChange={(e) => {
@@ -480,6 +496,7 @@ export default function PartnerSearch() {
               className="search-textarea"
               onFocus={(e) => (e.target.style.borderColor = '#2563eb')}
               onBlur={(e) => (e.target.style.borderColor = '#e5e7eb')}
+              style={{ paddingLeft: '220px' }} // Make room for the prefix pill inside textarea
             />
             <button
               onClick={runSearch}
@@ -487,6 +504,109 @@ export default function PartnerSearch() {
             >
               {t('search_button')}
             </button>
+          </div>
+        </section>
+
+        <section className="card agent-status-board glass" style={{ padding: '1.5rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginTop: '1.5rem', marginBottom: '0.5rem' }}>
+          <div className="board-header" style={{ gridColumn: 'span 3', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(226, 232, 240, 0.6)', paddingBottom: '0.75rem', marginBottom: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '18px' }}>🤖</span>
+              <strong style={{ fontSize: '15px', color: 'var(--fg)', fontWeight: 800 }}>
+                {lang === 'ko' ? 'K-Statra 실시간 AI 에이전트 작동 현황' : 'K-Statra Real-time AI Agent Status'}
+              </strong>
+            </div>
+            <span style={{ fontSize: '11px', color: 'var(--success)', fontWeight: 800, background: 'rgba(16, 185, 129, 0.1)', padding: '2px 8px', borderRadius: '999px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span className="search-agent-pulse" style={{ position: 'static', display: 'inline-block', width: '6px', height: '6px' }}></span>
+              SYSTEM ONLINE
+            </span>
+          </div>
+
+          {/* 에이전트 1: 파트너 발굴 */}
+          <div 
+            className="board-agent-card" 
+            onClick={() => {
+              const textarea = document.querySelector('.search-textarea');
+              if (textarea) {
+                textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                textarea.focus();
+              } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
+            style={{ cursor: 'pointer' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <div className="search-agent-avatar" style={{ background: 'var(--accent-gradient)', width: '32px', height: '32px' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ display: 'block' }}>
+                  <rect width="16" height="12" x="4" y="8" rx="2" />
+                  <path d="M12 8V4H8" />
+                  <path d="M9 13h.01" />
+                  <path d="M15 13h.01" />
+                  <path d="M10 17h4" />
+                </svg>
+                <span className="search-agent-pulse"></span>
+              </div>
+              <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
+                {lang === 'ko' ? '비즈 파트너 발굴 에이전트' : 'Partner Discovery Agent'}
+              </h4>
+            </div>
+            <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
+              {lang === 'ko' 
+                ? '사용자의 비즈니스 니즈를 정밀 분석하여 적합한 글로벌 바이어/공급망 파트너를 실시간 탐색합니다.'
+                : 'Analyzes business needs to discover optimal global buyers and supply-chain partners in real time.'}
+            </p>
+          </div>
+
+          {/* 에이전트 2: 밋업 조율 */}
+          <div 
+            className="board-agent-card" 
+            onClick={() => navigate('/schedule')}
+            style={{ cursor: 'pointer' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #4F46E5 100%)', width: '32px', height: '32px' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ display: 'block' }}>
+                  <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <span className="search-agent-pulse"></span>
+              </div>
+              <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
+                {lang === 'ko' ? '1:1 글로벌 밋업 조율 에이전트' : 'Meetup Coordinator Agent'}
+              </h4>
+            </div>
+            <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
+              {lang === 'ko' 
+                ? '매칭된 기업들과의 온라인 영상 미팅 스케줄링 및 글로벌 오프라인 전시회 부스 조율을 대행합니다.'
+                : 'Coordinates online video meetings and offline global exhibition booth schedules with matched partners.'}
+            </p>
+          </div>
+
+          {/* 에이전트 3: XRP 스마트 결제 */}
+          <div 
+            className="board-agent-card" 
+            onClick={() => navigate('/payments')}
+            style={{ cursor: 'pointer' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', width: '32px', height: '32px' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ display: 'block' }}>
+                  <rect width="20" height="14" x="2" y="5" rx="2" />
+                  <line x1="2" y1="10" x2="22" y2="10" />
+                </svg>
+                <span className="search-agent-pulse"></span>
+              </div>
+              <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
+                {lang === 'ko' ? 'XRP 스마트 계약 결제 에이전트' : 'XRP Smart Payment Agent'}
+              </h4>
+            </div>
+            <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
+              {lang === 'ko' 
+                ? '국경 없는 신속하고 안전한 XRP 원스톱 무역대금 송금 및 스마트 지갑 간편 결제를 관리합니다.'
+                : 'Manages seamless and secure cross-border XRP trade payments and smart contract settlements.'}
+            </p>
           </div>
         </section>
 
@@ -581,39 +701,79 @@ export default function PartnerSearch() {
 
 
 
-        <section className="card consultant-card">
-          <div className="row space" style={{ alignItems: 'flex-end' }}>
-            <div style={{ flex: 1, marginRight: '1rem' }}>
-              <h3>{t('assistant_service_title') || '전문가 서비스 (Expert Services)'}</h3>
-              <p className="muted small" style={{ marginBottom: '1rem' }}>
-                {t('assistant_service_desc') || '원하시는 서비스를 선택하여 전문가에게 도움을 요청하세요.'}
-              </p>
-              <label className="filter-group" style={{ marginBottom: 0 }}>
-                <span style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.5rem', display: 'block' }}>
-                  서비스 선택 (Select Service)
-                </span>
-                <select
-                  value={selectedService}
-                  onChange={(e) => setSelectedService(e.target.value)}
-                  style={{ width: '100%', maxWidth: '400px', padding: '0.6rem' }}
-                >
-                  {consultantOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+        <section className="card consultant-card" style={{ marginTop: '2rem', padding: '2.5rem 2rem' }}>
+          {/* Header area */}
+          <div className="page-agent-header" style={{ marginBottom: '12px' }}>
+            <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', width: '28px', height: '28px' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
+                <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+              </svg>
+              <span className="search-agent-pulse"></span>
             </div>
-            <Button
+            <span className="page-agent-badge-text">
+              {lang === 'ko' ? '글로벌 비즈니스 컨설턴트 에이전트' : 'Global Biz Consultant Agent'}
+            </span>
+          </div>
+
+          <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '0.5rem', marginTop: 0 }}>
+            {lang === 'ko' ? 'Global Biz Consultant의 도움이 필요하신가요?' : 'Need help from a Global Biz Consultant?'}
+          </h3>
+          <p className="muted" style={{ fontSize: '13.5px', marginBottom: '1.75rem', maxWidth: '800px', lineHeight: 1.5 }}>
+            {lang === 'ko'
+              ? '원하시는 무역 솔루션 서비스를 클릭하여 K-Statra의 현지 전문가 및 인공지능 컨설턴트에게 실시간 도움을 요청하세요.'
+              : 'Click on the trade solution service you need to request real-time help from K-Statra\'s local experts and AI consultants.'}
+          </p>
+
+          {/* Premium Service Cards Grid */}
+          <div className="consultant-services-grid">
+            
+            {/* Card 1: Regional Expert */}
+            <div 
+              className="consultant-service-card"
               onClick={() => {
-                track('consultant_service_click', { service: selectedService })
-                openConsultModal(selectedService)
+                track('consultant_service_click', { service: 'regional-consulting' })
+                openConsultModal('regional-consulting')
               }}
-              style={{ height: 'fit-content', alignSelf: 'flex-end' }}
             >
-              {t('assistant_request_button')}
-            </Button>
+              <div className="consultant-service-icon">🌍</div>
+              <div className="consultant-service-body">
+                <h4>{lang === 'ko' ? '지역전문가 컨설팅' : 'Regional Expert Consulting'}</h4>
+                <span className="consultant-service-subtitle">Regional Expert</span>
+                <p>
+                  {lang === 'ko'
+                    ? '글로벌 무역 전문가가 타겟 국가(미국, 유럽, 아시아 등)의 현지 시장 규제와 진입 장벽 분석을 맞춤 지원합니다.'
+                    : 'Get custom support from global trade experts analyzing local market regulations and entry barriers for target countries.'}
+                </p>
+                <span className="consultant-service-action">
+                  {lang === 'ko' ? '상담 신청하기 ➔' : 'Request Consultation ➔'}
+                </span>
+              </div>
+            </div>
+
+            {/* Card 2: Trade Documents */}
+            <div 
+              className="consultant-service-card"
+              onClick={() => {
+                track('consultant_service_click', { service: 'trade-document' })
+                openConsultModal('trade-document')
+              }}
+            >
+              <div className="consultant-service-icon">📄</div>
+              <div className="consultant-service-body">
+                <h4>{lang === 'ko' ? '무역서류 지원' : 'Trade Documents Helper'}</h4>
+                <span className="consultant-service-subtitle">Trade Documents</span>
+                <p>
+                  {lang === 'ko'
+                    ? 'FTA 원산지 증명서(C/O), 관세 혜택 증빙 및 NDA 등 복잡한 무역 실무 서류 작성을 AI 에이전트와 전문가가 완벽히 보조합니다.'
+                    : 'AI agents and experts assist in preparing complex trade documentation such as FTA Certificate of Origin (C/O), tariff benefits, and NDAs.'}
+                </p>
+                <span className="consultant-service-action">
+                  {lang === 'ko' ? '도움 요청하기 ➔' : 'Request Assistance ➔'}
+                </span>
+              </div>
+            </div>
+
           </div>
         </section>
 

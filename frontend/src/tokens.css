@@ -1,16 +1,40 @@
 :root {
-  --bg: #F5F6F8;
+  /* Modern Clean Light Theme with Vibrant Accents */
+  --bg: #F8FAFC;
+  --bg-secondary: #F1F5F9;
   --card: #FFFFFF;
-  --fg: #222222;
-  --fg-secondary: #666666;
-  --accent: #004C99;
-  --accent-dark: #00366D;
-  --muted: #888888;
-  --danger: #FF4B4B;
-  --border: #E8EBEF;
-  --radius: 0px; 
-  --radius-sm: 0px;
-  --radius-lg: 0px;
-  --shadow-card: 0 2px 8px rgba(0,0,0,0.04);
+  --card-glass: rgba(255, 255, 255, 0.7);
+  --fg: #0F172A;
+  --fg-secondary: #475569;
+  
+  /* Premium Indigo/Blue Gradients */
+  --accent: #4F46E5;
+  --accent-dark: #3730A3;
+  --accent-light: #818CF8;
+  --accent-gradient: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #4338CA 0%, #2563EB 100%);
+  
+  --muted: #94A3B8;
+  --danger: #EF4444;
+  --success: #10B981;
+  --warning: #F59E0B;
+  
+  --border: #E2E8F0;
+  --border-light: #F1F5F9;
+  
+  /* Soft, Modern Radii */
+  --radius-sm: 8px;
+  --radius: 12px; 
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+  
+  /* Deep, Soft Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-card-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.4);
+  
+  /* Glassmorphism Backdrop Filter */
+  --glass-blur: blur(12px);
 }
-

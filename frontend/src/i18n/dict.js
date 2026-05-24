@@ -245,7 +245,7 @@ const en = {};
 for (const key of keys) en[key] = humanize(key);
 
 Object.assign(en, {
-  nav_overview: 'Overview',
+  nav_overview: 'Dashboard',
   nav_dashboard: 'Dashboard',
   nav_analytics: 'Analytics',
   nav_my_partners: 'My Partners',
@@ -402,7 +402,7 @@ Object.assign(en, {
   tz_label_local: 'Browser local time',
   tz_label_server: 'Server UTC',
   tz_use_utc: 'Use UTC time',
-  overview_title_heading: 'Overview',
+  overview_title_heading: 'Dashboard',
   overview_subheading: 'Your business snapshot and market insights in one place.',
   issued_title: 'Issued currency payment',
   issued_docs_hint: 'See docs/payments.md for details.',
@@ -446,7 +446,7 @@ Object.assign(en, {
   search_provider_codex: 'codex',
   search_provider_antigravity: 'antigravity',
   search_provider_hybrid: 'hybrid',
-  assistant_service_title: 'Need expert help?',
+  assistant_service_title: 'Need a Global Biz Consultant?',
   assistant_service_desc: 'Select a service to request help from an expert.',
   assistant_request_button: 'Request Consultation',
   search_placeholder: 'Ex: I want to export K-Beauty products to the US, recommend importers in LA.',
@@ -459,8 +459,10 @@ Object.assign(en, {
 
 const ko = {
   ...en,
-  nav_overview: '개요',
+  nav_overview: '대시보드',
   nav_dashboard: '대시보드',
+  overview_title_heading: '대시보드',
+  overview_subheading: '비즈니스 현황 및 시장 인사이트를 한눈에 확인하세요.',
   nav_analytics: '분석',
   nav_my_partners: 'Biz 파트너',
   nav_payments: 'XRP 무역대금 결제',
@@ -631,7 +633,7 @@ const ko = {
   search_provider_codex: 'codex',
   search_provider_antigravity: 'antigravity',
   search_provider_hybrid: 'hybrid',
-  assistant_service_title: '전문가의 도움이 필요하신가요?',
+  assistant_service_title: 'Global Biz Consultant의 도움이 필요하신가요?',
   assistant_service_desc: '원하시는 서비스를 선택하여 전문가에게 도움을 요청하세요.',
   assistant_request_button: '상담 신청',
   search_placeholder: '예시 : K-뷰티 상품을 베트남으로 수출하고 싶어. 베트남의 뷰티상품 수입업체 또는 디스트리뷰터를 추천해 줘',

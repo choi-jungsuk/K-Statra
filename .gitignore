@@ -1,4 +1,4 @@
-﻿node_modules/
+node_modules/
 .env
 .env.*.local
 logs
@@ -12,3 +12,7 @@ tmp.txt
 uploads/
 frontend/dist/
 scripts/
+config.yaml
+*.zip
+*.ps1
+*.txt
