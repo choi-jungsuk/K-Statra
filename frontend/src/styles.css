@@ -412,28 +412,18 @@ h3 {
 .header .inner {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 14px 24px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.header-top {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 36px;
-  width: auto;
-}
-
-.header-bar {
-  display: flex;
-  align-items: center;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
   gap: 24px;
+  align-items: center;
+}
+
+.header-right-col {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  flex-wrap: wrap;
 }
 
 .header .brand {
@@ -458,6 +448,10 @@ h3 {
 }
 
 @media (max-width: 768px) {
+  .header-right-col {
+    display: contents;
+  }
+
   .header .inner {
     display: grid;
     grid-template-columns: auto 1fr;

@@ -303,138 +303,140 @@ export default function App() {
               K-Statra
             </Link>
           </div>
-          <nav className="nav" aria-label="Primary">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) => (isActive ? 'active' : undefined)}
-                onClick={() => track('nav_click', { target: item.to })}
-              >
-                {t(item.key)}
-              </NavLink>
-            ))}
-          </nav>
-          <div className="controls-row">
-            <div className="control-group" aria-label="Language selector">
-              <span className="control-icon" aria-hidden="true">
-                🌐
-              </span>
-              <LanguageSwitcher />
-            </div>
-            <div className="notif-wrapper" style={{ position: 'relative' }}>
-              <button
-                className="icon-btn"
-                type="button"
-                aria-label="Notifications"
-                onClick={() => setNotifOpen((prev) => !prev)}
-                style={{ borderRadius: '12px', border: '1px solid #eceff3' }}
-              >
-                <span className="bell-icon" aria-hidden="true">
-                  🔔
-                </span>
-                <span className="notif-badge" aria-hidden={notificationCount === 0}>
-                  {notificationCount}
-                </span>
-              </button>
-              {notifOpen && (
-                <div
-                  className="notif-dropdown"
-                  style={{
-                    position: 'absolute',
-                    top: '120%',
-                    right: 0,
-                    width: 220,
-                    padding: '0.75rem',
-                    borderRadius: '12px',
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.12)',
-                    background: '#fff',
-                    zIndex: 60,
-                  }}
+          <div className="header-right-col">
+            <nav className="nav" aria-label="Primary">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === '/'}
+                  className={({ isActive }) => (isActive ? 'active' : undefined)}
+                  onClick={() => track('nav_click', { target: item.to })}
                 >
-                  {notifications.map((item) => (
-                    <div key={item.id} style={{ marginBottom: '0.5rem' }}>
-                      <strong style={{ display: 'block', marginBottom: '0.15rem' }}>{item.title}</strong>
-                      <span className="muted small">{item.body}</span>
-                    </div>
-                  ))}
-                  <button type="button" className="link-btn" style={{ padding: 0 }} onClick={() => setNotifOpen(false)}>
-                    {lang === 'ko' ? '닫기' : 'Close'}
-                  </button>
-                </div>
-              )}
-            </div>
-            {currentUser ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#4F46E5', background: 'rgba(79, 70, 229, 0.08)', padding: '0.35rem 0.8rem', borderRadius: '12px', border: '1px solid rgba(79, 70, 229, 0.15)' }}>
-                  👤 {currentUser.name} ({currentUser.role === 'buyer' ? (lang === 'ko' ? '바이어' : 'Buyer') : (lang === 'ko' ? '공급사' : 'Supplier')})
+                  {t(item.key)}
+                </NavLink>
+              ))}
+            </nav>
+            <div className="controls-row">
+              <div className="control-group" aria-label="Language selector">
+                <span className="control-icon" aria-hidden="true">
+                  🌐
                 </span>
-                <button
-                  className="avatar-btn"
-                  type="button"
-                  onClick={handleLogout}
-                  style={{
-                    borderRadius: '999px',
-                    padding: '0.2rem 0.8rem',
-                    minWidth: 64,
-                    fontSize: '0.8rem',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    background: '#ef4444',
-                    color: '#fff',
-                    border: 'none',
-                    boxShadow: '0 2px 8px rgba(239, 68, 68, 0.2)'
-                  }}
-                >
-                  {lang === 'ko' ? '로그아웃' : 'Log Out'}
-                </button>
+                <LanguageSwitcher />
               </div>
-            ) : (
-              <>
+              <div className="notif-wrapper" style={{ position: 'relative' }}>
                 <button
-                  className="avatar-btn"
+                  className="icon-btn"
                   type="button"
-                  aria-label={signupLabel}
-                  onClick={openSignupModal}
-                  style={{
-                    borderRadius: '999px',
-                    padding: '0.2rem 0.6rem',
-                    minWidth: lang === 'ko' ? 64 : 76,
-                    fontSize: '0.8rem',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    background: '#fff',
-                    color: '#111',
-                    border: '1px solid #d5dae0',
-                  }}
+                  aria-label="Notifications"
+                  onClick={() => setNotifOpen((prev) => !prev)}
+                  style={{ borderRadius: '12px', border: '1px solid #eceff3' }}
                 >
-                  <span style={{ display: 'inline-block', minWidth: lang === 'ko' ? '4em' : '4.5em', textAlign: 'center' }}>
-                    {signupLabel}
+                  <span className="bell-icon" aria-hidden="true">
+                    🔔
+                  </span>
+                  <span className="notif-badge" aria-hidden={notificationCount === 0}>
+                    {notificationCount}
                   </span>
                 </button>
-                <button
-                  className="avatar-btn"
-                  type="button"
-                  aria-label={loginLabel}
-                  onClick={openLoginModal}
-                  style={{
-                    borderRadius: '999px',
-                    padding: '0.2rem 0.8rem',
-                    minWidth: lang === 'ko' ? 64 : 76,
-                    fontSize: '0.8rem',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    background: '#0066CC',
-                    color: '#fff',
-                    border: 'none',
-                    boxShadow: '0 2px 8px rgba(0, 102, 204, 0.2)'
-                  }}
-                >
-                  <span style={{ display: 'inline-block', minWidth: lang === 'ko' ? '3.5em' : '4em', textAlign: 'center' }}>{loginLabel}</span>
-                </button>
-              </>
-            )}
+                {notifOpen && (
+                  <div
+                    className="notif-dropdown"
+                    style={{
+                      position: 'absolute',
+                      top: '120%',
+                      right: 0,
+                      width: 220,
+                      padding: '0.75rem',
+                      borderRadius: '12px',
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.12)',
+                      background: '#fff',
+                      zIndex: 60,
+                    }}
+                  >
+                    {notifications.map((item) => (
+                      <div key={item.id} style={{ marginBottom: '0.5rem' }}>
+                        <strong style={{ display: 'block', marginBottom: '0.15rem' }}>{item.title}</strong>
+                        <span className="muted small">{item.body}</span>
+                      </div>
+                    ))}
+                    <button type="button" className="link-btn" style={{ padding: 0 }} onClick={() => setNotifOpen(false)}>
+                      {lang === 'ko' ? '닫기' : 'Close'}
+                    </button>
+                  </div>
+                )}
+              </div>
+              {currentUser ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#4F46E5', background: 'rgba(79, 70, 229, 0.08)', padding: '0.35rem 0.8rem', borderRadius: '12px', border: '1px solid rgba(79, 70, 229, 0.15)' }}>
+                    👤 {currentUser.name} ({currentUser.role === 'buyer' ? (lang === 'ko' ? '바이어' : 'Buyer') : (lang === 'ko' ? '공급사' : 'Supplier')})
+                  </span>
+                  <button
+                    className="avatar-btn"
+                    type="button"
+                    onClick={handleLogout}
+                    style={{
+                      borderRadius: '999px',
+                      padding: '0.2rem 0.8rem',
+                      minWidth: 64,
+                      fontSize: '0.8rem',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      background: '#ef4444',
+                      color: '#fff',
+                      border: 'none',
+                      boxShadow: '0 2px 8px rgba(239, 68, 68, 0.2)'
+                    }}
+                  >
+                    {lang === 'ko' ? '로그아웃' : 'Log Out'}
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <button
+                    className="avatar-btn"
+                    type="button"
+                    aria-label={signupLabel}
+                    onClick={openSignupModal}
+                    style={{
+                      borderRadius: '999px',
+                      padding: '0.2rem 0.6rem',
+                      minWidth: lang === 'ko' ? 64 : 76,
+                      fontSize: '0.8rem',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      background: '#fff',
+                      color: '#111',
+                      border: '1px solid #d5dae0',
+                    }}
+                  >
+                    <span style={{ display: 'inline-block', minWidth: lang === 'ko' ? '4em' : '4.5em', textAlign: 'center' }}>
+                      {signupLabel}
+                    </span>
+                  </button>
+                  <button
+                    className="avatar-btn"
+                    type="button"
+                    aria-label={loginLabel}
+                    onClick={openLoginModal}
+                    style={{
+                      borderRadius: '999px',
+                      padding: '0.2rem 0.8rem',
+                      minWidth: lang === 'ko' ? 64 : 76,
+                      fontSize: '0.8rem',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      background: '#0066CC',
+                      color: '#fff',
+                      border: 'none',
+                      boxShadow: '0 2px 8px rgba(0, 102, 204, 0.2)'
+                    }}
+                  >
+                    <span style={{ display: 'inline-block', minWidth: lang === 'ko' ? '3.5em' : '4em', textAlign: 'center' }}>{loginLabel}</span>
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>
