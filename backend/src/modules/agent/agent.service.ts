@@ -320,18 +320,121 @@ ${JSON.stringify(companiesInfo, null, 2)}
 
         subject.complete();
       } catch (err: any) {
-        this.logger.error(`Claude Streaming Agent Error: ${err.message}`);
-        subject.next({
-          data: JSON.stringify({
-            type: 'error',
-            text: `에이전트 오류가 발생했습니다: ${err.response?.data?.error?.message || err.message}`,
-          }),
-        });
-        subject.complete();
+        this.logger.warn(`Anthropic streaming failed, falling back to OpenAI: ${err.message}`);
+        await this.streamWithOpenAI(message, history, subject);
       }
     })();
 
     return subject.asObservable();
+  }
+
+  private async streamWithOpenAI(message: string, history: any[], subject: Subject<any>): Promise<void> {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      subject.next({
+        data: JSON.stringify({
+          type: 'error',
+          text: 'Anthropic 및 OpenAI API 키가 모두 설정되지 않았습니다.',
+        }),
+      });
+      subject.complete();
+      return;
+    }
+
+    try {
+      subject.next({ data: JSON.stringify({ type: 'status', text: 'Hermes 에이전트 가동 중 (OpenAI 백업가동)...' }) });
+
+      // 1. K-Statra DB에서 파트너 검색 (도구를 미리 가동)
+      const searchResult = await this.partnersService.search({ q: message, limit: 5 });
+      const companiesInfo = searchResult.data.map(company => ({
+        name: company.name,
+        industry: company.industry,
+        description: company.profileText || company.description || '',
+        tags: company.tags || [],
+        location: company.location ? `${company.location.city || ''} ${company.location.country || ''}`.trim() : '',
+        sizeBucket: company.sizeBucket || '',
+      }));
+
+      // 먼저 검색된 기업 리스트를 프론트엔드로 즉시 송신해 카드 렌더링
+      if (companiesInfo.length > 0) {
+        subject.next({
+          data: JSON.stringify({
+            type: 'companies',
+            companies: companiesInfo,
+          }),
+        });
+      }
+
+      const systemPrompt = `당신은 K-Statra B2B 매칭 플랫폼의 친절하고 스마트한 대표 AI 에이전트 Hermes(헤르메스)입니다.
+사용자에게 가장 적합한 비즈니스 파트너(기업)를 추천하고 플랫폼 안내 및 컨설팅 질문에 정성껏 답변해 주세요.
+반드시 마크다운(Markdown) 형식을 사용하여 단락, 글머리 기호, 굵은 글씨 등을 적용해 답변을 보기 좋고 세련되게 꾸며야 합니다.
+
+[실시간 데이터베이스 검색된 파트너 목록]
+${JSON.stringify(companiesInfo, null, 2)}
+
+위 파트너 목록 데이터를 바탕으로 사용자의 매칭 요청에 부합하는 기업을 정성껏 추천하고 답변해 주세요. 데이터에 없거나 적절하지 않다면, 검색 결과가 충분하지 않음을 솔직하게 밝히고 다른 추천을 제공하세요.`;
+
+      const openAIMessages = [
+        { role: 'system', content: systemPrompt },
+        ...history.map(h => ({
+          role: h.role === 'assistant' ? 'assistant' : 'user',
+          content: typeof h.content === 'string' ? h.content : JSON.stringify(h.content)
+        })),
+        { role: 'user', content: message }
+      ];
+
+      subject.next({ data: JSON.stringify({ type: 'status', text: '매칭 파트너를 분석하여 답변을 구성하고 있습니다...' }) });
+
+      const response = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          model: 'gpt-4o',
+          messages: openAIMessages,
+          temperature: 0.5,
+          max_tokens: 1500,
+          stream: true,
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          responseType: 'stream',
+        }
+      );
+
+      const rl = readline.createInterface({
+        input: response.data,
+        terminal: false,
+      });
+
+      for await (const line of rl) {
+        const cleaned = line.trim();
+        if (!cleaned || cleaned === 'data: [DONE]') continue;
+        if (cleaned.startsWith('data:')) {
+          try {
+            const parsed = JSON.parse(cleaned.substring(5).trim());
+            const text = parsed.choices?.[0]?.delta?.content;
+            if (text) {
+              subject.next({ data: JSON.stringify({ type: 'text', text }) });
+            }
+          } catch (e) {
+            // ignore JSON chunk errors
+          }
+        }
+      }
+
+      subject.complete();
+    } catch (error: any) {
+      this.logger.error(`OpenAI Fallback Error: ${error.message}`);
+      subject.next({
+        data: JSON.stringify({
+          type: 'error',
+          text: `에이전트 통신 오류가 발생했습니다: ${error.response?.data?.error?.message || error.message}`,
+        }),
+      });
+      subject.complete();
+    }
   }
 }
 
