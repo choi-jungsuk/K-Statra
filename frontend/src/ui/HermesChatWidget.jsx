@@ -253,22 +253,28 @@ export default function HermesChatWidget() {
     <div className="hermes-widget-container">
       {/* 1. 플로팅 트리거 버튼 */}
       {!isOpen && (
-        <button
-          className="hermes-trigger"
-          onClick={() => {
-            setIsOpen(true);
-            // 대화창 열릴 때 가벼운 알림 수 증가
-            if (messages.length === 1) {
-              setUnreadCount(0);
-            }
-          }}
-          title={lang === 'ko' ? 'Hermes AI 비서와 대화하기' : 'Chat with Hermes AI'}
-        >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-          {unreadCount > 0 && <span className="trigger-badge">{unreadCount}</span>}
-        </button>
+        <div className="hermes-trigger-wrapper">
+          <div className="hermes-trigger-badge">
+            <span className="trigger-badge-dot"></span>
+            {lang === 'ko' ? 'AI 안내 데스크' : 'AI Info Desk'}
+          </div>
+          <button
+            className="hermes-trigger"
+            onClick={() => {
+              setIsOpen(true);
+              // 대화창 열릴 때 가벼운 알림 수 증가
+              if (messages.length === 1) {
+                setUnreadCount(0);
+              }
+            }}
+            title={lang === 'ko' ? 'Hermes AI 비서와 대화하기' : 'Chat with Hermes AI'}
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            {unreadCount > 0 && <span className="trigger-badge">{unreadCount}</span>}
+          </button>
+        </div>
       )}
 
       {/* 2. 대화 창 */}
