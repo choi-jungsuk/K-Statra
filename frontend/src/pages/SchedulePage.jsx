@@ -2,10 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../api';
 import { useI18n } from '../i18n/I18nProvider';
 import Button from '../ui/Button';
+import { useSearchParams } from 'react-router-dom';
 
 export default function SchedulePage() {
   const { t, lang } = useI18n();
-  const [activeTab, setActiveTab] = useState('ONLINE'); // 'ONLINE' or 'OFFLINE'
+  const [searchParams] = useSearchParams();
+  
+  const presetCompany = searchParams.get('companyName') || '';
+  const presetType = searchParams.get('type') || 'ONLINE'; // 'ONLINE' or 'OFFLINE'
+  
+  const [activeTab, setActiveTab] = useState(presetType === 'OFFLINE' ? 'OFFLINE' : 'ONLINE'); // 'ONLINE' or 'OFFLINE'
   
   const [consultations, setConsultations] = useState([]);
   const [companies, setCompanies] = useState([]);
@@ -16,8 +22,19 @@ export default function SchedulePage() {
   const [isScheduling, setIsScheduling] = useState(false);
 
   // Form states
-  const [onlineForm, setOnlineForm] = useState({ companyName: '', date: '', timeSlot: '10:00 - 11:00', agenda: '' });
-  const [offlineForm, setOfflineForm] = useState({ companyName: '', exhibition: 'KOAA SHOW 2026', date: '', boothNumber: '', purpose: '' });
+  const [onlineForm, setOnlineForm] = useState({ 
+    companyName: presetType === 'ONLINE' ? presetCompany : '', 
+    date: '', 
+    timeSlot: '10:00 - 11:00', 
+    agenda: presetType === 'ONLINE' ? '1차 수출 B2B 매칭 협의 및 기술 제안 설명' : '' 
+  });
+  const [offlineForm, setOfflineForm] = useState({ 
+    companyName: presetType === 'OFFLINE' ? presetCompany : '', 
+    exhibition: 'KOAA SHOW 2026', 
+    date: '', 
+    boothNumber: '', 
+    purpose: presetType === 'OFFLINE' ? 'KOAA SHOW 2026 부스 비즈니스 매칭 계약 체결식 NDA 서명' : '' 
+  });
 
   // 1. Fetch consultations & company list on mount
   const loadData = () => {
