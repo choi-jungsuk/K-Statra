@@ -9,9 +9,9 @@ export default function SchedulePage() {
   const [searchParams] = useSearchParams();
   
   const presetCompany = searchParams.get('companyName') || '';
-  const presetType = searchParams.get('type') || 'ONLINE'; // 'ONLINE' or 'OFFLINE'
+  const presetType = searchParams.get('type') || 'OFFLINE'; // Default to 'OFFLINE' for offline-first strategy
   
-  const [activeTab, setActiveTab] = useState(presetType === 'OFFLINE' ? 'OFFLINE' : 'ONLINE'); // 'ONLINE' or 'OFFLINE'
+  const [activeTab, setActiveTab] = useState(presetType === 'ONLINE' ? 'ONLINE' : 'OFFLINE'); // 'OFFLINE' or 'ONLINE'
   
   const [consultations, setConsultations] = useState([]);
   const [companies, setCompanies] = useState([]);
@@ -156,8 +156,11 @@ export default function SchedulePage() {
   const exhibitions = [
     { name: 'KOAA SHOW 2026', date: '2026.10.21 - 10.23', color: '#BE123C', desc: '국제 모빌리티 산업전 - 모빌리티를 위한 모든 솔루션 (한국 KINTEX - PoC 진행 중)' },
     { name: 'CES 2026 Las Vegas', date: '2026.01.06 - 01.09', color: '#4F46E5', desc: '세계 최대 가전 및 IT 정보기술 전시회 (미국 라스베이거스)' },
-    { name: 'MWC 2026 Barcelona', date: '2026.03.02 - 03.05', color: '#10B981', desc: '글로벌 최대 모바일 및 커뮤니케이션 기술 박람회 (스페인 바르셀로나)' },
-    { name: 'IFA 2026 Berlin', date: '2026.09.04 - 09.09', color: '#F59E0B', desc: '유럽 유서 깊은 글로벌 멀티미디어 및 가전 산업 박람회 (독일 베를린)' }
+    { name: 'HANNOVER MESSE 2026', date: '2026.04.13 - 04.17', color: '#1E3A8A', desc: '세계 최대 산업기술 박람회 - 스마트 제조 및 자동화 기술 매칭 (독일 하노버)' },
+    { name: 'Canton Fair 2026', date: '2026.04.15 - 05.05', color: '#D97706', desc: '중국 최대 종합 수출입 상품 교역회 - 종합 B2B 제조 및 수출 매칭 (중국 광저우)' },
+    { name: 'Automotive World 2026', date: '2026.01.21 - 01.23', color: '#0369A1', desc: '미래 자동차 모빌리티 전문 전시회 - EV, 자율주행, 정밀 부품 및 금형 조율 (일본 도쿄)' },
+    { name: 'Vietnam Expo 2026', date: '2026.04.08 - 04.11', color: '#DC2626', desc: '베트남 최대 종합 B2B 산업 박람회 - 소비재, 유통, 부품 제조 파트너십 구축 (베트남 하노이)' },
+    { name: 'MWC 2026 Barcelona', date: '2026.03.02 - 03.05', color: '#10B981', desc: '글로벌 최대 모바일 및 IT 통신 기술 박람회 (스페인 바르셀로나)' }
   ];
 
   return (
@@ -228,7 +231,7 @@ export default function SchedulePage() {
           {activeTab === 'OFFLINE' && (
             <div>
               <h3 style={{ fontSize: '15px', fontWeight: 800, marginBottom: '0.75rem', color: 'var(--fg)' }}>
-                {lang === 'ko' ? '조율 대상 글로벌 대형 전시회' : 'Target Global Exhibitions'}
+                {lang === 'ko' ? '오프라인 상담 주선 (글로벌 전시장 매칭)' : 'Offline Matchmaking Services'}
               </h3>
               <div className="exhibitions-banner-row">
                 {exhibitions.map((ex, idx) => (
@@ -422,9 +425,11 @@ export default function SchedulePage() {
                   onChange={(e) => setOfflineForm(prev => ({ ...prev, exhibition: e.target.value }))}
                 >
                   <option value="KOAA SHOW 2026">KOAA SHOW 2026 (한국)</option>
-                  <option value="CES 2026 Las Vegas">CES 2026 Las Vegas (미국)</option>
+                  <option value="HANNOVER MESSE 2026">HANNOVER MESSE 2026 (독일)</option>
+                  <option value="Canton Fair 2026">Canton Fair 2026 (중국)</option>
+                  <option value="Automotive World 2026">Automotive World 2026 (일본)</option>
+                  <option value="Vietnam Expo 2026">Vietnam Expo 2026 (베트남)</option>
                   <option value="MWC 2026 Barcelona">MWC 2026 Barcelona (스페인)</option>
-                  <option value="IFA 2026 Berlin">IFA 2026 Berlin (독일)</option>
                 </select>
               </div>
 

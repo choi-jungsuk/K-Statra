@@ -2,6 +2,7 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
+  Post,
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
@@ -91,5 +92,21 @@ export class PartnersController {
   })
   debug() {
     return this.partnersService.getDebugInfo();
+  }
+
+  @Get('cache/stats')
+  @ApiOperation({
+    summary: '현재 적재된 B2B 매칭 검색 캐시 상태 및 쿼리 조회',
+  })
+  getCacheStats() {
+    return this.partnersService.getCacheStats();
+  }
+
+  @Post('cache/warmup')
+  @ApiOperation({
+    summary: 'B2B 검색 캐시 사전 워밍업 수동 강제 재트리거 및 리셋',
+  })
+  forceWarmup() {
+    return this.partnersService.forceCacheWarmup();
   }
 }

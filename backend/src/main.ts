@@ -19,8 +19,9 @@ async function bootstrap() {
   app.use(helmet({ contentSecurityPolicy: false }));
 
   // CORS
+  const isDev = configService.get<string>('nodeEnv') === 'development' || process.env.NODE_ENV === 'development';
   app.enableCors({
-    origin: origins.includes('*') ? true : origins,
+    origin: isDev ? true : (origins.includes('*') ? true : origins),
     credentials: true,
   });
 

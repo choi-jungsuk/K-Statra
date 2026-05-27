@@ -224,6 +224,38 @@ async function searchPartners(payload) {
   return searchCodex(payload)
 }
 
+function getCountryFlag(country) {
+  if (!country) return '🌐'
+  const c = country.toLowerCase()
+  if (c.includes('vietnam') || c.includes('베트남')) return '🇻🇳'
+  if (c.includes('chile') || c.includes('칠레')) return '🇨🇱'
+  if (c.includes('panama') || c.includes('파나마')) return '🇵🇦'
+  if (c.includes('poland') || c.includes('폴란드')) return '🇵🇱'
+  if (c.includes('uae') || c.includes('아랍')) return '🇦🇪'
+  if (c.includes('usa') || c.includes('미국') || c.includes('states')) return '🇺🇸'
+  if (c.includes('germany') || c.includes('독일')) return '🇩🇪'
+  if (c.includes('france') || c.includes('프랑스')) return '🇫🇷'
+  if (c.includes('spain') || c.includes('스페인')) return '🇪🇸'
+  if (c.includes('indonesia') || c.includes('인니')) return '🇮🇩'
+  if (c.includes('thailand') || c.includes('태국')) return '🇹🇭'
+  if (c.includes('korea') || c.includes('한국')) return '🇰🇷'
+  if (c.includes('china') || c.includes('중국')) return '🇨🇳'
+  if (c.includes('japan') || c.includes('일본')) return '🇯🇵'
+  if (c.includes('brazil') || c.includes('브라질')) return '🇧🇷'
+  if (c.includes('mexico') || c.includes('멕시코')) return '🇲🇽'
+  if (c.includes('canada') || c.includes('캐나다')) return '🇨🇦'
+  if (c.includes('oman') || c.includes('오만')) return '🇴🇲'
+  if (c.includes('uzbekistan') || c.includes('우즈벡')) return '🇺🇿'
+  if (c.includes('kazakhstan') || c.includes('카자흐')) return '🇰🇿'
+  if (c.includes('kenya') || c.includes('케냐')) return '🇰🇪'
+  if (c.includes('nigeria') || c.includes('나이지리아')) return '🇳🇬'
+  if (c.includes('egypt') || c.includes('이집트')) return '🇪🇬'
+  if (c.includes('morocco') || c.includes('모로코')) return '🇲🇦'
+  if (c.includes('hungary') || c.includes('헝가리')) return '🇭🇺'
+  if (c.includes('czech') || c.includes('체코')) return '🇨🇿'
+  return '🌐'
+}
+
 export default function PartnerSearch() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
@@ -649,9 +681,22 @@ export default function PartnerSearch() {
                 onClick={() => setSelectedCompany(company)}
                 style={{ cursor: 'pointer' }}
               >
-                <div className="result-hero" style={{ background: 'var(--accent)', color: 'white', flexDirection: 'column', backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)', backgroundSize: '40px 40px' }}>
-                  <div style={{ fontSize: '28px', fontWeight: '800', opacity: 0.9 }}>{company.name.substring(0, 2).toUpperCase()}</div>
-                  <div style={{ fontSize: '12px', opacity: 0.7, marginTop: '8px', letterSpacing: '1px' }}>{company.industry?.substring(0, 20) || 'PARTNER'}</div>
+                <div className="result-hero" style={{ 
+                  height: '52px', 
+                  background: 'var(--accent-gradient)', 
+                  color: 'white', 
+                  display: 'flex', 
+                  flexDirection: 'row', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between', 
+                  padding: '0 20px',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: '800', letterSpacing: '0.05em', opacity: 0.95 }}>
+                    <span style={{ fontSize: '17px' }}>{getCountryFlag(company.country)}</span>
+                    <span>{company.country?.toUpperCase() || 'GLOBAL'}</span>
+                  </div>
+                  <div style={{ fontSize: '11px', fontWeight: '700', opacity: 0.85, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{company.industry?.substring(0, 20) || 'PARTNER'}</div>
                 </div>
                 <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1, gap: '12px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
