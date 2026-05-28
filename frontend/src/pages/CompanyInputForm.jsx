@@ -1,9 +1,9 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import Button from "../ui/Button";
 import { Field, TextInput, TextArea } from "../ui/Input";
 
 // Hardcoded fallback for production
-const PROD_API = 'https://web-production-9ceeb.up.railway.app';
+const PROD_API = 'https://backend-production-601f2.up.railway.app';
 const API_BASE = import.meta.env.VITE_API_BASE || (import.meta.env.PROD ? PROD_API : "http://localhost:4000");
 
 async function uploadCompanyImage(companyId, file, companyName) {
