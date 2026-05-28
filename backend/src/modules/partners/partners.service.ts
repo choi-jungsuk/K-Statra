@@ -923,7 +923,7 @@ Be extremely concise. Keep all profileText and matchRecommendation descriptions 
             Authorization: `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
           },
-          timeout: 20000,
+          timeout: 4500,
         }
       );
 
