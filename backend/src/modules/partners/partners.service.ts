@@ -146,7 +146,7 @@ export class PartnersService implements OnApplicationBootstrap {
 
     // 백그라운드 큐 구축을 위해 국가와 아이템 생성
     const countries = [
-      'Oman', 'Poland', 'Chile', 'Panama', 'UAE', 'Vietnam', 'Indonesia', 'Thailand',
+      'Brazil', 'Oman', 'Poland', 'Chile', 'Panama', 'UAE', 'Vietnam', 'Indonesia', 'Thailand',
       'Uzbekistan', 'Kazakhstan', 'Kenya', 'Nigeria', 'Egypt', 'Morocco', 'Hungary',
       'Czech Republic', 'USA', 'Mexico', 'Canada', 'Germany', 'France', 'Spain', 'Japan'
     ];
@@ -170,7 +170,11 @@ export class PartnersService implements OnApplicationBootstrap {
       '포터블 TV',
       '기어',
       '크래쉬 패드',
-      '가전 금형'
+      '가전 금형',
+      '자동차 에어백',
+      '차량용 와이퍼',
+      '차량용 램프',
+      '전기차 배터리'
     ];
 
     const queue: string[] = [...priorityQueries];
@@ -179,7 +183,8 @@ export class PartnersService implements OnApplicationBootstrap {
     countries.forEach(c => {
       items.forEach(i => {
         let krCountry = c;
-        if (c === 'Oman') krCountry = '오만';
+        if (c === 'Brazil') krCountry = '브라질';
+        else if (c === 'Oman') krCountry = '오만';
         else if (c === 'Poland') krCountry = '폴란드';
         else if (c === 'Chile') krCountry = '칠레';
         else if (c === 'Panama') krCountry = '파나마';
@@ -1142,7 +1147,8 @@ const AUTOMOTIVE_KEYWORDS = [
   '시트', 'seat', '금형', 'mold', 'die', '조향', 'steering', '펌프', 'valve', '밸브',
   '특수', '특장', 'special vehicle', '전장', 'led', '샤시', 'chassis', '브라켓', 'bracket',
   '탄소중립', '범퍼', 'bumper', '다이캐스팅', 'die casting', '가전', '기어', 'gear', 'lidar',
-  '자율주행', 'autonomous', '2차전지', 'battery equipment', '스마트팩토리', 'smart factory', 'automation'
+  '자율주행', 'autonomous', '2차전지', 'battery equipment', '스마트팩토리', 'smart factory', 'automation',
+  '에어백', 'airbag', '와이퍼', 'wiper', '램프', 'lamp', '전기차 배터리'
 ];
 const KOREA_KEYWORDS = [
   '한국',
@@ -1261,6 +1267,10 @@ function buildTavilyQuery(originalQuery: string, intent: string): string {
     { kr: '자율주행', en: 'LIDAR autonomous driving' },
     { kr: '스마트팩토리', en: 'smart factory industrial automation' },
     { kr: '포터블 TV', en: 'portable TV smart display' },
+    { kr: '자동차 에어백', en: 'automotive airbags safety systems' },
+    { kr: '차량용 와이퍼', en: 'automotive wiper blades windshield wipers' },
+    { kr: '차량용 램프', en: 'automotive lighting lamps LED headlights' },
+    { kr: '전기차 배터리', en: 'EV battery cells lithium-ion batteries' },
   ];
 
   const regionEn =
