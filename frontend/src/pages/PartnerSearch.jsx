@@ -60,7 +60,7 @@ const consultantOptions = [
   { value: 'trade-document', label: '무역서류 지원 (Trade Documents)' },
 ]
 
-const PROD_API = 'https://orange-women-appear.loca.lt';
+const PROD_API = 'https://web-production-9ceeb.up.railway.app';
 const API_BASE = import.meta?.env?.VITE_API_BASE || (import.meta.env.PROD ? PROD_API : 'http://localhost:4000');
 
 const SEARCH_PROVIDER = 'antigravity'

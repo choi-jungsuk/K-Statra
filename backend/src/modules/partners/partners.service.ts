@@ -117,7 +117,8 @@ export class PartnersService implements OnApplicationBootstrap {
     if (this.isPrefetchingStarted) return;
     this.isPrefetchingStarted = true;
 
-    this.logger.log('[Search Warmer] Starting background B2B cache pre-fetching queue (30s initial delay)...');
+    const isDev = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
+    this.logger.log(`[Search Warmer] Starting background B2B cache pre-fetching queue (isDev: ${isDev})...`);
 
     // 최우선 순위 적재 타겟 (아인글로벌 중점 타겟)
     const priorityQueries = [
@@ -180,40 +181,42 @@ export class PartnersService implements OnApplicationBootstrap {
     const queue: string[] = [...priorityQueries];
 
     // 중복 제거하면서 모든 국가 X 아이템 조합 큐에 채워넣기
-    countries.forEach(c => {
-      items.forEach(i => {
-        let krCountry = c;
-        if (c === 'Brazil') krCountry = '브라질';
-        else if (c === 'Oman') krCountry = '오만';
-        else if (c === 'Poland') krCountry = '폴란드';
-        else if (c === 'Chile') krCountry = '칠레';
-        else if (c === 'Panama') krCountry = '파나마';
-        else if (c === 'UAE') krCountry = 'UAE';
-        else if (c === 'Vietnam') krCountry = '베트남';
-        else if (c === 'Indonesia') krCountry = '인도네시아';
-        else if (c === 'Thailand') krCountry = '태국';
-        else if (c === 'Uzbekistan') krCountry = '우즈베키스탄';
-        else if (c === 'Kazakhstan') krCountry = '카자흐스탄';
-        else if (c === 'Kenya') krCountry = '케냐';
-        else if (c === 'Nigeria') krCountry = '나이지리아';
-        else if (c === 'Egypt') krCountry = '이집트';
-        else if (c === 'Morocco') krCountry = '모로코';
-        else if (c === 'Hungary') krCountry = '헝가리';
-        else if (c === 'Czech Republic') krCountry = '체코';
-        else if (c === 'USA') krCountry = '미국';
-        else if (c === 'Mexico') krCountry = '멕시코';
-        else if (c === 'Canada') krCountry = '캐나다';
-        else if (c === 'Germany') krCountry = '독일';
-        else if (c === 'France') krCountry = '프랑스';
-        else if (c === 'Spain') krCountry = '스페인';
-        else if (c === 'Japan') krCountry = '일본';
+    if (isDev) {
+      countries.forEach(c => {
+        items.forEach(i => {
+          let krCountry = c;
+          if (c === 'Brazil') krCountry = '브라질';
+          else if (c === 'Oman') krCountry = '오만';
+          else if (c === 'Poland') krCountry = '폴란드';
+          else if (c === 'Chile') krCountry = '칠레';
+          else if (c === 'Panama') krCountry = '파나마';
+          else if (c === 'UAE') krCountry = 'UAE';
+          else if (c === 'Vietnam') krCountry = '베트남';
+          else if (c === 'Indonesia') krCountry = '인도네시아';
+          else if (c === 'Thailand') krCountry = '태국';
+          else if (c === 'Uzbekistan') krCountry = '우즈베키스탄';
+          else if (c === 'Kazakhstan') krCountry = '카자흐스탄';
+          else if (c === 'Kenya') krCountry = '케냐';
+          else if (c === 'Nigeria') krCountry = '나이지리아';
+          else if (c === 'Egypt') krCountry = '이집트';
+          else if (c === 'Morocco') krCountry = '모로코';
+          else if (c === 'Hungary') krCountry = '헝가리';
+          else if (c === 'Czech Republic') krCountry = '체코';
+          else if (c === 'USA') krCountry = '미국';
+          else if (c === 'Mexico') krCountry = '멕시코';
+          else if (c === 'Canada') krCountry = '캐나다';
+          else if (c === 'Germany') krCountry = '독일';
+          else if (c === 'France') krCountry = '프랑스';
+          else if (c === 'Spain') krCountry = '스페인';
+          else if (c === 'Japan') krCountry = '일본';
 
-        const qStr = `${krCountry}의 ${i} 수입업체`;
-        if (!queue.includes(qStr)) {
-          queue.push(qStr);
-        }
+          const qStr = `${krCountry}의 ${i} 수입업체`;
+          if (!queue.includes(qStr)) {
+            queue.push(qStr);
+          }
+        });
       });
-    });
+    }
 
     this.logger.log(`[Search Warmer] Total ${queue.length} queries scheduled in background queue.`);
 
