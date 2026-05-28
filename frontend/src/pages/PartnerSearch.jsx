@@ -60,7 +60,7 @@ const consultantOptions = [
   { value: 'trade-document', label: '무역서류 지원 (Trade Documents)' },
 ]
 
-const PROD_API = 'https://web-production-9ceeb.up.railway.app';
+const PROD_API = 'https://orange-women-appear.loca.lt';
 const API_BASE = import.meta?.env?.VITE_API_BASE || (import.meta.env.PROD ? PROD_API : 'http://localhost:4000');
 
 const SEARCH_PROVIDER = 'antigravity'
@@ -178,8 +178,12 @@ async function searchAntigravity(payload) {
   // Pass q parameter correctly
   const qs = new URLSearchParams({ limit: '50', ...payload })
   if (payload.q) qs.set('q', payload.q);
+  const headers = {};
+  if (ANTIGRAVITY_KEY) headers['Authorization'] = `Bearer ${ANTIGRAVITY_KEY}`;
+  headers['Bypass-Tunnel-Reminder'] = 'true';
+
   const response = await fetch(`${base}/partners/search?${qs.toString()}`, {
-    headers: ANTIGRAVITY_KEY ? { Authorization: `Bearer ${ANTIGRAVITY_KEY}` } : undefined,
+    headers,
   })
   if (!response.ok) {
     const message = response.statusText || 'Antigravity search failed'

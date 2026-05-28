@@ -1,5 +1,5 @@
 // Hardcoded fallback for production to ensure connectivity
-const PROD_API = 'https://web-production-9ceeb.up.railway.app';
+const PROD_API = 'https://orange-women-appear.loca.lt';
 const BASE = import.meta?.env?.VITE_API_BASE || (import.meta.env.PROD ? PROD_API : 'http://localhost:4000');
 
 async function http(path, { method = 'GET', headers = {}, body } = {}) {
@@ -7,6 +7,7 @@ async function http(path, { method = 'GET', headers = {}, body } = {}) {
     method,
     headers: {
       'Content-Type': 'application/json',
+      'Bypass-Tunnel-Reminder': 'true',
       ...headers,
     },
     credentials: 'include',
