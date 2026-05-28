@@ -12,7 +12,7 @@ async function bootstrap() {
   });
 
   const configService = app.get(ConfigService);
-  const port = configService.get<number>('port') ?? 3000;
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : (configService.get<number>('port') ?? 4000);
   const origins = configService.get<string[]>('cors.origins') ?? ['*'];
 
   // Security (Swagger UI 인라인 스크립트 허용)
