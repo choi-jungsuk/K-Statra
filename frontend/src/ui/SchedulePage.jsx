@@ -1,30 +1,114 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { api } from '../api';
 import { useI18n } from '../i18n/I18nProvider';
-import Button from '../ui/Button';
+import Button from './Button';
+import { useSearchParams } from 'react-router-dom';
+import { boothExhibitors } from '../data/booth-data';
 
 export default function SchedulePage() {
   const { t, lang } = useI18n();
-  const [activeTab, setActiveTab] = useState('ONLINE'); // 'ONLINE' or 'OFFLINE'
+  const [searchParams] = useSearchParams();
   
+  const presetCompany = searchParams.get('companyName') || '';
+  const presetType = searchParams.get('type') || 'OFFLINE'; // Default to 'OFFLINE'
+  
+  const [activeTab, setActiveTab] = useState(presetType === 'ONLINE' ? 'ONLINE' : 'OFFLINE');
   const [consultations, setConsultations] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Hermes Agent status feedback simulation states
+  // Hermes Agent status feedback states
   const [agentStatus, setAgentStatus] = useState('');
   const [isScheduling, setIsScheduling] = useState(false);
 
-  // Form states
-  const [onlineForm, setOnlineForm] = useState({ companyName: '', date: '', timeSlot: '10:00 - 11:00', agenda: '' });
-  const [offlineForm, setOfflineForm] = useState({ companyName: '', exhibition: 'KOAA SHOW 2026', date: '', boothNumber: '', purpose: '' });
+  // 250-booth scheduling states
+  const [selectedExhibitor, setSelectedExhibitor] = useState(null);
+  const [exhibitorSearch, setExhibitorSearch] = useState('');
+  const [exhibitorFilter, setExhibitorFilter] = useState({ industry: '', country: '' });
+  const [schedulerMap, setSchedulerMap] = useState({});
+  const [selectedExhibition, setSelectedExhibition] = useState('KOAA SHOW 2026');
 
-  // 1. Fetch consultations & company list on mount
+  // Form states (Online only)
+  const [onlineForm, setOnlineForm] = useState({ 
+    companyName: presetType === 'ONLINE' ? presetCompany : '', 
+    date: '', 
+    timeSlot: '10:00 - 11:00', 
+    agenda: presetType === 'ONLINE' ? '1차 B2B 매칭 협의 및 기술 제안 설명' : '' 
+  });
+
+  // Calculate distinct industries & countries for sidebar presets in scheduler
+  const distinctFilters = useMemo(() => {
+    const inds = new Set();
+    const cnts = new Set();
+    boothExhibitors.forEach(ex => {
+      inds.add(ex.industry);
+      cnts.add(ex.country);
+    });
+    return {
+      industries: Array.from(inds).sort(),
+      countries: Array.from(cnts).sort()
+    };
+  }, []);
+
+  // Filter 250 exhibitors based on search term & distinct filters
+  const filteredExhibitors = useMemo(() => {
+    return boothExhibitors.filter(ex => {
+      const matchSearch = ex.name.toLowerCase().includes(exhibitorSearch.toLowerCase()) || 
+                          ex.boothNumber.toLowerCase().includes(exhibitorSearch.toLowerCase()) ||
+                          ex.item.toLowerCase().includes(exhibitorSearch.toLowerCase());
+      const matchInd = !exhibitorFilter.industry || ex.industry === exhibitorFilter.industry;
+      const matchCnt = !exhibitorFilter.country || ex.country === exhibitorFilter.country;
+      return matchSearch && matchInd && matchCnt;
+    });
+  }, [exhibitorSearch, exhibitorFilter]);
+
+  // Generate realistic seed-based booked/available schedule for an exhibitor to ensure visual realism
+  const getExhibitorSchedule = (exId) => {
+    const slots = {};
+    const days = ['2026-10-21', '2026-10-22', '2026-10-23'];
+    const times = [
+      '10:00 - 11:00', 
+      '11:00 - 12:00', 
+      '12:00 - 13:00', // Lunch
+      '13:00 - 14:00', 
+      '14:00 - 15:00', 
+      '15:00 - 16:00', 
+      '16:00 - 17:00'
+    ];
+    
+    days.forEach((day, dIdx) => {
+      slots[day] = {};
+      times.forEach((time, tIdx) => {
+        if (time === '12:00 - 13:00') {
+          slots[day][time] = 'LUNCH';
+          return;
+        }
+        
+        // Simple hash seed generator based on exhibitor ID, day, and time
+        const seed = (exId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) + dIdx * 3 + tIdx * 7) % 10;
+        if (seed < 3) {
+          slots[day][time] = 'BOOKED';
+        } else {
+          slots[day][time] = 'AVAILABLE';
+        }
+      });
+    });
+    return slots;
+  };
+
+  // Watch for selected exhibitor to map their time table
+  useEffect(() => {
+    if (selectedExhibitor) {
+      setSchedulerMap(getExhibitorSchedule(selectedExhibitor.id));
+    }
+  }, [selectedExhibitor]);
+
+  // Load consultations & MongoDB companies on mount
   const loadData = () => {
     setLoading(true);
     Promise.all([
       api.listConsultations(),
-      api.listCompanies({ limit: 20 })
+      api.listCompanies({ limit: 50 })
     ])
       .then(([consultRes, compRes]) => {
         setConsultations(Array.isArray(consultRes) ? consultRes : []);
@@ -32,7 +116,7 @@ export default function SchedulePage() {
         setLoading(false);
       })
       .catch(err => {
-        console.error("SchedulePage initial load error:", err);
+        console.error("SchedulePage load error:", err);
         setLoading(false);
       });
   };
@@ -41,10 +125,9 @@ export default function SchedulePage() {
     loadData();
   }, []);
 
-  // Filter consultations based on current tab
   const filteredConsultations = consultations.filter(c => c.reqType === activeTab);
 
-  // 2. Handle Online Video Match booking
+  // Online video submit handler
   const handleOnlineSubmit = async (e) => {
     e.preventDefault();
     if (!onlineForm.companyName || !onlineForm.date) {
@@ -56,7 +139,7 @@ export default function SchedulePage() {
     setAgentStatus(lang === 'ko' ? 'Hermes 에이전트가 바이어의 스케줄러를 조회하는 중...' : 'Hermes agent looking up buyer schedule...');
 
     setTimeout(async () => {
-      setAgentStatus(lang === 'ko' ? '비어있는 시간대를 예약하고 Zoom 가상 미팅룸 생성 중...' : 'Booking open slot and creating Zoom virtual meeting room...');
+      setAgentStatus(lang === 'ko' ? '비어있는 시간대를 예약하고 Zoom 화상방 생성 중...' : 'Booking open slot and creating Zoom virtual meeting room...');
       
       setTimeout(async () => {
         const payload = {
@@ -77,75 +160,159 @@ export default function SchedulePage() {
             setIsScheduling(false);
             setAgentStatus('');
             setOnlineForm({ companyName: '', date: '', timeSlot: '10:00 - 11:00', agenda: '' });
-            loadData(); // Reload list
+            loadData();
           }, 1500);
         } catch (err) {
           console.error(err);
           setIsScheduling(false);
           setAgentStatus('');
-          alert('Scheduling failed. Please try again.');
+          alert('Scheduling failed.');
         }
       }, 1500);
     }, 1500);
   };
 
-  // 3. Handle Offline Exhibition Match booking
-  const handleOfflineSubmit = async (e) => {
-    e.preventDefault();
-    if (!offlineForm.companyName || !offlineForm.date || !offlineForm.boothNumber) {
-      alert(lang === 'ko' ? '회사, 일자, 부스 번호를 모두 작성해 주세요.' : 'Please fill in company, date, and booth number.');
-      return;
-    }
+  // Offline interactive booth scheduler grid submit handler
+  const handleOfflineSlotClick = async (day, time) => {
+    if (!selectedExhibitor) return;
+    
+    const confirmMsg = lang === 'ko' 
+      ? `"${selectedExhibitor.name}" (${selectedExhibitor.boothNumber})과 ${day}일자 [${time}]에 B2B 미팅 스케줄 조율을 신청하시겠습니까?\n\n*상대방이 일정을 수락하면 최종 확정(CONFIRMED) 상태로 전환됩니다.`
+      : `Request B2B meeting with "${selectedExhibitor.name}" (${selectedExhibitor.boothNumber}) on ${day} [${time}]?\n\n*Confirmed upon recipient acceptance.`;
+      
+    if (!window.confirm(confirmMsg)) return;
 
     setIsScheduling(true);
-    setAgentStatus(lang === 'ko' ? `Hermes 에이전트가 "${offlineForm.exhibition}" 전시회 맵 확인 중...` : `Hermes agent mapping "${offlineForm.exhibition}" exhibition layout...`);
+    setAgentStatus(lang === 'ko' 
+      ? `Hermes 에이전트가 상대방 "${selectedExhibitor.boothNumber}" 전시장 맵 위치 조회 중...` 
+      : `Hermes mapping path to "${selectedExhibitor.boothNumber}"...`);
 
     setTimeout(async () => {
-      setAgentStatus(lang === 'ko' ? `바이어 측 부스 번호 "${offlineForm.boothNumber}" 스케줄 및 동선 조율 중...` : `Coordinating booth schedule for "${offlineForm.boothNumber}"...`);
+      setAgentStatus(lang === 'ko' 
+        ? `부스 담당자에게 실시간 스케줄 수락(Approve) 알림을 전송하는 중...` 
+        : `Sending real-time schedule approval request to exhibitor team...`);
       
       setTimeout(async () => {
         const payload = {
-          companyName: offlineForm.companyName,
-          date: offlineForm.date,
-          timeSlot: `${offlineForm.exhibition} - 부스 #${offlineForm.boothNumber}`,
+          companyName: selectedExhibitor.name,
+          date: day,
+          timeSlot: `${selectedExhibition} - 부스 #${selectedExhibitor.boothNumber.replace('Booth #', '')}`,
           reqType: 'OFFLINE',
-          status: 'CONFIRMED',
-          boothNumber: offlineForm.boothNumber,
+          status: 'PENDING', // PENDING status represents buyer requesting & exhibitor needing to approve
+          boothNumber: selectedExhibitor.boothNumber.replace('Booth #', ''),
           meetingLink: '',
-          agenda: `[${offlineForm.exhibition}] 현장 미팅 - ${offlineForm.purpose || '최종 파트너십 부스 미팅 및 계약 서명'}`
+          agenda: `[${selectedExhibition}] B2B 현장 미팅 신청 - ${selectedExhibitor.item} 공급 및 바이어 수입 조율 상담`
         };
 
         try {
           await api.createConsultation(payload);
-          setAgentStatus(lang === 'ko' ? '🎉 오프라인 전시회 밋업 매칭 및 부스 일정 확정 성공!' : '🎉 Offline exhibition meetup scheduled and booth confirmed successfully!');
+          setAgentStatus(lang === 'ko' 
+            ? '🎉 오프라인 전시장 밋업 접수 완료! 수락 대기(PENDING) 상태로 등록되었습니다.' 
+            : '🎉 Exhibition meetup requested! Pending approval.');
           
+          // Mask slot as booked in the UI client-side temporarily
+          setSchedulerMap(prev => ({
+            ...prev,
+            [day]: {
+              ...prev[day],
+              [time]: 'BOOKED'
+            }
+          }));
+
           setTimeout(() => {
             setIsScheduling(false);
             setAgentStatus('');
-            setOfflineForm({ companyName: '', exhibition: 'KOAA SHOW 2026', date: '', boothNumber: '', purpose: '' });
-            loadData(); // Reload list
-          }, 1500);
+            loadData(); // Refresh list
+          }, 1800);
         } catch (err) {
           console.error(err);
           setIsScheduling(false);
           setAgentStatus('');
-          alert('Scheduling failed. Please try again.');
+          alert('Failed to request appointment.');
         }
       }, 1500);
     }, 1500);
   };
 
-  // Exhibition Card presets
-  const exhibitions = [
-    { name: 'KOAA SHOW 2026', date: '2026.10.21 - 10.23', color: '#BE123C', desc: '국제 모빌리티 산업전 - 모빌리티를 위한 모든 솔루션 (한국 KINTEX - PoC 진행 중)' },
-    { name: 'CES 2026 Las Vegas', date: '2026.01.06 - 01.09', color: '#4F46E5', desc: '세계 최대 가전 및 IT 정보기술 전시회 (미국 라스베이거스)' },
-    { name: 'MWC 2026 Barcelona', date: '2026.03.02 - 03.05', color: '#10B981', desc: '글로벌 최대 모바일 및 커뮤니케이션 기술 박람회 (스페인 바르셀로나)' },
-    { name: 'IFA 2026 Berlin', date: '2026.09.04 - 09.09', color: '#F59E0B', desc: '유럽 유서 깊은 글로벌 멀티미디어 및 가전 산업 박람회 (독일 베를린)' }
+  const days = ['2026-10-21', '2026-10-22', '2026-10-23'];
+  const times = [
+    '10:00 - 11:00', 
+    '11:00 - 12:00', 
+    '12:00 - 13:00', // Lunch
+    '13:00 - 14:00', 
+    '14:00 - 15:00', 
+    '15:00 - 16:00', 
+    '16:00 - 17:00'
   ];
 
   return (
     <div className="inner" style={{ padding: '2rem 1rem' }}>
-      {/* 전역 에이전트 배지 */}
+      {/* Dynamic CSS Stylesheet injection */}
+      <style>{`
+        .schedule-tabs-row {
+          display: flex;
+          background: rgba(241, 245, 249, 0.9);
+          padding: 5px;
+          border-radius: 16px;
+          margin-bottom: 2rem;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+          gap: 4px;
+        }
+        .schedule-tab-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 22px;
+          border: none;
+          background: none;
+          font-size: 13.5px;
+          font-weight: 700;
+          color: #64748b;
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .schedule-tab-btn.active {
+          background: #ffffff;
+          color: var(--accent-dark);
+          box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.15), 0 8px 10px -6px rgba(79, 70, 229, 0.15);
+        }
+        .exhibitor-list-card {
+          box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .exhibitor-list-card:hover {
+          background: #ffffff !important;
+          border-color: rgba(79, 70, 229, 0.4) !important;
+          box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.08) !important;
+          transform: translateY(-2px);
+        }
+        .exhibitor-scroll-container::-webkit-scrollbar {
+          width: 6px;
+        }
+        .exhibitor-scroll-container::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .exhibitor-scroll-container::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 10px;
+        }
+        .exhibitor-scroll-container::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
+        }
+        .scheduler-interactive-slot {
+          position: relative;
+        }
+        .scheduler-interactive-slot:hover {
+          background: rgba(79, 70, 229, 0.12) !important;
+          box-shadow: inset 0 0 0 2px rgba(79, 70, 229, 0.25);
+          transform: translateY(-1px);
+        }
+        .scheduler-interactive-slot:active {
+          transform: translateY(0px);
+        }
+      `}</style>
+
+      {/* Hermes coordinator agent badge */}
       <div className="page-agent-header">
         <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #4F46E5 100%)' }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
@@ -161,17 +328,16 @@ export default function SchedulePage() {
         </span>
       </div>
 
-      {/* 헤더 및 설명 */}
       <h2 style={{ marginBottom: '0.5rem', fontWeight: 800 }}>
         {lang === 'ko' ? '1:1 비즈니스 밋업' : '1:1 Business Meetups'}
       </h2>
       <p style={{ marginBottom: '2rem', color: '#6b7280', fontSize: '14px', maxWidth: '800px', lineHeight: 1.5 }}>
         {lang === 'ko' 
-          ? '장벽 없는 글로벌 바이어 탐색을 위한 온라인 화상 미팅부터, 대형 전시회 오프라인 부스에서의 최종 계약 컨펌까지 원스톱으로 조율합니다.' 
-          : 'Coordinate online video meetings for quick screening, and meet in person at major exhibitions to finalize contracts.'}
+          ? '장벽 없는 글로벌 바이어 탐색을 위한 온라인 화상 미팅부터, 대형 전시회 오프라인 부스에서의 1:1 현장 계약 조율까지 원스톱으로 매칭합니다.' 
+          : 'Coordinate online video meetings for quick screening, and schedule 1:1 in-person meetings at major exhibition booths.'}
       </p>
 
-      {/* 2대 영역 분할 슬라이딩 탭 제어기 */}
+      {/* sliding tabs row */}
       <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
         <div className="schedule-tabs-row">
           <button 
@@ -183,7 +349,10 @@ export default function SchedulePage() {
           </button>
           <button 
             className={`schedule-tab-btn ${activeTab === 'OFFLINE' ? 'active' : ''}`}
-            onClick={() => setActiveTab('OFFLINE')}
+            onClick={() => {
+              setActiveTab('OFFLINE');
+              setSelectedExhibitor(null); // Clear active exhibitor selection to browse list
+            }}
             type="button"
           >
             <span>🎪</span> {lang === 'ko' ? '글로벌 전시회 오프라인 미팅' : 'Offline Exhibition Booth'}
@@ -191,7 +360,7 @@ export default function SchedulePage() {
         </div>
       </div>
 
-      {/* 실시간 에이전트 작업 진행 피드백 바 */}
+      {/* scheduling status info */}
       {isScheduling && (
         <div className="hermes-status-msg" style={{ width: '100%', maxWidth: '800px', justifyContent: 'center', padding: '12px', borderRadius: '12px', marginBottom: '2rem', background: 'rgba(79, 70, 229, 0.08)', border: '1px solid rgba(79, 70, 229, 0.15)' }}>
           <span className="pulse-loader" style={{ scale: '0.8' }}>
@@ -203,27 +372,61 @@ export default function SchedulePage() {
         </div>
       )}
 
-      {/* 메인 2분할 레이아웃 그리드 */}
-      <div className="schedule-grid-layout">
+      <div className="schedule-grid-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '2rem', marginTop: '1rem' }}>
         
-        {/* 왼쪽: 일정 목록 */}
+        {/* Left Side: Confirmed/Pending Appointments Lists & Target Exhibition Cards */}
         <div>
           {activeTab === 'OFFLINE' && (
-            <div>
+            <div style={{ marginBottom: '2rem' }}>
               <h3 style={{ fontSize: '15px', fontWeight: 800, marginBottom: '0.75rem', color: 'var(--fg)' }}>
-                {lang === 'ko' ? '조율 대상 글로벌 대형 전시회' : 'Target Global Exhibitions'}
+                {lang === 'ko' ? '🎪 조율 대상 글로벌 무역 전시회 (클릭 시 선택)' : '🎪 Target Global Exhibitions (Click to Select)'}
               </h3>
-              <div className="exhibitions-banner-row">
-                {exhibitions.map((ex, idx) => (
-                  <div key={idx} className="exhibition-banner-card">
-                    <span className="exhibition-logo-banner" style={{ background: ex.color }}>
-                      {ex.name.split(' ')[0]}
-                    </span>
-                    <h4>{ex.name}</h4>
-                    <p style={{ fontWeight: 700, color: ex.color }}>{ex.date}</p>
-                    <p>{ex.desc}</p>
-                  </div>
-                ))}
+              <div className="exhibitions-banner-row" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {[
+                  { name: 'KOAA SHOW 2026', date: '2026.10.21 - 10.23', color: '#BE123C', desc: '국제 모빌리티 산업전 - 모빌리티 솔루션 파트너 상담 (킨텍스 KINTEX 제1전시장)' },
+                  { name: 'HANNOVER MESSE 2026', date: '2026.04.13 - 04.17', color: '#4F46E5', desc: '세계 최대 산업기술 박람회 - 스마트 제조 솔루션 매칭 (독일 하노버)' },
+                  { name: 'Canton Fair 2026', date: '2026.10.15 - 10.19', color: '#10B981', desc: '중국 최대 수출입 상품 교역회 - 종합 B2B 부품 조율 (중국 광저우)' },
+                  { name: 'Automotive World 2026', date: '2026.01.21 - 01.23', color: '#F59E0B', desc: '미래 자동차 모빌리티 전문 전시회 - EV 및 자율주행 부품 조율 (일본 도쿄)' },
+                  { name: 'Vietnam Expo 2026', date: '2026.04.08 - 04.11', color: '#8B5CF6', desc: '베트남 최대 종합 B2B 박람회 - 동남아 신흥 시장 유통망 구축 (베트남 하노이)' }
+                ].map((ex, idx) => {
+                  const isSelected = selectedExhibition === ex.name;
+                  return (
+                    <div 
+                      key={idx} 
+                      onClick={() => {
+                        setSelectedExhibition(ex.name);
+                        // Optional: clear exhibitor when changing exhibition to reset schedule
+                        setSelectedExhibitor(null);
+                      }}
+                      className="exhibition-banner-card" 
+                      style={{ 
+                        padding: '1.25rem', 
+                        border: isSelected ? '2.5px solid var(--accent)' : '1px solid rgba(226, 232, 240, 0.8)', 
+                        background: isSelected ? 'rgba(79, 70, 229, 0.02)' : '#fff', 
+                        borderRadius: '16px',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        boxShadow: isSelected ? '0 10px 20px rgba(79, 70, 229, 0.06)' : 'none'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                        <span className="exhibition-logo-banner" style={{ background: ex.color, color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 800 }}>
+                          {ex.name.split(' ')[0]}
+                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span style={{ fontSize: '12px', color: ex.color, fontWeight: 800 }}>{ex.date}</span>
+                          {isSelected && (
+                            <span style={{ fontSize: '11px', background: 'var(--accent)', color: 'white', padding: '1px 6px', borderRadius: '4px', fontWeight: 800 }}>
+                              {lang === 'ko' ? '선택됨 👉' : 'Selected 👉'}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: 800 }}>{ex.name}</h4>
+                      <p className="muted" style={{ margin: 0, fontSize: '11.5px', lineHeight: 1.4 }}>{ex.desc}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -231,18 +434,18 @@ export default function SchedulePage() {
           <h3 style={{ fontSize: '15px', fontWeight: 800, marginBottom: '0.75rem', color: 'var(--fg)' }}>
             {activeTab === 'ONLINE' 
               ? (lang === 'ko' ? '확정된 온라인 미팅 일정' : 'Confirmed Online Meetups')
-              : (lang === 'ko' ? '확정된 글로벌 전시회 현장 미팅 일정' : 'Confirmed Booth Meetups')}
+              : (lang === 'ko' ? '확정 및 승인대기 미팅 일정' : 'Offline Appointment Schedules')}
           </h3>
 
           {loading ? (
-            <p>{lang === 'ko' ? '데이터 로딩 중...' : 'Loading schedules...'}</p>
+            <p>{lang === 'ko' ? '일정을 로드 중...' : 'Loading schedules...'}</p>
           ) : filteredConsultations.length === 0 ? (
-            <div style={{ padding: '4rem 2rem', textAlign: 'center', background: 'var(--card-glass)', backdropFilter: 'var(--glass-blur)', border: '1px solid rgba(226,232,240,0.6)', borderRadius: '20px' }}>
+            <div style={{ padding: '4rem 2rem', textAlign: 'center', background: 'var(--card-glass)', border: '1px solid rgba(226,232,240,0.6)', borderRadius: '20px' }}>
               <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '1rem' }}>📅</span>
               <p className="muted" style={{ fontSize: '14px', margin: 0 }}>
                 {activeTab === 'ONLINE'
                   ? (lang === 'ko' ? '등록된 온라인 화상 미팅 스케줄이 없습니다.' : 'No online meetups scheduled yet.')
-                  : (lang === 'ko' ? '등록된 글로벌 전시회 오프라인 밋업 스케줄이 없습니다.' : 'No offline exhibition meetups scheduled yet.')}
+                  : (lang === 'ko' ? '등록된 글로벌 전시 부스 미팅 스케줄이 없습니다.' : 'No offline exhibition meetups scheduled yet.')}
               </p>
             </div>
           ) : (
@@ -258,48 +461,59 @@ export default function SchedulePage() {
                     boxShadow: 'var(--shadow-sm)',
                     transition: 'all 0.2s'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent-light)'}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(226, 232, 240, 0.8)'}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                    <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: 'var(--fg)' }}>{c.companyName}</h4>
+                    <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 800, color: 'var(--fg)' }}>{c.companyName}</h4>
                     <span style={{ 
-                      padding: '3px 10px', 
+                      padding: '2px 8px', 
                       borderRadius: '999px', 
-                      fontSize: '11px', 
+                      fontSize: '10px', 
                       fontWeight: 800,
-                      background: c.status === 'CONFIRMED' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(100, 116, 139, 0.1)',
-                      color: c.status === 'CONFIRMED' ? 'var(--success)' : '#475569'
+                      background: c.status === 'CONFIRMED' 
+                        ? 'rgba(16, 185, 129, 0.1)' 
+                        : c.status === 'PENDING'
+                          ? 'rgba(245, 158, 11, 0.1)'
+                          : 'rgba(100, 116, 139, 0.1)',
+                      color: c.status === 'CONFIRMED' 
+                        ? 'var(--success)' 
+                        : c.status === 'PENDING'
+                          ? 'var(--warning)'
+                          : '#475569'
                     }}>
-                      {c.status}
+                      {c.status === 'CONFIRMED' 
+                        ? (lang === 'ko' ? '수락완료 (CONFIRMED)' : 'CONFIRMED')
+                        : c.status === 'PENDING'
+                          ? (lang === 'ko' ? '수락대기 (PENDING)' : 'PENDING')
+                          : c.status}
                     </span>
                   </div>
-                  <p style={{ margin: '0 0 1.25rem 0', color: 'var(--fg-secondary)', fontSize: '13px', lineHeight: 1.5 }}>
-                    <strong>📅 {lang === 'ko' ? '일시:' : 'Date:'}</strong> {new Date(c.date).toLocaleDateString()} ({c.timeSlot})
+                  <p style={{ margin: '0 0 1.25rem 0', color: 'var(--fg-secondary)', fontSize: '12.5px', lineHeight: 1.5 }}>
+                    <strong>📅 {lang === 'ko' ? '일시:' : 'Date:'}</strong> {new Date(c.date).toLocaleDateString()}
                     <br />
-                    <strong>🎯 {lang === 'ko' ? '미팅 목적:' : 'Agenda:'}</strong> {c.agenda}
+                    <strong>🎪 {lang === 'ko' ? '상담 슬롯:' : 'Slot Info:'}</strong> {c.timeSlot}
+                    <br />
+                    <strong>🎯 {lang === 'ko' ? '상담 목적:' : 'Agenda:'}</strong> {c.agenda}
                     {c.boothNumber && (
                       <>
                         <br />
-                        <strong>🎪 {lang === 'ko' ? '전시회 부스:' : 'Exhibition Booth:'}</strong> <span style={{ color: 'var(--accent)', fontWeight: 800 }}># {c.boothNumber}</span>
+                        <strong>🎪 {lang === 'ko' ? '부스 위치:' : 'Exhibitor Booth:'}</strong> <span style={{ color: 'var(--accent)', fontWeight: 800 }}># {c.boothNumber}</span>
                       </>
                     )}
                   </p>
                   
-                  {/* 동적 제어 버튼 */}
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     {c.reqType === 'ONLINE' && c.meetingLink && (
-                      <Button onClick={() => window.open(c.meetingLink, '_blank')} style={{ borderRadius: '999px', fontSize: '12px', padding: '6px 16px' }}>
+                      <Button onClick={() => window.open(c.meetingLink, '_blank')} style={{ borderRadius: '999px', fontSize: '11px', padding: '5px 14px' }}>
                         🎥 {lang === 'ko' ? '화상 대화방 접속' : 'Join Video Call'}
                       </Button>
                     )}
                     {c.reqType === 'OFFLINE' && c.boothNumber && (
                       <Button 
                         variant="secondary" 
-                        onClick={() => alert(`부스 번호: ${c.boothNumber}\n전시회: ${c.timeSlot.split(' - ')[0]}`)}
-                        style={{ borderRadius: '999px', fontSize: '12px', padding: '6px 16px' }}
+                        onClick={() => alert(`해당 업체의 부스 번호는 [${c.boothNumber}] 입니다.\n전시회: KOAA SHOW 2026\n\n상대방의 수락 대기(PENDING) 승인이 완료되면 상담표가 최종 락업됩니다.`)}
+                        style={{ borderRadius: '999px', fontSize: '11px', padding: '5px 14px' }}
                       >
-                        🎪 {lang === 'ko' ? '전시회 부스 맵 보기' : 'View Exhibition Map'}
+                        🎪 {lang === 'ko' ? '부스 정보 및 맵 안내' : 'Exhibitor Map Info'}
                       </Button>
                     )}
                   </div>
@@ -309,48 +523,43 @@ export default function SchedulePage() {
           )}
         </div>
 
-        {/* 오른쪽: 신청 폼 (Glassmorphic) */}
+        {/* Right Side: Tabular Scheduler or Booking Form */}
         <div>
           {activeTab === 'ONLINE' ? (
-            <form className="booking-form-wrapper glass" onSubmit={handleOnlineSubmit}>
-              <h3>💻 {lang === 'ko' ? '온라인 미팅 신청' : 'Book Video Meetup'}</h3>
-              <p>{lang === 'ko' ? 'AI 매칭 파트너를 선택하고 화상 미팅을 신청하세요.' : 'Schedule an online video screening with matched partners.'}</p>
+            <form className="booking-form-wrapper glass" onSubmit={handleOnlineSubmit} style={{ padding: '1.75rem', borderRadius: '20px', border: '1px solid rgba(226, 232, 240, 0.8)', background: '#fff' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 800, margin: '0 0 6px 0' }}>💻 {lang === 'ko' ? '온라인 미팅 예약' : 'Book Video Meetup'}</h3>
+              <p className="muted" style={{ fontSize: '12.5px', marginBottom: '1.25rem' }}>AI 매칭 파트너를 선택하고 화상 미팅 일정을 조율해 보십시오.</p>
               
-              <div className="booking-form-field">
-                <span>{lang === 'ko' ? '대상 파트너 기업 선택' : 'Select Partner Company'}</span>
+              <div className="booking-form-field" style={{ marginBottom: '1rem' }}>
+                <span style={{ fontSize: '12.5px', fontWeight: 700, display: 'block', marginBottom: '4px' }}>{lang === 'ko' ? '대상 파트너 기업 선택' : 'Select Partner Company'}</span>
                 <select 
                   value={onlineForm.companyName}
                   onChange={(e) => setOnlineForm(prev => ({ ...prev, companyName: e.target.value }))}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border)' }}
                 >
                   <option value="">{lang === 'ko' ? '-- 기업을 선택하세요 --' : '-- Choose a Company --'}</option>
                   {companies.map(c => (
                     <option key={c._id} value={c.name}>{c.name}</option>
                   ))}
-                  {/* Fallback seeds if DB company list is empty */}
-                  {companies.length === 0 && (
-                    <>
-                      <option value="TechFlow Solutions">TechFlow Solutions</option>
-                      <option value="Global Innovators">Global Innovators</option>
-                      <option value="Smart Manufacturing Co.">Smart Manufacturing Co.</option>
-                    </>
-                  )}
                 </select>
               </div>
 
-              <div className="booking-form-field">
-                <span>{lang === 'ko' ? '희망 일자 선택' : 'Select Date'}</span>
+              <div className="booking-form-field" style={{ marginBottom: '1rem' }}>
+                <span style={{ fontSize: '12.5px', fontWeight: 700, display: 'block', marginBottom: '4px' }}>{lang === 'ko' ? '희망 일자 선택' : 'Select Date'}</span>
                 <input 
                   type="date" 
                   value={onlineForm.date}
                   onChange={(e) => setOnlineForm(prev => ({ ...prev, date: e.target.value }))}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border)' }}
                 />
               </div>
 
-              <div className="booking-form-field">
-                <span>{lang === 'ko' ? '희망 시간대 선택' : 'Select Time Slot'}</span>
+              <div className="booking-form-field" style={{ marginBottom: '1rem' }}>
+                <span style={{ fontSize: '12.5px', fontWeight: 700, display: 'block', marginBottom: '4px' }}>{lang === 'ko' ? '희망 시간대 선택' : 'Select Time Slot'}</span>
                 <select 
                   value={onlineForm.timeSlot}
                   onChange={(e) => setOnlineForm(prev => ({ ...prev, timeSlot: e.target.value }))}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border)' }}
                 >
                   <option value="09:00 - 10:00">09:00 - 10:00</option>
                   <option value="10:00 - 11:00">10:00 - 11:00</option>
@@ -360,91 +569,181 @@ export default function SchedulePage() {
                 </select>
               </div>
 
-              <div className="booking-form-field">
-                <span>{lang === 'ko' ? '회의 아젠다' : 'Meeting Agenda'}</span>
+              <div className="booking-form-field" style={{ marginBottom: '1.25rem' }}>
+                <span style={{ fontSize: '12.5px', fontWeight: 700, display: 'block', marginBottom: '4px' }}>{lang === 'ko' ? '회의 아젠다' : 'Meeting Agenda'}</span>
                 <textarea 
                   rows="3"
                   value={onlineForm.agenda}
-                  placeholder={lang === 'ko' ? '1차 수출 매칭 협의 및 기술 제안 설명' : 'Brief discussion on export match and capabilities.'}
+                  placeholder={lang === 'ko' ? '1차 B2B 매칭 협의 및 기술 제안 설명' : 'Brief discussion on export match and capabilities.'}
                   onChange={(e) => setOnlineForm(prev => ({ ...prev, agenda: e.target.value }))}
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border)', fontSize: '13px' }}
                 />
               </div>
 
               <Button type="submit" style={{ width: '100%', marginTop: '0.75rem', borderRadius: '999px' }} loading={isScheduling}>
-                ⚡ {lang === 'ko' ? '온라인 미팅 예약 신청' : 'Request Video Meeting'}
+                ⚡ {lang === 'ko' ? '온라인 미팅 예약 신청' : 'Book Online Video Meeting'}
               </Button>
             </form>
           ) : (
-            <form className="booking-form-wrapper glass" onSubmit={handleOfflineSubmit}>
-              <h3>🎪 {lang === 'ko' ? '전시회 현장 미팅 신청' : 'Book Booth Meetup'}</h3>
-              <p>{lang === 'ko' ? '오프라인 전시회 현장에서 바이어를 직접 만나는 일정을 예약하세요.' : 'Schedule an in-person meeting at a global exhibition hall.'}</p>
-              
-              <div className="booking-form-field">
-                <span>{lang === 'ko' ? '대상 파트너 기업 선택' : 'Select Partner Company'}</span>
-                <select 
-                  value={offlineForm.companyName}
-                  onChange={(e) => setOfflineForm(prev => ({ ...prev, companyName: e.target.value }))}
-                >
-                  <option value="">{lang === 'ko' ? '-- 기업을 선택하세요 --' : '-- Choose a Company --'}</option>
-                  {companies.map(c => (
-                    <option key={c._id} value={c.name}>{c.name}</option>
-                  ))}
-                  {companies.length === 0 && (
-                    <>
-                      <option value="TechFlow Solutions">TechFlow Solutions</option>
-                      <option value="Global Innovators">Global Innovators</option>
-                      <option value="Smart Manufacturing Co.">Smart Manufacturing Co.</option>
-                    </>
-                  )}
-                </select>
+            /* OFFLINE Interactive 250-booth scheduler bound into form dropdown */
+            <div className="offline-scheduler-wrapper glass" style={{ padding: '1.75rem', borderRadius: '20px', border: '1px solid rgba(226, 232, 240, 0.8)', background: '#fff', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0 }}>
+                  🎪 {lang === 'ko' ? '전시회 현장 미팅 신청' : 'Book Booth Meetup'}
+                </h3>
+                <span style={{ fontSize: '11px', background: 'rgba(190, 18, 60, 0.1)', color: '#BE123C', padding: '2px 8px', borderRadius: '999px', fontWeight: 800 }}>
+                  {selectedExhibition}
+                </span>
               </div>
+              <p className="muted" style={{ fontSize: '12.5px', marginBottom: '1.5rem' }}>
+                {lang === 'ko' ? '오프라인 전시회 현장에서 바이어를 직접 만나는 일정을 예약하세요.' : 'Schedule an in-person meeting at a global exhibition hall.'}
+              </p>
 
-              <div className="booking-form-field">
-                <span>{lang === 'ko' ? '목표 글로벌 전시회 선택' : 'Select Exhibition'}</span>
-                <select 
-                  value={offlineForm.exhibition}
-                  onChange={(e) => setOfflineForm(prev => ({ ...prev, exhibition: e.target.value }))}
-                >
-                  <option value="KOAA SHOW 2026">KOAA SHOW 2026 (한국)</option>
-                  <option value="CES 2026 Las Vegas">CES 2026 Las Vegas (미국)</option>
-                  <option value="MWC 2026 Barcelona">MWC 2026 Barcelona (스페인)</option>
-                  <option value="IFA 2026 Berlin">IFA 2026 Berlin (독일)</option>
-                </select>
+              {/* Form inputs */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                
+                {/* 250-Company selection select drop-down */}
+                <div className="booking-form-field">
+                  <span style={{ fontSize: '12.5px', fontWeight: 700, display: 'block', marginBottom: '6px', color: '#374151' }}>
+                    {lang === 'ko' ? '대상 파트너 기업 선택 (250개사)' : 'Select Partner Company (250 Companies)'}
+                  </span>
+                  <select 
+                    value={selectedExhibitor ? selectedExhibitor.id : ''}
+                    onChange={(e) => {
+                      const ex = boothExhibitors.find(item => item.id === e.target.value);
+                      setSelectedExhibitor(ex || null);
+                    }}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--border)', fontSize: '13.5px', fontWeight: 600, background: '#fafafa' }}
+                  >
+                    <option value="">{lang === 'ko' ? '-- 기업을 선택하세요 --' : '-- Choose a Company --'}</option>
+                    {boothExhibitors.map(ex => (
+                      <option key={ex.id} value={ex.id}>
+                        [{ex.boothNumber}] {ex.name} ({ex.country}) - {ex.item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Sub-renderer: Displays scheduler grid once company is selected */}
+                {selectedExhibitor && (
+                  <div style={{ marginTop: '0.75rem', animation: 'fadeIn 0.3s ease-in-out' }}>
+                    <div style={{ padding: '10px 14px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '1rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--accent)' }}>{selectedExhibitor.name}</span>
+                        <span style={{ fontSize: '11px', background: '#3b82f6', color: 'white', padding: '1px 6px', borderRadius: '4px', fontWeight: 700 }}>
+                          {selectedExhibitor.boothNumber}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '11.5px', color: '#64748b', marginTop: '4px' }}>
+                        <strong>{lang === 'ko' ? '주요 상담 품목:' : 'Consulting Item:'}</strong> {selectedExhibitor.item} ({selectedExhibitor.industry})
+                      </div>
+                    </div>
+
+                    <h4 style={{ fontSize: '13px', fontWeight: 800, margin: '0 0 6px 0', color: '#1f2937' }}>
+                      📅 {lang === 'ko' ? '상담 가능일 및 시간 선택 (3일간)' : 'Select Date & Time Slot'}
+                    </h4>
+                    <p className="muted" style={{ fontSize: '11.5px', marginBottom: '0.75rem', lineHeight: 1.4 }}>
+                      {lang === 'ko' 
+                        ? '빈 슬롯을 클릭하시면 Hermes 에이전트가 상대방 전시장 맵 위치 조회 후 수락 대기(PENDING) 예약을 자동 신청합니다. (12~1시는 점심시간 보호 잠금)'
+                        : 'Click an available slot to schedule a PENDING meetup request.'}
+                    </p>
+
+                    {/* Table Scheduler Grid */}
+                    <div style={{ overflowX: 'auto', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11.5px', minWidth: '400px' }}>
+                        <thead>
+                          <tr>
+                            <th style={{ padding: '6px 8px', background: '#f1f5f9', borderBottom: '1px solid #e2e8f0', width: '25%', fontWeight: 800 }}>Time</th>
+                            {days.map(d => (
+                              <th key={d} style={{ padding: '6px 8px', background: '#f1f5f9', borderBottom: '1px solid #e2e8f0', width: '25%', fontWeight: 800 }}>
+                                {d.substring(5)}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {times.map(t => (
+                            <tr key={t}>
+                              <td style={{ padding: '6px', borderBottom: '1px solid #e2e8f0', background: '#f8fafc', fontWeight: 700, textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                {t}
+                              </td>
+                              {days.map(d => {
+                                const status = schedulerMap[d]?.[t] || 'AVAILABLE';
+                                const isLunch = t === '12:00 - 13:00';
+                                const isBooked = status === 'BOOKED';
+                                
+                                let cellBg = 'rgba(79, 70, 229, 0.04)';
+                                let cellColor = 'var(--accent-dark)';
+                                let cellBorder = '1px solid rgba(79, 70, 229, 0.12)';
+                                let cellText = lang === 'ko' ? '예약 가능' : 'Available';
+                                let cursorType = 'pointer';
+                                
+                                if (isLunch) {
+                                  cellBg = '#f1f5f9';
+                                  cellColor = '#94a3b8';
+                                  cellBorder = '1px solid #e2e8f0';
+                                  cellText = '🍽️ Lunch';
+                                  cursorType = 'not-allowed';
+                                } else if (isBooked) {
+                                  cellBg = 'rgba(239, 68, 68, 0.07)';
+                                  cellColor = '#dc2626';
+                                  cellBorder = '1px solid rgba(239, 68, 68, 0.12)';
+                                  cellText = '🔴 Booked';
+                                  cursorType = 'not-allowed';
+                                }
+
+                                return (
+                                  <td 
+                                    key={d + t}
+                                    onClick={() => {
+                                      if (!isLunch && !isBooked) {
+                                        handleOfflineSlotClick(d, t);
+                                      }
+                                    }}
+                                    className={!isLunch && !isBooked ? 'scheduler-interactive-slot' : ''}
+                                    style={{
+                                      padding: '8px 4px',
+                                      borderBottom: '1px solid #e2e8f0',
+                                      background: cellBg,
+                                      color: cellColor,
+                                      fontWeight: 700,
+                                      textAlign: 'center',
+                                      cursor: cursorType,
+                                      transition: 'all 0.2s',
+                                      borderLeft: cellBorder,
+                                      borderRight: cellBorder
+                                    }}
+                                  >
+                                    <div style={{ fontSize: '10.5px' }}>{cellText}</div>
+                                  </td>
+                                );
+                              })}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Bottom Legend */}
+                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem', justifyContent: 'center', fontSize: '11px', color: '#64748b' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ width: '8px', height: '8px', background: 'rgba(79, 70, 229, 0.08)', border: '1px solid rgba(79, 70, 229, 0.2)', borderRadius: '2px' }}></span>
+                        <span>{lang === 'ko' ? '예약 가능' : 'Available'}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ width: '8px', height: '8px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '2px' }}></span>
+                        <span>{lang === 'ko' ? '예약 완료' : 'Booked'}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ width: '8px', height: '8px', background: '#f1f5f9', border: '1px solid #e2e8f0', borderRadius: '2px' }}></span>
+                        <span>{lang === 'ko' ? '점심 시간' : 'Lunch'}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
               </div>
-
-              <div className="booking-form-field">
-                <span>{lang === 'ko' ? '희망 일자 선택' : 'Select Date'}</span>
-                <input 
-                  type="date" 
-                  value={offlineForm.date}
-                  onChange={(e) => setOfflineForm(prev => ({ ...prev, date: e.target.value }))}
-                />
-              </div>
-
-              <div className="booking-form-field">
-                <span>{lang === 'ko' ? '바이어 부스 번호' : 'Buyer Booth Number'}</span>
-                <input 
-                  type="text" 
-                  placeholder="예: LVCC West Hall #12345"
-                  value={offlineForm.boothNumber}
-                  onChange={(e) => setOfflineForm(prev => ({ ...prev, boothNumber: e.target.value }))}
-                />
-              </div>
-
-              <div className="booking-form-field">
-                <span>{lang === 'ko' ? '상담 목적' : 'Consultation Purpose'}</span>
-                <textarea 
-                  rows="3"
-                  value={offlineForm.purpose}
-                  placeholder={lang === 'ko' ? '최종 매칭 계약 확인 및 NDA 서명식 진행' : 'Final contract confirmation and NDA signing ceremony.'}
-                  onChange={(e) => setOfflineForm(prev => ({ ...prev, purpose: e.target.value }))}
-                />
-              </div>
-
-              <Button type="submit" style={{ width: '100%', marginTop: '0.75rem', borderRadius: '999px' }} loading={isScheduling}>
-                ⚡ {lang === 'ko' ? '전시회 미팅 일정 확정 신청' : 'Request In-Person Meeting'}
-              </Button>
-            </form>
+            </div>
           )}
         </div>
 
