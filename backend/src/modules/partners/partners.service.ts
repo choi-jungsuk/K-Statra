@@ -133,7 +133,9 @@ export class PartnersService implements OnApplicationBootstrap {
   ) {}
 
   onApplicationBootstrap() {
-    this.startCacheWarmup();
+    // 백그라운드 큐가 API 할당량(Rate Limit)을 자동 고갈시켜 실제 유저 검색을 블로킹하는 현상 원천 차단
+    // 캐시 워밍업은 실서버에서 자동 가동하지 않으며, 필요 시 수동(/partners/cache/warmup)으로만 구동 가능하게 제어
+    this.logger.log('[Search Warmer] Automatic background pre-fetching queue disabled to protect API Rate Limits.');
   }
 
   // 캐시 통계를 확인할 수 있도록 게터 신설
