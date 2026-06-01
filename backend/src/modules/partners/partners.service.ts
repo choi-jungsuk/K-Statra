@@ -44,6 +44,50 @@ const INDUSTRY_MAPPING: Record<string, string[]> = {
   Other: ['Other', '(Unspecified)'],
 };
 
+const REGION_MAP = [
+  { kr: '미국', en: 'USA' },
+  { kr: '캐나다', en: 'Canada' },
+  { kr: '멕시코', en: 'Mexico' },
+  { kr: '브라질', en: 'Brazil' },
+  { kr: '칠레', en: 'Chile' },
+  { kr: '파나마', en: 'Panama' },
+  { kr: '영국', en: 'UK' },
+  { kr: '독일', en: 'Germany' },
+  { kr: '프랑스', en: 'France' },
+  { kr: '이탈리아', en: 'Italy' },
+  { kr: '스페인', en: 'Spain' },
+  { kr: '일본', en: 'Japan' },
+  { kr: '중국', en: 'China' },
+  { kr: '베트남', en: 'Vietnam' },
+  { kr: '태국', en: 'Thailand' },
+  { kr: '인도네시아', en: 'Indonesia' },
+  { kr: '인니', en: 'Indonesia' },
+  { kr: '필리핀', en: 'Philippines' },
+  { kr: '말레이시아', en: 'Malaysia' },
+  { kr: '싱가포르', en: 'Singapore' },
+  { kr: '호주', en: 'Australia' },
+  { kr: '인도', en: 'India' },
+  { kr: '사우디', en: 'Saudi Arabia' },
+  { kr: 'uae', en: 'UAE' },
+  { kr: '오만', en: 'Oman' },
+  { kr: '우즈베키스탄', en: 'Uzbekistan' },
+  { kr: '카자흐스탄', en: 'Kazakhstan' },
+  { kr: '케냐', en: 'Kenya' },
+  { kr: '나이지리아', en: 'Nigeria' },
+  { kr: '이집트', en: 'Egypt' },
+  { kr: '모로코', en: 'Morocco' },
+  { kr: '폴란드', en: 'Poland' },
+  { kr: '헝가리', en: 'Hungary' },
+  { kr: '체코', en: 'Czech Republic' },
+  { kr: '아프리카', en: 'Africa' },
+  { kr: '중남미', en: 'Latin America' },
+  { kr: '중동', en: 'Middle East' },
+  { kr: '동남아', en: 'Southeast Asia' },
+  { kr: '유럽', en: 'Europe' },
+  { kr: '북미', en: 'North America' },
+  { kr: 'cis', en: 'CIS' }
+];
+
 export interface SearchOptions {
   q?: string;
   limit?: number;
@@ -312,6 +356,18 @@ export class PartnersService implements OnApplicationBootstrap {
     let intentData: any = null;
     let aiResponse = '';
 
+    // 조기에 q로부터 타겟 국가 파싱 (skipLLM이 true일 때도 정확히 작동하도록 보장)
+    let targetCountry = country;
+    if (q) {
+      const qL = q.toLowerCase();
+      const found = REGION_MAP.find(
+        (r) => qL.includes(r.kr.toLowerCase()) || qL.includes(r.en.toLowerCase())
+      );
+      if (found) {
+        targetCountry = found.en;
+      }
+    }
+
     if (q) {
       const qLower = q.toLowerCase();
       const hasRegion = REGION_KEYWORDS.some((kw) =>
@@ -349,6 +405,9 @@ export class PartnersService implements OnApplicationBootstrap {
           });
           try {
             intentData = await Promise.race([intentPromise, timeoutPromise]);
+            if (intentData?.country) {
+              targetCountry = intentData.country;
+            }
           } finally {
             clearTimeout(timeoutId!);
           }
@@ -538,66 +597,15 @@ export class PartnersService implements OnApplicationBootstrap {
         if (tavilyFailed) {
           this.logger.log(`[Search] Tavily failed or was throttled. Activating B2B AI Sourcing Consultant for: "${q}"`);
           
-          let targetCountry = intentData?.country || country;
-          if (!targetCountry && q) {
-            const qL = q.toLowerCase();
-            const regionMap = [
-              { kr: '미국', en: 'USA' },
-              { kr: '캐나다', en: 'Canada' },
-              { kr: '멕시코', en: 'Mexico' },
-              { kr: '브라질', en: 'Brazil' },
-              { kr: '칠레', en: 'Chile' },
-              { kr: '파나마', en: 'Panama' },
-              { kr: '영국', en: 'UK' },
-              { kr: '독일', en: 'Germany' },
-              { kr: '프랑스', en: 'France' },
-              { kr: '이탈리아', en: 'Italy' },
-              { kr: '스페인', en: 'Spain' },
-              { kr: '일본', en: 'Japan' },
-              { kr: '중국', en: 'China' },
-              { kr: '베트남', en: 'Vietnam' },
-              { kr: '태국', en: 'Thailand' },
-              { kr: '인도네시아', en: 'Indonesia' },
-              { kr: '인니', en: 'Indonesia' },
-              { kr: '필리핀', en: 'Philippines' },
-              { kr: '말레이시아', en: 'Malaysia' },
-              { kr: '싱가포르', en: 'Singapore' },
-              { kr: '호주', en: 'Australia' },
-              { kr: '인도', en: 'India' },
-              { kr: '사우디', en: 'Saudi Arabia' },
-              { kr: 'uae', en: 'UAE' },
-              { kr: '오만', en: 'Oman' },
-              { kr: '우즈베키스탄', en: 'Uzbekistan' },
-              { kr: '카자흐스탄', en: 'Kazakhstan' },
-              { kr: '케냐', en: 'Kenya' },
-              { kr: '나이지리아', en: 'Nigeria' },
-              { kr: '이집트', en: 'Egypt' },
-              { kr: '모로코', en: 'Morocco' },
-              { kr: '폴란드', en: 'Poland' },
-              { kr: '헝가리', en: 'Hungary' },
-              { kr: '체코', en: 'Czech Republic' },
-              { kr: '아프리카', en: 'Africa' },
-              { kr: '중남미', en: 'Latin America' },
-              { kr: '중동', en: 'Middle East' },
-              { kr: '동남아', en: 'Southeast Asia' },
-              { kr: '유럽', en: 'Europe' },
-            ];
-            const found = regionMap.find((r) => qL.includes(r.kr.toLowerCase()) || qL.includes(r.en.toLowerCase()));
-            if (found) {
-              targetCountry = found.en;
-            }
-          }
-          if (!targetCountry) {
-            targetCountry = 'Canada';
-          }
+          const sourcingCountry = targetCountry || 'Chile';
 
-          const aiSourced = await this.generateAILeads(q, targetCountry, detectedIntent);
+          const aiSourced = await this.generateAILeads(q, sourcingCountry, detectedIntent);
           
           mappedWebResults = aiSourced.map((item: any, index: number) => ({
             _id: `ai_sourced_${index}`,
             name: item.name,
             industry: item.industry || 'Automotive',
-            location: { country: item.country || targetCountry || 'Global', city: '' },
+            location: { country: item.country || sourcingCountry, city: '' },
             profileText: item.profileText,
             website: item.website || '',
             tags: item.tags || ['AI Lead', 'Distributor'],
@@ -688,7 +696,7 @@ export class PartnersService implements OnApplicationBootstrap {
               _id: `web_${index}`,
               name: item.title,
               industry: 'Web Result',
-              location: { country: 'Global', city: '' },
+              location: { country: targetCountry || 'Global', city: '' },
               profileText: item.content,
               website: item.url,
               tags: ['Web'],
@@ -698,16 +706,27 @@ export class PartnersService implements OnApplicationBootstrap {
             };
           });
 
-          if (intentData?.country) {
-            const countryLower = (intentData.country as string).toLowerCase();
+          // 엄격한 국가 매치 페널티 적용 (조기 추출한 targetCountry 기반)
+          if (targetCountry) {
+            const countryLower = targetCountry.toLowerCase();
+            const countryKr = REGION_MAP.find((r) => r.en.toLowerCase() === countryLower)?.kr || '';
+            const countryKrLower = countryKr.toLowerCase();
+
             mappedWebResults = mappedWebResults.map((item: any) => {
               const text = (
                 (item.profileText || '') +
                 ' ' +
                 (item.name || '')
               ).toLowerCase();
-              if (!text.includes(countryLower))
-                return { ...item, score: item.score * 0.7 };
+
+              const hasCountry =
+                text.includes(countryLower) ||
+                (countryKrLower && text.includes(countryKrLower));
+
+              if (!hasCountry) {
+                // Strict country penalty: 0.4 multiplier
+                return { ...item, score: item.score * 0.4 };
+              }
               return item;
             });
           }
@@ -719,61 +738,15 @@ export class PartnersService implements OnApplicationBootstrap {
           if (mappedWebResults.length === 0) {
             this.logger.log(`[Search] Tavily returned too few relevant results (${mappedWebResults.length}). Activating B2B AI Sourcing Consultant for "${q}"...`);
             
-            let targetCountry = intentData?.country || country;
-            if (!targetCountry && q) {
-              const qL = q.toLowerCase();
-              const regionMap = [
-                { kr: '미국', en: 'USA' },
-                { kr: '캐나다', en: 'Canada' },
-                { kr: '멕시코', en: 'Mexico' },
-                { kr: '브라질', en: 'Brazil' },
-                { kr: '칠레', en: 'Chile' },
-                { kr: '파나마', en: 'Panama' },
-                { kr: '영국', en: 'UK' },
-                { kr: '독일', en: 'Germany' },
-                { kr: '프랑스', en: 'France' },
-                { kr: '이탈리아', en: 'Italy' },
-                { kr: '스페인', en: 'Spain' },
-                { kr: '일본', en: 'Japan' },
-                { kr: '중국', en: 'China' },
-                { kr: '베트남', en: 'Vietnam' },
-                { kr: '태국', en: 'Thailand' },
-                { kr: '인도네시아', en: 'Indonesia' },
-                { kr: '인니', en: 'Indonesia' },
-                { kr: '필리핀', en: 'Philippines' },
-                { kr: '말레이시아', en: 'Malaysia' },
-                { kr: '싱가포르', en: 'Singapore' },
-                { kr: '호주', en: 'Australia' },
-                { kr: '인도', en: 'India' },
-                { kr: '사우디', en: 'Saudi Arabia' },
-                { kr: 'uae', en: 'UAE' },
-                { kr: '오만', en: 'Oman' },
-                { kr: '우즈베키스탄', en: 'Uzbekistan' },
-                { kr: '카자흐스탄', en: 'Kazakhstan' },
-                { kr: '케냐', en: 'Kenya' },
-                { kr: '나이지리아', en: 'Nigeria' },
-                { kr: '이집트', en: 'Egypt' },
-                { kr: '모로코', en: 'Morocco' },
-                { kr: '폴란드', en: 'Poland' },
-                { kr: '헝가리', en: 'Hungary' },
-                { kr: '체코', en: 'Czech Republic' },
-              ];
-              const found = regionMap.find((r) => qL.includes(r.kr.toLowerCase()) || qL.includes(r.en.toLowerCase()));
-              if (found) {
-                targetCountry = found.en;
-              }
-            }
-            if (!targetCountry) {
-              targetCountry = 'Chile'; // Default to Chile if it matches Chile query or Fallback Target
-            }
+            const sourcingCountry = targetCountry || 'Chile';
 
             try {
-              const aiSourced = await this.generateAILeads(q, targetCountry, detectedIntent);
+              const aiSourced = await this.generateAILeads(q, sourcingCountry, detectedIntent);
               const mappedAI = aiSourced.map((item: any, index: number) => ({
                 _id: `ai_sourced_low_relevance_${index}`,
                 name: item.name,
                 industry: item.industry || 'Automotive',
-                location: { country: item.country || targetCountry || 'Global', city: '' },
+                location: { country: item.country || sourcingCountry, city: '' },
                 profileText: item.profileText,
                 website: item.website || '',
                 tags: item.tags || ['AI Lead', 'Distributor'],
@@ -812,60 +785,14 @@ export class PartnersService implements OnApplicationBootstrap {
       } catch (mainWebErr: any) {
         this.logger.error(`[Search Fallback] Critical error during web-search pipeline: ${mainWebErr.message}. Launching absolute bulletproof fallback...`);
         
-        let targetCountry = intentData?.country || country;
-        if (!targetCountry && q) {
-          const qL = q.toLowerCase();
-          const regionMap = [
-            { kr: '미국', en: 'USA' },
-            { kr: '캐나다', en: 'Canada' },
-            { kr: '멕시코', en: 'Mexico' },
-            { kr: '브라질', en: 'Brazil' },
-            { kr: '칠레', en: 'Chile' },
-            { kr: '파나마', en: 'Panama' },
-            { kr: '영국', en: 'UK' },
-            { kr: '독일', en: 'Germany' },
-            { kr: '프랑스', en: 'France' },
-            { kr: '이탈리아', en: 'Italy' },
-            { kr: '스페인', en: 'Spain' },
-            { kr: '일본', en: 'Japan' },
-            { kr: '중국', en: 'China' },
-            { kr: '베트남', en: 'Vietnam' },
-            { kr: '태국', en: 'Thailand' },
-            { kr: '인도네시아', en: 'Indonesia' },
-            { kr: '인니', en: 'Indonesia' },
-            { kr: '필리핀', en: 'Philippines' },
-            { kr: '말레이시아', en: 'Malaysia' },
-            { kr: '싱가포르', en: 'Singapore' },
-            { kr: '호주', en: 'Australia' },
-            { kr: '인도', en: 'India' },
-            { kr: '사우디', en: 'Saudi Arabia' },
-            { kr: 'uae', en: 'UAE' },
-            { kr: '오만', en: 'Oman' },
-            { kr: '우즈베키스탄', en: 'Uzbekistan' },
-            { kr: '카자흐스탄', en: 'Kazakhstan' },
-            { kr: '케냐', en: 'Kenya' },
-            { kr: '나이지리아', en: 'Nigeria' },
-            { kr: '이집트', en: 'Egypt' },
-            { kr: '모로코', en: 'Morocco' },
-            { kr: '폴란드', en: 'Poland' },
-            { kr: '헝가리', en: 'Hungary' },
-            { kr: '체코', en: 'Czech Republic' },
-          ];
-          const found = regionMap.find((r) => qL.includes(r.kr.toLowerCase()) || qL.includes(r.en.toLowerCase()));
-          if (found) {
-            targetCountry = found.en;
-          }
-        }
-        if (!targetCountry) {
-          targetCountry = 'Canada';
-        }
+        const sourcingCountry = targetCountry || 'Chile';
 
-        const aiSourced = await this.generateAILeads(q, targetCountry, detectedIntent);
+        const aiSourced = await this.generateAILeads(q, sourcingCountry, detectedIntent);
         const mappedWebResults = aiSourced.map((item: any, index: number) => ({
           _id: `ai_sourced_fallback_${index}`,
           name: item.name,
           industry: item.industry || 'Automotive',
-          location: { country: item.country || targetCountry || 'Global', city: '' },
+          location: { country: item.country || sourcingCountry, city: '' },
           profileText: item.profileText,
           website: item.website || '',
           tags: item.tags || ['AI Lead', 'Distributor'],
@@ -876,7 +803,7 @@ export class PartnersService implements OnApplicationBootstrap {
 
         return {
           data: mappedWebResults,
-          aiResponse: `Web search service is currently undergoing minor latency optimization. Our B2B Sourcing Agent successfully generated 5 verified matching leads for ${targetCountry}.`,
+          aiResponse: `Web search service is currently undergoing minor latency optimization. Our B2B Sourcing Agent successfully generated 5 verified matching leads for ${sourcingCountry}.`,
           provider: 'ai_sourcing',
           debug: {
             searchType: 'FALLBACK_BULLETPROOF',

@@ -148,7 +148,7 @@ describe('PartnersService', () => {
         results: [
           {
             title: 'US Importer',
-            content: 'imports parts',
+            content: 'imports parts in USA',
             url: 'http://example.com',
             score: 0.9,
           },
