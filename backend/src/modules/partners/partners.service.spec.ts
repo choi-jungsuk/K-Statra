@@ -177,7 +177,7 @@ describe('PartnersService', () => {
       loggerSpy.mockRestore();
     });
 
-    it('자동차 관련 없는 웹 결과 → score 감점', async () => {
+    it('자동차 관련 없는 웹 결과 → 필터링되어 결과에서 배제됨', async () => {
       jest.spyOn(service as any, 'searchWeb').mockResolvedValue({
         results: [
           {
@@ -192,8 +192,8 @@ describe('PartnersService', () => {
 
       const result = await service.search({ q: '미국 자동차부품 수입업체' });
 
-      // 자동차 컨텍스트 없는 결과는 0.6 감점
-      expect(result.data[0].score).toBeLessThan(0.5);
+      // 자동차 컨텍스트 없는 결과는 감점으로 기준치(0.65) 미달되어 필터링됨
+      expect(result.data).toHaveLength(0);
     });
   });
 

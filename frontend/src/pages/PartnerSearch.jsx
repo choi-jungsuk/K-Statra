@@ -532,7 +532,6 @@ export default function PartnerSearch() {
               className="search-textarea"
               onFocus={(e) => (e.target.style.borderColor = '#2563eb')}
               onBlur={(e) => (e.target.style.borderColor = '#e5e7eb')}
-              style={{ paddingLeft: '220px' }} // Make room for the prefix pill inside textarea
             />
             <button
               onClick={runSearch}

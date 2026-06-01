@@ -2189,6 +2189,10 @@ h3 {
   position: relative;
 }
 
+.search-textarea {
+  padding-left: 220px;
+}
+
 .search-agent-pill {
   position: absolute;
   left: 24px;
