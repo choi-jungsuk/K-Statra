@@ -117,6 +117,7 @@ const SEARCH_PROJECTION = {
   updatedAt: 1,
   'dart.corpCode': 1,
   dataSource: 1,
+  website: 1,
 } as const;
 
 @Injectable()

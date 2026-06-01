@@ -66,6 +66,7 @@ export class Company {
   @Prop({ type: [String], default: [] }) needs: string[];
   @Prop({ type: [String], default: [] }) tags: string[];
   @Prop({ default: '' }) profileText: string;
+  @Prop({ default: '' }) website: string;
   @Prop({ default: '' }) videoUrl: string;
 
   @Prop({ type: { city: String, state: String, country: String }, default: {} })
