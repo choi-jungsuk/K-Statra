@@ -706,7 +706,8 @@ export class PartnersService implements OnApplicationBootstrap {
             };
           });
 
-          // 엄격한 국가 매치 페널티 적용 (조기 추출한 targetCountry 기반)
+          // 국가 매치 페널티 적용 (조기 추출한 targetCountry 기반)
+          // 실제 존재하는 업체를 최대한 노출하기 위해 페널티 비율을 0.75로 온건하게 적용
           if (targetCountry) {
             const countryLower = targetCountry.toLowerCase();
             const countryKr = REGION_MAP.find((r) => r.en.toLowerCase() === countryLower)?.kr || '';
@@ -724,15 +725,15 @@ export class PartnersService implements OnApplicationBootstrap {
                 (countryKrLower && text.includes(countryKrLower));
 
               if (!hasCountry) {
-                // Strict country penalty: 0.4 multiplier
-                return { ...item, score: item.score * 0.4 };
+                // Moderate country penalty: 0.75 multiplier to preserve real companies
+                return { ...item, score: item.score * 0.75 };
               }
               return item;
             });
           }
 
-          // Filter out garbage/low-relevance results to ensure 100% precision
-          mappedWebResults = mappedWebResults.filter((item: any) => item.score >= 0.65);
+          // 실제 존재하는 업체를 확보하기 위해 필터링 커트라인을 0.48로 대폭 완화
+          mappedWebResults = mappedWebResults.filter((item: any) => item.score >= 0.48);
 
           // If Tavily yielded too few high-quality matching results (0), activate AI Sourcing Agent as an absolute bulletproof fallback!
           if (mappedWebResults.length === 0) {
@@ -985,7 +986,7 @@ export class PartnersService implements OnApplicationBootstrap {
               role: 'system',
               content: `You are a senior global B2B trade consulting agent. 
 The user is looking to connect with companies matching: "${query}" in country: "${country || 'any country'}".
-Since our database is in cold-start mode, your task is to retrieve or construct 5 highly realistic, actual major distributor/importer companies or target B2B buyers in "${country || 'the target region'}" that match this criteria.
+CRITICAL REQUIREMENT: You MUST ONLY return real, actual, legally registered and historically verifiable real-world companies (e.g., major auto parts distributors like Derco, Gildemeister in Chile, or THACO in Vietnam). NEVER generate hypothetical, fictional, or virtual "fake" company names. If you are unsure of the exact name of a real company, search your historical knowledge and provide actual large-scale automotive/industrial conglomerates, trading groups, or national distributors in the target country "${country || 'the target region'}".
 
 Return a JSON object containing a "companies" array. Each company MUST match this schema:
 {
