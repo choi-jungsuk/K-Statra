@@ -85,7 +85,7 @@ const REGION_MAP = [
   { kr: '동남아', en: 'Southeast Asia' },
   { kr: '유럽', en: 'Europe' },
   { kr: '북미', en: 'North America' },
-  { kr: 'cis', en: 'CIS' }
+  { kr: 'cis', en: 'CIS' },
 ];
 
 export interface SearchOptions {
@@ -123,7 +123,10 @@ const SEARCH_PROJECTION = {
 @Injectable()
 export class PartnersService implements OnApplicationBootstrap {
   private readonly logger = new Logger(PartnersService.name);
-  private readonly searchCache = new Map<string, { data: SearchResult; timestamp: number }>();
+  private readonly searchCache = new Map<
+    string,
+    { data: SearchResult; timestamp: number }
+  >();
   private isPrefetchingStarted = false;
 
   constructor(
@@ -135,7 +138,9 @@ export class PartnersService implements OnApplicationBootstrap {
   onApplicationBootstrap() {
     // 백그라운드 큐가 API 할당량(Rate Limit)을 자동 고갈시켜 실제 유저 검색을 블로킹하는 현상 원천 차단
     // 캐시 워밍업은 실서버에서 자동 가동하지 않으며, 필요 시 수동(/partners/cache/warmup)으로만 구동 가능하게 제어
-    this.logger.log('[Search Warmer] Automatic background pre-fetching queue disabled to protect API Rate Limits.');
+    this.logger.log(
+      '[Search Warmer] Automatic background pre-fetching queue disabled to protect API Rate Limits.',
+    );
   }
 
   // 캐시 통계를 확인할 수 있도록 게터 신설
@@ -143,29 +148,36 @@ export class PartnersService implements OnApplicationBootstrap {
     const keys = Array.from(this.searchCache.keys());
     return {
       totalCached: keys.length,
-      cachedQueries: keys.map(k => {
-        try { return JSON.parse(k).q; } catch { return k; }
+      cachedQueries: keys.map((k) => {
+        try {
+          return JSON.parse(k).q;
+        } catch {
+          return k;
+        }
       }),
     };
   }
 
   // 강제로 워밍업을 재트리거할 수 있는 메서드
-  async forceCacheWarmup(): Promise<{ message: string; totalQueued: number }> {
+  forceCacheWarmup(): Promise<{ message: string; totalQueued: number }> {
     this.searchCache.clear();
     this.isPrefetchingStarted = false;
     this.startCacheWarmup();
-    return {
+    return Promise.resolve({
       message: 'Cache cleared and warm-up queue restarted.',
       totalQueued: 460,
-    };
+    });
   }
 
   private startCacheWarmup() {
     if (this.isPrefetchingStarted) return;
     this.isPrefetchingStarted = true;
 
-    const isDev = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
-    this.logger.log(`[Search Warmer] Starting background B2B cache pre-fetching queue (isDev: ${isDev})...`);
+    const isDev =
+      process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
+    this.logger.log(
+      `[Search Warmer] Starting background B2B cache pre-fetching queue (isDev: ${isDev})...`,
+    );
 
     // 최우선 순위 적재 타겟 (아인글로벌 중점 타겟)
     const priorityQueries = [
@@ -189,14 +201,35 @@ export class PartnersService implements OnApplicationBootstrap {
       '멕시코의 기어 수입업체',
       '독일의 크래쉬 패드 수입업체',
       '프랑스의 알루미늄 다이캐스팅 수입업체',
-      '스페인의 가전 금형 수입업체'
+      '스페인의 가전 금형 수입업체',
     ];
 
     // 백그라운드 큐 구축을 위해 국가와 아이템 생성
     const countries = [
-      'Brazil', 'Oman', 'Poland', 'Chile', 'Panama', 'UAE', 'Vietnam', 'Indonesia', 'Thailand',
-      'Uzbekistan', 'Kazakhstan', 'Kenya', 'Nigeria', 'Egypt', 'Morocco', 'Hungary',
-      'Czech Republic', 'USA', 'Mexico', 'Canada', 'Germany', 'France', 'Spain', 'Japan'
+      'Brazil',
+      'Oman',
+      'Poland',
+      'Chile',
+      'Panama',
+      'UAE',
+      'Vietnam',
+      'Indonesia',
+      'Thailand',
+      'Uzbekistan',
+      'Kazakhstan',
+      'Kenya',
+      'Nigeria',
+      'Egypt',
+      'Morocco',
+      'Hungary',
+      'Czech Republic',
+      'USA',
+      'Mexico',
+      'Canada',
+      'Germany',
+      'France',
+      'Spain',
+      'Japan',
     ];
 
     const items = [
@@ -222,15 +255,15 @@ export class PartnersService implements OnApplicationBootstrap {
       '자동차 에어백',
       '차량용 와이퍼',
       '차량용 램프',
-      '전기차 배터리'
+      '전기차 배터리',
     ];
 
     const queue: string[] = [...priorityQueries];
 
     // 중복 제거하면서 모든 국가 X 아이템 조합 큐에 채워넣기
     if (isDev) {
-      countries.forEach(c => {
-        items.forEach(i => {
+      countries.forEach((c) => {
+        items.forEach((i) => {
           let krCountry = c;
           if (c === 'Brazil') krCountry = '브라질';
           else if (c === 'Oman') krCountry = '오만';
@@ -265,21 +298,27 @@ export class PartnersService implements OnApplicationBootstrap {
       });
     }
 
-    this.logger.log(`[Search Warmer] Total ${queue.length} queries scheduled in background queue.`);
+    this.logger.log(
+      `[Search Warmer] Total ${queue.length} queries scheduled in background queue.`,
+    );
 
     // 15초 초기 유예 시간 후, 8초 주기로 3개씩 병렬 호출 처리 (OpenAI RPM 안전 범위 준수)
     let index = 0;
     const batchSize = 3;
     const processQueue = async () => {
       if (index >= queue.length) {
-        this.logger.log('[Search Warmer] Background pre-fetching queue fully completed!');
+        this.logger.log(
+          '[Search Warmer] Background pre-fetching queue fully completed!',
+        );
         return;
       }
 
       const batch = queue.slice(index, index + batchSize);
       index += batch.length;
 
-      this.logger.log(`[Search Warmer] [${index}/${queue.length}] Processing batch of ${batch.length} queries: ${batch.join(', ')}`);
+      this.logger.log(
+        `[Search Warmer] [${index}/${queue.length}] Processing batch of ${batch.length} queries: ${batch.join(', ')}`,
+      );
 
       // 3개 쿼리를 병렬로 비동기 실행 (Promise.all)하여 가속화
       await Promise.all(
@@ -287,27 +326,45 @@ export class PartnersService implements OnApplicationBootstrap {
           try {
             await this.search({ q: currentQuery, limit: 5 });
           } catch (err: any) {
-            this.logger.warn(`[Search Warmer] Failed pre-fetching for "${currentQuery}": ${err.message}`);
+            this.logger.warn(
+              `[Search Warmer] Failed pre-fetching for "${currentQuery}": ${err.message}`,
+            );
           }
-        })
+        }),
       );
 
       // 다음 배치는 8초 후에 처리 (기존 20초에서 8초로 단축)
-      setTimeout(processQueue, 8000);
+      setTimeout(() => {
+        void processQueue();
+      }, 8000);
     };
 
     // 15초 대기 후 가동 (기존 30초에서 단축)
-    setTimeout(processQueue, 15000);
+    setTimeout(() => {
+      void processQueue();
+    }, 15000);
   }
 
   normalizeQuery(q: string): string {
     if (!q) return '';
     return q
-      .replace(/[\s\t\r\n\-\_\,\.\?\!\'\"]/g, '') // 공백, 특수문자 제거
-      .replace(/(recommend|please|find|show|search|for|me|howabout|suggest)/gi, '') // 영어 불용어 제거
-      .replace(/(의|에|을|를|과|와|에서|으로|로|은|는|이|가|에대해|에대한|를위한|을위한)/g, '') // 조사 및 전치사 제거
-      .replace(/(추천해달라고요청해보려해|추천해달라고|추천해줘|알려줘|찾아줘|보여줘|검색해줘|구해줘|찾기|검증|해달라고|해줘|했더니|해보려해|해보려|하려고)/g, '') // 요청형 어미 제거
-      .replace(/(수입업체|수입사|수입상|바이어|구매자|해외바이어|유통사|디스트리뷰터|수출업체|수출사|수출상|공급사|공급업체|제조사|제조업체|importer|buyer|distributor|exporter|supplier|manufacturer)/g, '') // B2B 역할 불용어 제거
+      .replace(/[\s\t\r\n\-_,.?!'"]/g, '') // 공백, 특수문자 제거
+      .replace(
+        /(recommend|please|find|show|search|for|me|howabout|suggest)/gi,
+        '',
+      ) // 영어 불용어 제거
+      .replace(
+        /(의|에|을|를|과|와|에서|으로|로|은|는|이|가|에대해|에대한|를위한|을위한)/g,
+        '',
+      ) // 조사 및 전치사 제거
+      .replace(
+        /(추천해달라고요청해보려해|추천해달라고|추천해줘|알려줘|찾아줘|보여줘|검색해줘|구해줘|찾기|검증|해달라고|해줘|했더니|해보려해|해보려|하려고)/g,
+        '',
+      ) // 요청형 어미 제거
+      .replace(
+        /(수입업체|수입사|수입상|바이어|구매자|해외바이어|유통사|디스트리뷰터|수출업체|수출사|수출상|공급사|공급업체|제조사|제조업체|importer|buyer|distributor|exporter|supplier|manufacturer)/g,
+        '',
+      ) // B2B 역할 불용어 제거
       .toLowerCase()
       .trim();
   }
@@ -330,13 +387,17 @@ export class PartnersService implements OnApplicationBootstrap {
     const cached = this.searchCache.get(cacheKey);
     const cacheTTL = 30 * 60 * 1000; // 30 minutes TTL
     if (cached && Date.now() - cached.timestamp < cacheTTL) {
-      this.logger.log(`[Search Cache] HIT for query: "${opts.q}" (Normalized: "${normalizedQ}")`);
+      this.logger.log(
+        `[Search Cache] HIT for query: "${opts.q}" (Normalized: "${normalizedQ}")`,
+      );
       return cached.data;
     }
 
     const result = await this.executeSearch(opts);
     this.searchCache.set(cacheKey, { data: result, timestamp: Date.now() });
-    this.logger.log(`[Search Cache] MISS. Cached query: "${opts.q}" (Normalized: "${normalizedQ}")`);
+    this.logger.log(
+      `[Search Cache] MISS. Cached query: "${opts.q}" (Normalized: "${normalizedQ}")`,
+    );
     return result;
   }
 
@@ -364,7 +425,8 @@ export class PartnersService implements OnApplicationBootstrap {
     if (q) {
       const qL = q.toLowerCase();
       const found = REGION_MAP.find(
-        (r) => qL.includes(r.kr.toLowerCase()) || qL.includes(r.en.toLowerCase())
+        (r) =>
+          qL.includes(r.kr.toLowerCase()) || qL.includes(r.en.toLowerCase()),
       );
       if (found) {
         targetCountry = found.en;
@@ -389,7 +451,8 @@ export class PartnersService implements OnApplicationBootstrap {
         qLower.includes(kw.toLowerCase()),
       );
 
-      if (hasSellerIntent) detectedIntent = 'seller'; // 구체적인 셀러 키워드를 우선 매칭하여 '업체' 등의 일반 바이어 키워드와 꼬임 방지
+      if (hasSellerIntent)
+        detectedIntent = 'seller'; // 구체적인 셀러 키워드를 우선 매칭하여 '업체' 등의 일반 바이어 키워드와 꼬임 방지
       else if (hasBuyerIntent) detectedIntent = 'buyer';
 
       let skipLLM = false;
@@ -404,7 +467,10 @@ export class PartnersService implements OnApplicationBootstrap {
           let timeoutId: NodeJS.Timeout;
           const intentPromise = this.extractSearchIntent(q);
           const timeoutPromise = new Promise<null>((_, reject) => {
-            timeoutId = setTimeout(() => reject(new Error('LLM Timeout')), 4000);
+            timeoutId = setTimeout(
+              () => reject(new Error('LLM Timeout')),
+              4000,
+            );
           });
           try {
             intentData = await Promise.race([intentPromise, timeoutPromise]);
@@ -580,7 +646,10 @@ export class PartnersService implements OnApplicationBootstrap {
         try {
           const tavilyPromise = this.searchWeb(tavilyQuery);
           const timeoutPromise = new Promise<typeof webResults>((_, reject) => {
-            timeoutId = setTimeout(() => reject(new Error('Tavily Timeout')), 1500); // 1.5s timeout for ultra-fast fallback to AI Lead Sourcing
+            timeoutId = setTimeout(
+              () => reject(new Error('Tavily Timeout')),
+              1500,
+            ); // 1.5s timeout for ultra-fast fallback to AI Lead Sourcing
           });
           webResults = await Promise.race([tavilyPromise, timeoutPromise]);
           if (!webResults.results || webResults.results.length === 0) {
@@ -598,12 +667,14 @@ export class PartnersService implements OnApplicationBootstrap {
 
         // Fallback: If Tavily search failed (usage limits exceeded), trigger the AI Lead Generator!
         if (tavilyFailed) {
-          this.logger.log(`[Search] Tavily failed or was throttled. Activating B2B AI Sourcing Consultant for: "${q}"`);
-          
+          this.logger.log(
+            `[Search] Tavily failed or was throttled. Activating B2B AI Sourcing Consultant for: "${q}"`,
+          );
+
           const sourcingCountry = targetCountry || 'Chile';
 
-          const aiSourced = await this.generateAILeads(q, sourcingCountry, detectedIntent);
-          
+          const aiSourced = await this.generateAILeads(q, sourcingCountry);
+
           mappedWebResults = aiSourced.map((item: any, index: number) => ({
             _id: `ai_sourced_${index}`,
             name: item.name,
@@ -612,11 +683,13 @@ export class PartnersService implements OnApplicationBootstrap {
             profileText: item.profileText,
             website: item.website || '',
             tags: item.tags || ['AI Lead', 'Distributor'],
-            matchRecommendation: item.matchRecommendation || 'Sourced via K-Statra real-time B2B AI Sourcing Agent.',
+            matchRecommendation:
+              item.matchRecommendation ||
+              'Sourced via K-Statra real-time B2B AI Sourcing Agent.',
             matchAnalysis: item.matchAnalysis || [],
             score: item.score || 0.95,
           }));
-          
+
           providerName = 'ai_sourcing';
           aiResponse = `Since the external web-search API is currently experiencing traffic limitations, our B2B AI Sourcing Agent was activated. We have dynamically generated 5 matching global business leads matching your query.`;
         } else {
@@ -652,7 +725,7 @@ export class PartnersService implements OnApplicationBootstrap {
                 'trading',
               ];
               if (penalties.some((p) => title.includes(p))) score -= 0.45; // Strict B2B penalty (restored)
-              if (penalties.some((p) => content.includes(p))) score -= 0.30; // Strict B2B penalty (restored)
+              if (penalties.some((p) => content.includes(p))) score -= 0.3; // Strict B2B penalty (restored)
               if (boosts.some((b) => title.includes(b))) score += 0.2;
               if (boosts.some((b) => content.includes(b))) score += 0.1;
               if (
@@ -660,7 +733,7 @@ export class PartnersService implements OnApplicationBootstrap {
                 content.includes('supply of') ||
                 content.includes('products from')
               )
-                score -= 0.30; // Strict B2B penalty (restored)
+                score -= 0.3; // Strict B2B penalty (restored)
             } else if (detectedIntent === 'seller') {
               if (
                 title.includes('supplier') ||
@@ -691,7 +764,7 @@ export class PartnersService implements OnApplicationBootstrap {
                   (item.title + ' ' + item.content).toLowerCase().includes(t),
                 )
               ) {
-                score -= 0.60; // Strict automotive content relevance penalty (restored)
+                score -= 0.6; // Strict automotive content relevance penalty (restored)
               }
             }
 
@@ -713,7 +786,9 @@ export class PartnersService implements OnApplicationBootstrap {
           // 실제 존재하는 업체를 최대한 노출하기 위해 페널티 비율을 0.75로 온건하게 적용
           if (targetCountry) {
             const countryLower = targetCountry.toLowerCase();
-            const countryKr = REGION_MAP.find((r) => r.en.toLowerCase() === countryLower)?.kr || '';
+            const countryKr =
+              REGION_MAP.find((r) => r.en.toLowerCase() === countryLower)?.kr ||
+              '';
             const countryKrLower = countryKr.toLowerCase();
 
             mappedWebResults = mappedWebResults.map((item: any) => {
@@ -736,25 +811,38 @@ export class PartnersService implements OnApplicationBootstrap {
           }
 
           // 실제 존재하는 업체를 확보하기 위해 필터링 커트라인을 0.48로 대폭 완화
-          mappedWebResults = mappedWebResults.filter((item: any) => item.score >= 0.48);
+          mappedWebResults = mappedWebResults.filter(
+            (item: any) => item.score >= 0.48,
+          );
 
           // If Tavily yielded too few high-quality matching results (0), activate AI Sourcing Agent as an absolute bulletproof fallback!
           if (mappedWebResults.length === 0) {
-            this.logger.log(`[Search] Tavily returned too few relevant results (${mappedWebResults.length}). Activating B2B AI Sourcing Consultant for "${q}"...`);
-            
+            this.logger.log(
+              `[Search] Tavily returned too few relevant results (${mappedWebResults.length}). Activating B2B AI Sourcing Consultant for "${q}"...`,
+            );
+
             const sourcingCountry = targetCountry || 'Chile';
 
             try {
-              const aiSourced = await this.generateAILeads(q, sourcingCountry, detectedIntent);
+              const aiSourced = await this.generateAILeads(
+                q,
+                sourcingCountry,
+                detectedIntent,
+              );
               const mappedAI = aiSourced.map((item: any, index: number) => ({
                 _id: `ai_sourced_low_relevance_${index}`,
                 name: item.name,
                 industry: item.industry || 'Automotive',
-                location: { country: item.country || sourcingCountry, city: '' },
+                location: {
+                  country: item.country || sourcingCountry,
+                  city: '',
+                },
                 profileText: item.profileText,
                 website: item.website || '',
                 tags: item.tags || ['AI Lead', 'Distributor'],
-                matchRecommendation: item.matchRecommendation || 'Sourced via K-Statra real-time B2B AI Sourcing Agent.',
+                matchRecommendation:
+                  item.matchRecommendation ||
+                  'Sourced via K-Statra real-time B2B AI Sourcing Agent.',
                 matchAnalysis: item.matchAnalysis || [],
                 score: item.score || 0.95,
               }));
@@ -764,7 +852,9 @@ export class PartnersService implements OnApplicationBootstrap {
               providerName = 'ai_sourcing';
               aiResponse = `Some low-relevance search results were filtered out. K-Statra's real-time B2B AI Sourcing Agent has dynamically generated 5 highly relevant matching global leads.`;
             } catch (aiErr: any) {
-              this.logger.error(`[Search Fallback] AI Sourcing failed or timed out: ${aiErr.message}`);
+              this.logger.error(
+                `[Search Fallback] AI Sourcing failed or timed out: ${aiErr.message}`,
+              );
             }
           }
         }
@@ -787,11 +877,17 @@ export class PartnersService implements OnApplicationBootstrap {
           },
         };
       } catch (mainWebErr: any) {
-        this.logger.error(`[Search Fallback] Critical error during web-search pipeline: ${mainWebErr.message}. Launching absolute bulletproof fallback...`);
-        
+        this.logger.error(
+          `[Search Fallback] Critical error during web-search pipeline: ${mainWebErr.message}. Launching absolute bulletproof fallback...`,
+        );
+
         const sourcingCountry = targetCountry || 'Chile';
 
-        const aiSourced = await this.generateAILeads(q, sourcingCountry, detectedIntent);
+        const aiSourced = await this.generateAILeads(
+          q,
+          sourcingCountry,
+          detectedIntent,
+        );
         const mappedWebResults = aiSourced.map((item: any, index: number) => ({
           _id: `ai_sourced_fallback_${index}`,
           name: item.name,
@@ -800,7 +896,9 @@ export class PartnersService implements OnApplicationBootstrap {
           profileText: item.profileText,
           website: item.website || '',
           tags: item.tags || ['AI Lead', 'Distributor'],
-          matchRecommendation: item.matchRecommendation || 'Sourced via K-Statra real-time B2B AI Sourcing Agent.',
+          matchRecommendation:
+            item.matchRecommendation ||
+            'Sourced via K-Statra real-time B2B AI Sourcing Agent.',
           matchAnalysis: item.matchAnalysis || [],
           score: item.score || 0.95,
         }));
@@ -974,7 +1072,10 @@ export class PartnersService implements OnApplicationBootstrap {
     }
   }
 
-  private async generateAILeads(query: string, country?: string, intent?: string): Promise<any[]> {
+  private async generateAILeads(
+    query: string,
+    country?: string,
+  ): Promise<any[]> {
     const apiKey = process.env.OPENAI_API_KEY;
     const model = 'gpt-4o-mini'; // Using super-fast gpt-4o-mini for maximum speed
     if (!apiKey) return [];
@@ -1007,8 +1108,8 @@ Return a JSON object containing a "companies" array. Each company MUST match thi
   "score": 0.95
 }
 
-Be extremely concise. Keep all profileText and matchRecommendation descriptions very short (under 12 words each) to minimize response time. Return ONLY the raw JSON object. Do not include markdown code block syntax.`
-            }
+Be extremely concise. Keep all profileText and matchRecommendation descriptions very short (under 12 words each) to minimize response time. Return ONLY the raw JSON object. Do not include markdown code block syntax.`,
+            },
           ],
           response_format: { type: 'json_object' },
           temperature: 0.5,
@@ -1020,94 +1121,189 @@ Be extremely concise. Keep all profileText and matchRecommendation descriptions 
             'Content-Type': 'application/json',
           },
           timeout: 4500,
-        }
+        },
       );
 
       const data = JSON.parse(response.data.choices[0].message.content);
       return Array.isArray(data.companies) ? data.companies : [];
     } catch (err: any) {
-      this.logger.error(`[Search] AI Lead Generation failed or timed out: ${err.message}. Activating bulletproof fallback.`);
-      
+      this.logger.error(
+        `[Search] AI Lead Generation failed or timed out: ${err.message}. Activating bulletproof fallback.`,
+      );
+
       const qLower = (query || '').toLowerCase();
-      const isVietnam = qLower.includes('vietnam') || qLower.includes('베트남') || (country || '').toLowerCase().includes('vietnam') || (country || '').includes('베트남');
-      const isAutoMold = qLower.includes('자동차') || qLower.includes('부품') || qLower.includes('금형') || qLower.includes('mold') || qLower.includes('die') || qLower.includes('auto');
+      const isVietnam =
+        qLower.includes('vietnam') ||
+        qLower.includes('베트남') ||
+        (country || '').toLowerCase().includes('vietnam') ||
+        (country || '').includes('베트남');
+      const isAutoMold =
+        qLower.includes('자동차') ||
+        qLower.includes('부품') ||
+        qLower.includes('금형') ||
+        qLower.includes('mold') ||
+        qLower.includes('die') ||
+        qLower.includes('auto');
 
       if (isVietnam && isAutoMold) {
-        this.logger.log('[Search] Returning highly-optimized local B2B fallback for Vietnamese Automotive Mold Importers (5 companies)');
+        this.logger.log(
+          '[Search] Returning highly-optimized local B2B fallback for Vietnamese Automotive Mold Importers (5 companies)',
+        );
         return [
           {
-            name: "THACO Auto Parts (Truong Hai Group)",
-            industry: "Automotive / EV Parts",
-            country: "Vietnam",
-            profileText: "Vietnam's largest automotive group and key industrial manufacturer. They import high-precision injection molds, press dies, and automotive components from global suppliers for passenger and commercial vehicle production lines in Chu Lai.",
-            website: "https://thacoauto.vn",
-            tags: ["Buyer", "Automotive", "Distributor", "Importers", "DART Checked"],
-            matchRecommendation: "THACO is the absolute prime candidate in Vietnam. They are actively seeking premium Korean mold and die manufacturers to expand their localized manufacturing capacities.",
-            matchAnalysis: [
-              { label: "Industry Match", score: 98, description: "Perfect alignment as Vietnam's top mobility conglomerate." },
-              { label: "Sourcing Intent", score: 95, description: "Highly active sourcing for high-precision injection and press tooling." },
-              { label: "Financial Credit", score: 92, description: "Triple-A rated local group with certified secure transaction histories." }
+            name: 'THACO Auto Parts (Truong Hai Group)',
+            industry: 'Automotive / EV Parts',
+            country: 'Vietnam',
+            profileText:
+              "Vietnam's largest automotive group and key industrial manufacturer. They import high-precision injection molds, press dies, and automotive components from global suppliers for passenger and commercial vehicle production lines in Chu Lai.",
+            website: 'https://thacoauto.vn',
+            tags: [
+              'Buyer',
+              'Automotive',
+              'Distributor',
+              'Importers',
+              'DART Checked',
             ],
-            score: 0.98
+            matchRecommendation:
+              'THACO is the absolute prime candidate in Vietnam. They are actively seeking premium Korean mold and die manufacturers to expand their localized manufacturing capacities.',
+            matchAnalysis: [
+              {
+                label: 'Industry Match',
+                score: 98,
+                description:
+                  "Perfect alignment as Vietnam's top mobility conglomerate.",
+              },
+              {
+                label: 'Sourcing Intent',
+                score: 95,
+                description:
+                  'Highly active sourcing for high-precision injection and press tooling.',
+              },
+              {
+                label: 'Financial Credit',
+                score: 92,
+                description:
+                  'Triple-A rated local group with certified secure transaction histories.',
+              },
+            ],
+            score: 0.98,
           },
           {
-            name: "VinFast Sourcing & Tooling Division",
-            industry: "Automotive / EV Parts",
-            country: "Vietnam",
-            profileText: "The automotive and electric vehicle arm of Vingroup. Operating a state-of-the-art smart manufacturing complex in Hai Phong, they actively import specialized automotive tooling, stamping dies, and mold assemblies to support their rapid EV platform scaling.",
-            website: "https://vinfastauto.com",
-            tags: ["Buyer", "EV Parts", "Importer", "Global Giant"],
-            matchRecommendation: "VinFast's massive EV production lines have ongoing demands for premium molds and precision casting tooling. Ideal for premium technology partners.",
+            name: 'VinFast Sourcing & Tooling Division',
+            industry: 'Automotive / EV Parts',
+            country: 'Vietnam',
+            profileText:
+              'The automotive and electric vehicle arm of Vingroup. Operating a state-of-the-art smart manufacturing complex in Hai Phong, they actively import specialized automotive tooling, stamping dies, and mold assemblies to support their rapid EV platform scaling.',
+            website: 'https://vinfastauto.com',
+            tags: ['Buyer', 'EV Parts', 'Importer', 'Global Giant'],
+            matchRecommendation:
+              "VinFast's massive EV production lines have ongoing demands for premium molds and precision casting tooling. Ideal for premium technology partners.",
             matchAnalysis: [
-              { label: "Industry Match", score: 95, description: "Excellent alignment with EV parts and precision mold tooling." },
-              { label: "Sourcing Intent", score: 90, description: "Urgent requirements for fast-cycle injection mold components." },
-              { label: "Scale Compatibility", score: 95, description: "Global scale buyer capable of high-volume contracts." }
+              {
+                label: 'Industry Match',
+                score: 95,
+                description:
+                  'Excellent alignment with EV parts and precision mold tooling.',
+              },
+              {
+                label: 'Sourcing Intent',
+                score: 90,
+                description:
+                  'Urgent requirements for fast-cycle injection mold components.',
+              },
+              {
+                label: 'Scale Compatibility',
+                score: 95,
+                description:
+                  'Global scale buyer capable of high-volume contracts.',
+              },
             ],
-            score: 0.95
+            score: 0.95,
           },
           {
-            name: "Saigon Precision & Die Castings Joint Stock",
-            industry: "Mobility / Automation / Manufacturing",
-            country: "Vietnam",
-            profileText: "A major Tier-1 automotive mold importer and high-precision casting distributor headquartered in Ho Chi Minh City. They distribute Japanese and Korean molding machinery, high-durability dies, and press tooling to regional factories.",
-            website: "https://saigonprecision.vn",
-            tags: ["Buyer", "Distributor", "Automotive", "Precision Tooling"],
-            matchRecommendation: "Acts as a primary importer and domestic distributor. Best suited for Korean exporters looking for a local distributor with established supply channels.",
+            name: 'Saigon Precision & Die Castings Joint Stock',
+            industry: 'Mobility / Automation / Manufacturing',
+            country: 'Vietnam',
+            profileText:
+              'A major Tier-1 automotive mold importer and high-precision casting distributor headquartered in Ho Chi Minh City. They distribute Japanese and Korean molding machinery, high-durability dies, and press tooling to regional factories.',
+            website: 'https://saigonprecision.vn',
+            tags: ['Buyer', 'Distributor', 'Automotive', 'Precision Tooling'],
+            matchRecommendation:
+              'Acts as a primary importer and domestic distributor. Best suited for Korean exporters looking for a local distributor with established supply channels.',
             matchAnalysis: [
-              { label: "Industry Match", score: 92, description: "Direct fit in industrial tooling, mold imports, and sales." },
-              { label: "Distribution Network", score: 94, description: "Connected to over 150 local plastic molding factories." },
-              { label: "Sourcing Quality", score: 88, description: "Preferential sourcing from certified Korean mold makers." }
+              {
+                label: 'Industry Match',
+                score: 92,
+                description:
+                  'Direct fit in industrial tooling, mold imports, and sales.',
+              },
+              {
+                label: 'Distribution Network',
+                score: 94,
+                description:
+                  'Connected to over 150 local plastic molding factories.',
+              },
+              {
+                label: 'Sourcing Quality',
+                score: 88,
+                description:
+                  'Preferential sourcing from certified Korean mold makers.',
+              },
             ],
-            score: 0.92
+            score: 0.92,
           },
           {
-            name: "Saigon General Auto-importers Joint Stock (SGAI)",
-            industry: "Automotive / EV Parts",
-            country: "Vietnam",
-            profileText: "A premier national-scale automotive distributor importing specialized electronic systems, seat assemblies, and high-strength bracket products. SGAI operates over 45 major distribution centers across Vietnam.",
-            website: "https://sgai.vn",
-            tags: ["Buyer", "Distributor", "Automotive", "Components"],
-            matchRecommendation: "Outstanding national distribution channels. Strongly recommended for general auto parts and vehicle accessories.",
+            name: 'Saigon General Auto-importers Joint Stock (SGAI)',
+            industry: 'Automotive / EV Parts',
+            country: 'Vietnam',
+            profileText:
+              'A premier national-scale automotive distributor importing specialized electronic systems, seat assemblies, and high-strength bracket products. SGAI operates over 45 major distribution centers across Vietnam.',
+            website: 'https://sgai.vn',
+            tags: ['Buyer', 'Distributor', 'Automotive', 'Components'],
+            matchRecommendation:
+              'Outstanding national distribution channels. Strongly recommended for general auto parts and vehicle accessories.',
             matchAnalysis: [
-              { label: "Industry Match", score: 89, description: "Very strong compatibility across general auto parts distribution." },
-              { label: "Market Scale", score: 91, description: "Extensive national wholesale network and established dealer relationships." }
+              {
+                label: 'Industry Match',
+                score: 89,
+                description:
+                  'Very strong compatibility across general auto parts distribution.',
+              },
+              {
+                label: 'Market Scale',
+                score: 91,
+                description:
+                  'Extensive national wholesale network and established dealer relationships.',
+              },
             ],
-            score: 0.89
+            score: 0.89,
           },
           {
-            name: "Vietnam Precision Castings & Tooling Corp",
-            industry: "Mobility / Automation / Manufacturing",
-            country: "Vietnam",
-            profileText: "A prominent industrial importer specializing in precision molding machinery, die castings, and heavy automotive assembly components. Located in the northern Bac Ninh industrial hub.",
-            website: "https://vietnamprecision.com",
-            tags: ["Buyer", "Importer", "Industrial Tooling"],
-            matchRecommendation: "Best suited for industrial assembly lines, brackets, and die-casting products targeting northern Vietnam's manufacturing nodes.",
+            name: 'Vietnam Precision Castings & Tooling Corp',
+            industry: 'Mobility / Automation / Manufacturing',
+            country: 'Vietnam',
+            profileText:
+              'A prominent industrial importer specializing in precision molding machinery, die castings, and heavy automotive assembly components. Located in the northern Bac Ninh industrial hub.',
+            website: 'https://vietnamprecision.com',
+            tags: ['Buyer', 'Importer', 'Industrial Tooling'],
+            matchRecommendation:
+              "Best suited for industrial assembly lines, brackets, and die-casting products targeting northern Vietnam's manufacturing nodes.",
             matchAnalysis: [
-              { label: "Industry Match", score: 87, description: "Perfect alignment with die casting, tooling, and industrial brackets." },
-              { label: "Regional Access", score: 90, description: "Strong presence in the highly active northern industrial zones." }
+              {
+                label: 'Industry Match',
+                score: 87,
+                description:
+                  'Perfect alignment with die casting, tooling, and industrial brackets.',
+              },
+              {
+                label: 'Regional Access',
+                score: 90,
+                description:
+                  'Strong presence in the highly active northern industrial zones.',
+              },
             ],
-            score: 0.87
-          }
+            score: 0.87,
+          },
         ];
       }
 
@@ -1115,74 +1311,121 @@ Be extremely concise. Keep all profileText and matchRecommendation descriptions 
       return [
         {
           name: `${fallbackCountry} Global Sourcing Partners`,
-          industry: "Automotive / EV Parts",
+          industry: 'Automotive / EV Parts',
           country: fallbackCountry,
           profileText: `A premier global trade distributor specializing in importing specialized tooling, mold components, and high-precision industrial parts into the ${fallbackCountry} market.`,
-          website: "https://globalsourcing.net",
-          tags: ["Buyer", "Distributor", "B2B"],
+          website: 'https://globalsourcing.net',
+          tags: ['Buyer', 'Distributor', 'B2B'],
           matchRecommendation: `Excellent partner for local B2B penetration into the ${fallbackCountry} automotive and manufacturing sectors.`,
           matchAnalysis: [
-            { label: "Industry Fit", score: 90, description: "Strong alignment with industrial sourcing needs." },
-            { label: "Market Access", score: 85, description: "Established channels in the target region." }
+            {
+              label: 'Industry Fit',
+              score: 90,
+              description: 'Strong alignment with industrial sourcing needs.',
+            },
+            {
+              label: 'Market Access',
+              score: 85,
+              description: 'Established channels in the target region.',
+            },
           ],
-          score: 0.90
+          score: 0.9,
         },
         {
           name: `${fallbackCountry} Industrial & Automotive Imports`,
-          industry: "Mobility / Automation / Manufacturing",
+          industry: 'Mobility / Automation / Manufacturing',
           country: fallbackCountry,
           profileText: `A leading regional distributor focused on high-precision engineering systems, structural parts, and machinery components. They import global components for industrial clients in ${fallbackCountry}.`,
-          website: "https://regionalimports.net",
-          tags: ["Buyer", "Importer", "Engineering"],
+          website: 'https://regionalimports.net',
+          tags: ['Buyer', 'Importer', 'Engineering'],
           matchRecommendation: `Ideal buyer for high-volume automotive parts, chassis brackets, and structural components.`,
           matchAnalysis: [
-            { label: "Sourcing Scale", score: 88, description: "High-volume buyer seeking long-term manufacturing partners." },
-            { label: "Product Compatibility", score: 85, description: "Strong demand for certified automotive bracket and casting components." }
+            {
+              label: 'Sourcing Scale',
+              score: 88,
+              description:
+                'High-volume buyer seeking long-term manufacturing partners.',
+            },
+            {
+              label: 'Product Compatibility',
+              score: 85,
+              description:
+                'Strong demand for certified automotive bracket and casting components.',
+            },
           ],
-          score: 0.88
+          score: 0.88,
         },
         {
           name: `${fallbackCountry} Mobility & Tooling Distributors`,
-          industry: "Automotive / EV Parts",
+          industry: 'Automotive / EV Parts',
           country: fallbackCountry,
           profileText: `Key trading hub managing import, certification, and localized logistics for auto body parts, stamping dies, and electronic parts in ${fallbackCountry}.`,
-          website: "https://mobilitydist.com",
-          tags: ["Buyer", "Distributor", "Mobility"],
+          website: 'https://mobilitydist.com',
+          tags: ['Buyer', 'Distributor', 'Mobility'],
           matchRecommendation: `Strong distribution capabilities for vehicle accessories, interior electronic items, and localized moldings.`,
           matchAnalysis: [
-            { label: "Logistics Ability", score: 86, description: "Excellent localized distribution and bonded warehouse clearance." },
-            { label: "Sourcing Demand", score: 84, description: "Regular imports from certified East Asian component makers." }
+            {
+              label: 'Logistics Ability',
+              score: 86,
+              description:
+                'Excellent localized distribution and bonded warehouse clearance.',
+            },
+            {
+              label: 'Sourcing Demand',
+              score: 84,
+              description:
+                'Regular imports from certified East Asian component makers.',
+            },
           ],
-          score: 0.86
+          score: 0.86,
         },
         {
           name: `${fallbackCountry} B2B Engineering Sourcing Ltd`,
-          industry: "Mobility / Automation / Manufacturing",
+          industry: 'Mobility / Automation / Manufacturing',
           country: fallbackCountry,
           profileText: `A highly active industrial broker and importer linking global parts manufacturers to local assembly plants. They manage bulk procurement contracts in ${fallbackCountry}.`,
-          website: "https://b2bengineeringsourcing.com",
-          tags: ["Buyer", "B2B", "Sourcing"],
+          website: 'https://b2bengineeringsourcing.com',
+          tags: ['Buyer', 'B2B', 'Sourcing'],
           matchRecommendation: `Superb fit for manufacturing tech, factory automation equipment, and specialized industrial valves or gears.`,
           matchAnalysis: [
-            { label: "Procurement Power", score: 85, description: "Manages major supply contracts for domestic auto plants." },
-            { label: "Compliance Score", score: 87, description: "Highly compliant importer with clean trade records." }
+            {
+              label: 'Procurement Power',
+              score: 85,
+              description:
+                'Manages major supply contracts for domestic auto plants.',
+            },
+            {
+              label: 'Compliance Score',
+              score: 87,
+              description:
+                'Highly compliant importer with clean trade records.',
+            },
           ],
-          score: 0.85
+          score: 0.85,
         },
         {
           name: `${fallbackCountry} Apex Manufacturing Sourcing Group`,
-          industry: "Automotive / EV Parts",
+          industry: 'Automotive / EV Parts',
           country: fallbackCountry,
           profileText: `An established B2B sourcing network and trade platform that coordinates bulk import operations for secondary battery equipment and advanced mobility solutions in ${fallbackCountry}.`,
-          website: "https://apexpartsourcing.com",
-          tags: ["Buyer", "Sourcing", "Advanced Mobility"],
+          website: 'https://apexpartsourcing.com',
+          tags: ['Buyer', 'Sourcing', 'Advanced Mobility'],
           matchRecommendation: `Best suited for smart factory tech, lithium battery components, and LIDAR auto systems.`,
           matchAnalysis: [
-            { label: "Innovation Index", score: 82, description: "Actively expanding in next-gen EV and autonomous parts sectors." },
-            { label: "Import Coverage", score: 84, description: "Comprehensive nationwide delivery network." }
+            {
+              label: 'Innovation Index',
+              score: 82,
+              description:
+                'Actively expanding in next-gen EV and autonomous parts sectors.',
+            },
+            {
+              label: 'Import Coverage',
+              score: 84,
+              description: 'Comprehensive nationwide delivery network.',
+            },
           ],
-          score: 0.82
-        }
+          score: 0.82,
+        },
       ];
     }
   }
@@ -1224,9 +1467,9 @@ Be extremely concise. Keep all profileText and matchRecommendation descriptions 
         result.records.forEach((record) => {
           const id = record.get('mongoId') as string;
           scores[id] =
-            (record.get('industryScore') as any).toNumber() +
-            (record.get('countryScore') as any).toNumber() +
-            (record.get('tagScore') as any).toNumber();
+            record.get('industryScore').toNumber() +
+            record.get('countryScore').toNumber() +
+            record.get('tagScore').toNumber();
         });
       } finally {
         await session.close();
@@ -1240,12 +1483,57 @@ Be extremely concise. Keep all profileText and matchRecommendation descriptions 
   }
 }
 const AUTOMOTIVE_KEYWORDS = [
-  '자동차', '부품', 'automotive', 'car parts', 'ev', 'machinery', 'parts', '배터리', 'battery',
-  '시트', 'seat', '금형', 'mold', 'die', '조향', 'steering', '펌프', 'valve', '밸브',
-  '특수', '특장', 'special vehicle', '전장', 'led', '샤시', 'chassis', '브라켓', 'bracket',
-  '탄소중립', '범퍼', 'bumper', '다이캐스팅', 'die casting', '가전', '기어', 'gear', 'lidar',
-  '자율주행', 'autonomous', '2차전지', 'battery equipment', '스마트팩토리', 'smart factory', 'automation',
-  '에어백', 'airbag', '와이퍼', 'wiper', '램프', 'lamp', '전기차 배터리'
+  '자동차',
+  '부품',
+  'automotive',
+  'car parts',
+  'ev',
+  'machinery',
+  'parts',
+  '배터리',
+  'battery',
+  '시트',
+  'seat',
+  '금형',
+  'mold',
+  'die',
+  '조향',
+  'steering',
+  '펌프',
+  'valve',
+  '밸브',
+  '특수',
+  '특장',
+  'special vehicle',
+  '전장',
+  'led',
+  '샤시',
+  'chassis',
+  '브라켓',
+  'bracket',
+  '탄소중립',
+  '범퍼',
+  'bumper',
+  '다이캐스팅',
+  'die casting',
+  '가전',
+  '기어',
+  'gear',
+  'lidar',
+  '자율주행',
+  'autonomous',
+  '2차전지',
+  'battery equipment',
+  '스마트팩토리',
+  'smart factory',
+  'automation',
+  '에어백',
+  'airbag',
+  '와이퍼',
+  'wiper',
+  '램프',
+  'lamp',
+  '전기차 배터리',
 ];
 const KOREA_KEYWORDS = [
   '한국',
@@ -1290,8 +1578,99 @@ const SELLER_KEYWORDS = [
   'seller',
 ];
 const REGION_KEYWORDS = [
-  '미국', '캐나다', '멕시코', '브라질', '칠레', '파나마', '아르헨티나', '콜롬비아', '페루', '영국', '독일', '프랑스', '이탈리아', '스페인', '네덜란드', '벨기에', '러시아', '폴란드', '헝가리', '체코', '터키', '일본', '중국', '인도', '베트남', '태국', '인도네시아', '인니', '필리핀', '말레이시아', '싱가포르', '호주', '대만', '사우디', 'uae', '오만', '우즈베키스탄', '카자흐스탄', '케냐', '나이지리아', '이집트', '모로코', '아프리카', '중남미', '중동', '동남아', '유럽', '북미', 'cis',
-  'usa', 'america', 'canada', 'mexico', 'brazil', 'chile', 'panama', 'uk', 'germany', 'france', 'italy', 'spain', 'netherlands', 'russia', 'poland', 'hungary', 'czech republic', 'japan', 'china', 'india', 'vietnam', 'thailand', 'indonesia', 'philippines', 'malaysia', 'singapore', 'australia', 'taiwan', 'saudi', 'israel', 'egypt', 'oman', 'uzbekistan', 'kazakhstan', 'kenya', 'nigeria', 'morocco', 'africa', 'latin america', 'middle east', 'southeast asia', 'europe', 'north america', 'cis'
+  '미국',
+  '캐나다',
+  '멕시코',
+  '브라질',
+  '칠레',
+  '파나마',
+  '아르헨티나',
+  '콜롬비아',
+  '페루',
+  '영국',
+  '독일',
+  '프랑스',
+  '이탈리아',
+  '스페인',
+  '네덜란드',
+  '벨기에',
+  '러시아',
+  '폴란드',
+  '헝가리',
+  '체코',
+  '터키',
+  '일본',
+  '중국',
+  '인도',
+  '베트남',
+  '태국',
+  '인도네시아',
+  '인니',
+  '필리핀',
+  '말레이시아',
+  '싱가포르',
+  '호주',
+  '대만',
+  '사우디',
+  'uae',
+  '오만',
+  '우즈베키스탄',
+  '카자흐스탄',
+  '케냐',
+  '나이지리아',
+  '이집트',
+  '모로코',
+  '아프리카',
+  '중남미',
+  '중동',
+  '동남아',
+  '유럽',
+  '북미',
+  'cis',
+  'usa',
+  'america',
+  'canada',
+  'mexico',
+  'brazil',
+  'chile',
+  'panama',
+  'uk',
+  'germany',
+  'france',
+  'italy',
+  'spain',
+  'netherlands',
+  'russia',
+  'poland',
+  'hungary',
+  'czech republic',
+  'japan',
+  'china',
+  'india',
+  'vietnam',
+  'thailand',
+  'indonesia',
+  'philippines',
+  'malaysia',
+  'singapore',
+  'australia',
+  'taiwan',
+  'saudi',
+  'israel',
+  'egypt',
+  'oman',
+  'uzbekistan',
+  'kazakhstan',
+  'kenya',
+  'nigeria',
+  'morocco',
+  'africa',
+  'latin america',
+  'middle east',
+  'southeast asia',
+  'europe',
+  'north america',
+  'cis',
 ];
 
 function buildTavilyQuery(originalQuery: string, intent: string): string {
@@ -1378,7 +1757,7 @@ function buildTavilyQuery(originalQuery: string, intent: string): string {
     regionMap.find((r) => qL.includes(r.kr.toLowerCase()))?.en ?? '';
   const productEn =
     productMap.find((p) => qL.includes(p.kr.toLowerCase()))?.en ?? '';
-  
+
   let moldEn = '';
   if (qL.includes('금형') || qL.includes('mold') || qL.includes('die')) {
     moldEn = 'molds dies';

@@ -1,4 +1,11 @@
-import { Controller, Post, Body, Sse, Query, MessageEvent } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Sse,
+  Query,
+  MessageEvent,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { AgentService } from './agent.service';
 import { Observable } from 'rxjs';
@@ -24,18 +31,31 @@ export class AgentController {
   }
 
   @Sse('chat-stream')
-  @ApiOperation({ summary: 'Claude 에이전트 실시간 SSE 스트리밍 답변 및 도구 연동' })
-  @ApiQuery({ name: 'message', type: 'string', description: '사용자의 입력 질문' })
-  @ApiQuery({ name: 'history', type: 'string', required: false, description: '이전 대화 내역 (JSON 배열 문자열)' })
+  @ApiOperation({
+    summary: 'Claude 에이전트 실시간 SSE 스트리밍 답변 및 도구 연동',
+  })
+  @ApiQuery({
+    name: 'message',
+    type: 'string',
+    description: '사용자의 입력 질문',
+  })
+  @ApiQuery({
+    name: 'history',
+    type: 'string',
+    required: false,
+    description: '이전 대화 내역 (JSON 배열 문자열)',
+  })
   chatStream(
     @Query('message') message: string,
     @Query('history') history?: string,
   ): Observable<MessageEvent> {
     return this.agentService.chatWithClaudeAgentStream(message, history).pipe(
-      map((event) => ({
-        data: event.data,
-      } as MessageEvent))
+      map(
+        (event) =>
+          ({
+            data: event.data,
+          }) as MessageEvent,
+      ),
     );
   }
 }
-

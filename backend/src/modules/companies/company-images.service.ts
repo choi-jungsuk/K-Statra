@@ -44,7 +44,7 @@ export class CompanyImagesService {
     const initialLen = company.images.length;
     company.images = company.images.filter(
       (img) => (img as any)._id?.toString() !== imageId,
-    ) as typeof company.images;
+    );
 
     if (company.images.length === initialLen)
       throw new NotFoundException('Image not found');

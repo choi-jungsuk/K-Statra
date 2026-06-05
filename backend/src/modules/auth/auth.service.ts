@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
@@ -21,7 +25,10 @@ export class AuthService {
   private hashPassword(password: string): string {
     // Standard secure SHA-256 hashing (zero dependency)
     const salt = 'kstatra_secure_salt_2026';
-    return crypto.createHash('sha256').update(password + salt).digest('hex');
+    return crypto
+      .createHash('sha256')
+      .update(password + salt)
+      .digest('hex');
   }
 
   async register(dto: RegisterDto): Promise<any> {
@@ -94,7 +101,9 @@ export class AuthService {
     const user = await this.userModel.findOne({ email }).exec();
 
     if (!user || user.passwordHash !== this.hashPassword(password)) {
-      throw new UnauthorizedException('이메일 또는 비밀번호가 일치하지 않습니다');
+      throw new UnauthorizedException(
+        '이메일 또는 비밀번호가 일치하지 않습니다',
+      );
     }
 
     const payload = {

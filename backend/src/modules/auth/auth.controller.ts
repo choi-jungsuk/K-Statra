@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, UseGuards, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  UseGuards,
+  Req,
+  Res,
+} from '@nestjs/common';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -19,7 +27,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const result = await this.authService.register(dto);
-    
+
     // Set secure cookie
     res.cookie('kstatra_token', result.accessToken, {
       httpOnly: true,
@@ -40,7 +48,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const result = await this.authService.login(dto);
-    
+
     // Set secure cookie
     res.cookie('kstatra_token', result.accessToken, {
       httpOnly: true,
@@ -55,7 +63,7 @@ export class AuthController {
 
   @Post('logout')
   @ApiOperation({ summary: 'Log out and clear session cookie' })
-  async logout(@Res({ passthrough: true }) res: Response) {
+  logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('kstatra_token', { path: '/' });
     return { message: '로그아웃 되었습니다.' };
   }
@@ -63,7 +71,7 @@ export class AuthController {
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Get current user profile' })
-  async getProfile(@Req() req: any) {
+  getProfile(@Req() req: any) {
     return req.user;
   }
 }

@@ -1,8 +1,18 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDto {
-  @ApiProperty({ description: 'User email address', example: 'buyer@kstatra.com' })
+  @ApiProperty({
+    description: 'User email address',
+    example: 'buyer@kstatra.com',
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
@@ -18,18 +28,30 @@ export class RegisterDto {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ description: 'User role', enum: ['buyer', 'company'], default: 'buyer' })
+  @ApiProperty({
+    description: 'User role',
+    enum: ['buyer', 'company'],
+    default: 'buyer',
+  })
   @IsEnum(['buyer', 'company'])
   @IsNotEmpty()
   role: 'buyer' | 'company';
 
   // Optional business fields for automatic profile creation
-  @ApiProperty({ description: 'Country (optional)', example: 'South Korea', required: false })
+  @ApiProperty({
+    description: 'Country (optional)',
+    example: 'South Korea',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   country?: string;
 
-  @ApiProperty({ description: 'Industry sectors (optional)', example: ['K-Beauty', 'Robotics'], required: false })
+  @ApiProperty({
+    description: 'Industry sectors (optional)',
+    example: ['K-Beauty', 'Robotics'],
+    required: false,
+  })
   @IsOptional()
   industries?: string[];
 }

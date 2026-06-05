@@ -18,7 +18,9 @@ import { CompaniesModule } from '../companies/companies.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'kstatra_jwt_secret_key_2026',
+        secret:
+          configService.get<string>('JWT_SECRET') ||
+          'kstatra_jwt_secret_key_2026',
         signOptions: {
           expiresIn: '7d', // 7 days matching cookie expiry
         },

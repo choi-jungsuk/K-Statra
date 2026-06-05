@@ -152,7 +152,7 @@ export class XrplService implements OnModuleInit, OnModuleDestroy {
 
     if (matchedTx) {
       const tx = matchedTx.tx ?? matchedTx.tx_json;
-      return { paid: true, txHash: tx?.hash as string | undefined };
+      return { paid: true, txHash: tx?.hash };
     }
 
     return { paid: false };

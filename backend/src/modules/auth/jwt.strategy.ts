@@ -6,24 +6,27 @@ import { AuthService } from './auth.service';
 
 const cookieOrHeaderExtractor = (req: any) => {
   let token: string | null = null;
-  
+
   // 1. Extract from secure HttpOnly cookie
   if (req && req.headers && req.headers.cookie) {
-    const cookies = req.headers.cookie.split(';').reduce((res: any, c: string) => {
-      const [key, val] = c.trim().split('=');
-      if (key && val) {
-        res[key] = decodeURIComponent(val);
-      }
-      return res;
-    }, {} as Record<string, string>);
+    const cookies = req.headers.cookie.split(';').reduce(
+      (res: any, c: string) => {
+        const [key, val] = c.trim().split('=');
+        if (key && val) {
+          res[key] = decodeURIComponent(val);
+        }
+        return res;
+      },
+      {} as Record<string, string>,
+    );
     token = cookies['kstatra_token'];
   }
-  
+
   // 2. Fallback to Bearer token in headers
   if (!token) {
     token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
   }
-  
+
   return token;
 };
 
@@ -36,7 +39,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: cookieOrHeaderExtractor,
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('JWT_SECRET') || 'kstatra_jwt_secret_key_2026',
+      secretOrKey:
+        configService.get<string>('JWT_SECRET') ||
+        'kstatra_jwt_secret_key_2026',
     });
   }
 

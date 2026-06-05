@@ -12,16 +12,20 @@ async function bootstrap() {
   });
 
   const configService = app.get(ConfigService);
-  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : (configService.get<number>('port') ?? 4000);
+  const port = process.env.PORT
+    ? parseInt(process.env.PORT, 10)
+    : (configService.get<number>('port') ?? 4000);
   const origins = configService.get<string[]>('cors.origins') ?? ['*'];
 
   // Security (Swagger UI 인라인 스크립트 허용)
   app.use(helmet({ contentSecurityPolicy: false }));
 
   // CORS
-  const isDev = configService.get<string>('nodeEnv') === 'development' || process.env.NODE_ENV === 'development';
+  const isDev =
+    configService.get<string>('nodeEnv') === 'development' ||
+    process.env.NODE_ENV === 'development';
   app.enableCors({
-    origin: isDev ? true : (origins.includes('*') ? true : origins),
+    origin: isDev ? true : origins.includes('*') ? true : origins,
     credentials: true,
   });
 

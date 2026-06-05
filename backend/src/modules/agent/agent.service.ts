@@ -22,8 +22,11 @@ export class AgentService {
     }
 
     try {
-      const searchResult = await this.partnersService.search({ q: message, limit: 5 });
-      const companiesInfo = searchResult.data.map(company => ({
+      const searchResult = await this.partnersService.search({
+        q: message,
+        limit: 5,
+      });
+      const companiesInfo = searchResult.data.map((company) => ({
         이름: company.name,
         산업군: company.industry,
         설명: company.profileText || company.description || '',
@@ -41,11 +44,11 @@ ${JSON.stringify(companiesInfo, null, 2)}
 
       const messages = [
         { role: 'system', content: systemPrompt },
-        { role: 'user', content: message }
+        { role: 'user', content: message },
       ];
 
       const isOpenRouter = process.env.OPENROUTER_API_KEY ? true : false;
-      const url = isOpenRouter 
+      const url = isOpenRouter
         ? 'https://openrouter.ai/api/v1/chat/completions'
         : 'https://api.openai.com/v1/chat/completions';
 
@@ -59,7 +62,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
         },
         {
           headers: {
-            'Authorization': `Bearer ${apiKey}`,
+            Authorization: `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
           },
         },
@@ -68,9 +71,8 @@ ${JSON.stringify(companiesInfo, null, 2)}
       return {
         answer: response.data.choices[0].message.content,
         data_source: 'K-Statra DB + Azure AI Agent',
-        companies_found: companiesInfo.length
+        companies_found: companiesInfo.length,
       };
-
     } catch (error: any) {
       this.logger.error(`Azure AI Agent Error: ${error.message}`);
       throw new HttpException(
@@ -81,13 +83,21 @@ ${JSON.stringify(companiesInfo, null, 2)}
   }
 
   // 2. 프리미엄 Claude Managed Agent SSE 실시간 스트리밍 구현
-  chatWithClaudeAgentStream(message: string, historyJson?: string): Observable<any> {
+  chatWithClaudeAgentStream(
+    message: string,
+    historyJson?: string,
+  ): Observable<any> {
     const subject = new Subject<any>();
     const apiKey = process.env.ANTHROPIC_API_KEY;
 
     if (!apiKey) {
       setTimeout(() => {
-        subject.next({ data: JSON.stringify({ type: 'error', text: 'Anthropic API 키가 설정되지 않았습니다. .env 파일을 확인해 주세요.' }) });
+        subject.next({
+          data: JSON.stringify({
+            type: 'error',
+            text: 'Anthropic API 키가 설정되지 않았습니다. .env 파일을 확인해 주세요.',
+          }),
+        });
         subject.complete();
       }, 10);
       return subject.asObservable();
@@ -113,13 +123,15 @@ ${JSON.stringify(companiesInfo, null, 2)}
     const tools = [
       {
         name: 'search_partners',
-        description: 'K-Statra 파트너 데이터베이스에서 매칭이 필요한 비즈니스 파트너(기업) 목록을 실시간으로 검색합니다.',
+        description:
+          'K-Statra 파트너 데이터베이스에서 매칭이 필요한 비즈니스 파트너(기업) 목록을 실시간으로 검색합니다.',
         input_schema: {
           type: 'object',
           properties: {
             query: {
               type: 'string',
-              description: '사용자가 검색하려는 키워드나 비즈니스 업종, 매칭 분야 (예: 자동차 부품 수출, 바이오 헬스케어)',
+              description:
+                '사용자가 검색하려는 키워드나 비즈니스 업종, 매칭 분야 (예: 자동차 부품 수출, 바이오 헬스케어)',
             },
           },
           required: ['query'],
@@ -130,9 +142,17 @@ ${JSON.stringify(companiesInfo, null, 2)}
     // 비동기 파싱 처리 실행
     (async () => {
       try {
-        let currentMessages = [...history, { role: 'user', content: message }];
+        const currentMessages = [
+          ...history,
+          { role: 'user', content: message },
+        ];
 
-        subject.next({ data: JSON.stringify({ type: 'status', text: 'Hermes 에이전트 연결 중...' }) });
+        subject.next({
+          data: JSON.stringify({
+            type: 'status',
+            text: 'Hermes 에이전트 연결 중...',
+          }),
+        });
 
         // 첫 번째 API 호출 (도구 사용 여부 탐색)
         const response = await axios.post(
@@ -152,7 +172,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
               'content-type': 'application/json',
             },
             responseType: 'stream',
-          }
+          },
         );
 
         const rl = readline.createInterface({
@@ -162,16 +182,15 @@ ${JSON.stringify(companiesInfo, null, 2)}
 
         let toolUseBlock: any = null;
         let toolInputRaw = '';
-        let assistantMessageContent: any[] = [];
-        let textResponse = '';
+        const assistantMessageContent: any[] = [];
 
         for await (const line of rl) {
           if (!line.trim() || !line.startsWith('data:')) continue;
-          
+
           let parsed;
           try {
             parsed = JSON.parse(line.substring(5).trim());
-          } catch (e) {
+          } catch {
             continue;
           }
 
@@ -179,14 +198,20 @@ ${JSON.stringify(companiesInfo, null, 2)}
             if (parsed.content_block?.type === 'tool_use') {
               toolUseBlock = parsed.content_block;
               toolInputRaw = '';
-              subject.next({ data: JSON.stringify({ type: 'status', text: '데이터베이스에서 관련 비즈니스 파트너 검색 중...' }) });
+              subject.next({
+                data: JSON.stringify({
+                  type: 'status',
+                  text: '데이터베이스에서 관련 비즈니스 파트너 검색 중...',
+                }),
+              });
             }
           } else if (parsed.type === 'content_block_delta') {
             const delta = parsed.delta;
             if (delta?.type === 'text_delta') {
-              textResponse += delta.text;
               assistantMessageContent.push({ type: 'text', text: delta.text });
-              subject.next({ data: JSON.stringify({ type: 'text', text: delta.text }) });
+              subject.next({
+                data: JSON.stringify({ type: 'text', text: delta.text }),
+              });
             } else if (delta?.type === 'input_json_delta') {
               toolInputRaw += delta.partial_json;
             }
@@ -200,18 +225,28 @@ ${JSON.stringify(companiesInfo, null, 2)}
           let toolInput: any = {};
           try {
             toolInput = JSON.parse(toolInputRaw || '{}');
-          } catch (err) {
+          } catch {
             this.logger.error(`Failed to parse tool input: ${toolInputRaw}`);
           }
 
           const query = toolInput.query || message;
-          this.logger.log(`Claude requested tool: search_partners with query: "${query}"`);
-          
-          subject.next({ data: JSON.stringify({ type: 'status', text: `"${query}" 관련 기업 데이터를 불러오고 있습니다...` }) });
+          this.logger.log(
+            `Claude requested tool: search_partners with query: "${query}"`,
+          );
+
+          subject.next({
+            data: JSON.stringify({
+              type: 'status',
+              text: `"${query}" 관련 기업 데이터를 불러오고 있습니다...`,
+            }),
+          });
 
           // 1. 로컬 파트너 검색 실행
-          const searchResult = await this.partnersService.search({ q: query, limit: 5 });
-          const companiesInfo = searchResult.data.map(company => ({
+          const searchResult = await this.partnersService.search({
+            q: query,
+            limit: 5,
+          });
+          const companiesInfo = searchResult.data.map((company) => ({
             name: company.name,
             industry: company.industry,
             description: company.profileText || company.description || '',
@@ -235,29 +270,13 @@ ${JSON.stringify(companiesInfo, null, 2)}
             input: toolInput,
           });
 
-          const toolResultMessage = {
-            role: 'user',
-            content: [
-              ...currentMessages,
-              {
-                role: 'assistant',
-                content: assistantMessageContent,
-              },
-              {
-                role: 'user',
-                content: [
-                  {
-                    type: 'tool_result',
-                    tool_use_id: toolUseBlock.id,
-                    content: JSON.stringify(companiesInfo),
-                  },
-                ],
-              },
-            ],
-          };
-
           // 3. 도구 결과와 함께 2차 호출 실행하여 최종 답변 받기
-          subject.next({ data: JSON.stringify({ type: 'status', text: '매칭 파트너를 분석하여 답변을 구성하고 있습니다...' }) });
+          subject.next({
+            data: JSON.stringify({
+              type: 'status',
+              text: '매칭 파트너를 분석하여 답변을 구성하고 있습니다...',
+            }),
+          });
 
           const finalResponse = await axios.post(
             'https://api.anthropic.com/v1/messages',
@@ -291,7 +310,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
                 'content-type': 'application/json',
               },
               responseType: 'stream',
-            }
+            },
           );
 
           const finalRl = readline.createInterface({
@@ -301,18 +320,20 @@ ${JSON.stringify(companiesInfo, null, 2)}
 
           for await (const line of finalRl) {
             if (!line.trim() || !line.startsWith('data:')) continue;
-            
+
             let parsed;
             try {
               parsed = JSON.parse(line.substring(5).trim());
-            } catch (e) {
+            } catch {
               continue;
             }
 
             if (parsed.type === 'content_block_delta') {
               const delta = parsed.delta;
               if (delta?.type === 'text_delta') {
-                subject.next({ data: JSON.stringify({ type: 'text', text: delta.text }) });
+                subject.next({
+                  data: JSON.stringify({ type: 'text', text: delta.text }),
+                });
               }
             }
           }
@@ -320,7 +341,9 @@ ${JSON.stringify(companiesInfo, null, 2)}
 
         subject.complete();
       } catch (err: any) {
-        this.logger.warn(`Anthropic streaming failed, falling back to OpenAI: ${err.message}`);
+        this.logger.warn(
+          `Anthropic streaming failed, falling back to OpenAI: ${err.message}`,
+        );
         await this.streamWithOpenAI(message, history, subject);
       }
     })();
@@ -328,7 +351,11 @@ ${JSON.stringify(companiesInfo, null, 2)}
     return subject.asObservable();
   }
 
-  private async streamWithOpenAI(message: string, history: any[], subject: Subject<any>): Promise<void> {
+  private async streamWithOpenAI(
+    message: string,
+    history: any[],
+    subject: Subject<any>,
+  ): Promise<void> {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       subject.next({
@@ -342,16 +369,26 @@ ${JSON.stringify(companiesInfo, null, 2)}
     }
 
     try {
-      subject.next({ data: JSON.stringify({ type: 'status', text: 'Hermes 에이전트 가동 중 (OpenAI 백업가동)...' }) });
+      subject.next({
+        data: JSON.stringify({
+          type: 'status',
+          text: 'Hermes 에이전트 가동 중 (OpenAI 백업가동)...',
+        }),
+      });
 
       // 1. K-Statra DB에서 파트너 검색 (도구를 미리 가동)
-      const searchResult = await this.partnersService.search({ q: message, limit: 5 });
-      const companiesInfo = searchResult.data.map(company => ({
+      const searchResult = await this.partnersService.search({
+        q: message,
+        limit: 5,
+      });
+      const companiesInfo = searchResult.data.map((company) => ({
         name: company.name,
         industry: company.industry,
         description: company.profileText || company.description || '',
         tags: company.tags || [],
-        location: company.location ? `${company.location.city || ''} ${company.location.country || ''}`.trim() : '',
+        location: company.location
+          ? `${company.location.city || ''} ${company.location.country || ''}`.trim()
+          : '',
         sizeBucket: company.sizeBucket || '',
       }));
 
@@ -376,14 +413,22 @@ ${JSON.stringify(companiesInfo, null, 2)}
 
       const openAIMessages = [
         { role: 'system', content: systemPrompt },
-        ...history.map(h => ({
+        ...history.map((h) => ({
           role: h.role === 'assistant' ? 'assistant' : 'user',
-          content: typeof h.content === 'string' ? h.content : JSON.stringify(h.content)
+          content:
+            typeof h.content === 'string'
+              ? h.content
+              : JSON.stringify(h.content),
         })),
-        { role: 'user', content: message }
+        { role: 'user', content: message },
       ];
 
-      subject.next({ data: JSON.stringify({ type: 'status', text: '매칭 파트너를 분석하여 답변을 구성하고 있습니다...' }) });
+      subject.next({
+        data: JSON.stringify({
+          type: 'status',
+          text: '매칭 파트너를 분석하여 답변을 구성하고 있습니다...',
+        }),
+      });
 
       const response = await axios.post(
         'https://api.openai.com/v1/chat/completions',
@@ -396,11 +441,11 @@ ${JSON.stringify(companiesInfo, null, 2)}
         },
         {
           headers: {
-            'Authorization': `Bearer ${apiKey}`,
+            Authorization: `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
           },
           responseType: 'stream',
-        }
+        },
       );
 
       const rl = readline.createInterface({
@@ -418,7 +463,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
             if (text) {
               subject.next({ data: JSON.stringify({ type: 'text', text }) });
             }
-          } catch (e) {
+          } catch {
             // ignore JSON chunk errors
           }
         }
@@ -437,4 +482,3 @@ ${JSON.stringify(companiesInfo, null, 2)}
     }
   }
 }
-
