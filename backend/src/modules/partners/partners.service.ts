@@ -673,7 +673,11 @@ export class PartnersService implements OnApplicationBootstrap {
 
           const sourcingCountry = targetCountry || 'Chile';
 
-          const aiSourced = await this.generateAILeads(q, sourcingCountry);
+          const aiSourced = await this.generateAILeads(
+            q,
+            sourcingCountry,
+            detectedIntent,
+          );
 
           mappedWebResults = aiSourced.map((item: any, index: number) => ({
             _id: `ai_sourced_${index}`,
@@ -878,7 +882,7 @@ export class PartnersService implements OnApplicationBootstrap {
         };
       } catch (mainWebErr: any) {
         this.logger.error(
-          `[Search Fallback] Critical error during web-search pipeline: ${mainWebErr.message}. Launching absolute bulletproof fallback...`,
+          `[Search Fallback] Critical error during web-search pipeline: ${mainWebErr.message}. Launching absolute bulletproof fallback (Intent: ${detectedIntent})...`,
         );
 
         const sourcingCountry = targetCountry || 'Chile';
@@ -1075,9 +1079,13 @@ export class PartnersService implements OnApplicationBootstrap {
   private async generateAILeads(
     query: string,
     country?: string,
+    intent?: string,
   ): Promise<any[]> {
     const apiKey = process.env.OPENAI_API_KEY;
     const model = 'gpt-4o-mini'; // Using super-fast gpt-4o-mini for maximum speed
+    this.logger.debug(
+      `[AI Sourcing] Sourcing leads for query: "${query}" in country: "${country}" with intent: "${intent}"`,
+    );
     if (!apiKey) return [];
 
     try {
