@@ -3,7 +3,6 @@ import { api } from '../api';
 import { useI18n } from '../i18n/I18nProvider';
 import Button from '../ui/Button';
 import { useSearchParams } from 'react-router-dom';
-import { boothExhibitors } from '../data/booth-data';
 
 export default function SchedulePage() {
   const { t, lang } = useI18n();
@@ -23,8 +22,7 @@ export default function SchedulePage() {
 
   // 250-booth scheduling states
   const [selectedExhibitor, setSelectedExhibitor] = useState(null);
-  const [exhibitorSearch, setExhibitorSearch] = useState('');
-  const [exhibitorFilter, setExhibitorFilter] = useState({ industry: '', country: '' });
+  const [selectedDate, setSelectedDate] = useState('');
   const [schedulerMap, setSchedulerMap] = useState({});
   const [selectedExhibition, setSelectedExhibition] = useState('KOAA SHOW 2026');
 
@@ -33,34 +31,27 @@ export default function SchedulePage() {
     companyName: presetType === 'ONLINE' ? presetCompany : '', 
     date: '', 
     timeSlot: '10:00 - 11:00', 
-    agenda: presetType === 'ONLINE' ? '1차 수출 B2B 매칭 협의 및 기술 제안 설명' : '' 
+    agenda: presetType === 'ONLINE' ? '1차 B2B 매칭 협의 및 기술 제안 설명' : '' 
   });
 
-  // Calculate distinct industries & countries for sidebar presets in scheduler
-  const distinctFilters = useMemo(() => {
-    const inds = new Set();
-    const cnts = new Set();
-    boothExhibitors.forEach(ex => {
-      inds.add(ex.industry);
-      cnts.add(ex.country);
+  // Generate 250 custom booth companies in format: "1번 부스업체" to "250번 부스업체"
+  const customExhibitors = useMemo(() => {
+    return Array.from({ length: 250 }, (_, i) => {
+      const num = i + 1;
+      const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+      const letter = letters[i % letters.length];
+      const numPart = 100 + Math.floor(i / letters.length) + 1;
+      const boothNumber = `${letter}-${numPart}`;
+      return {
+        id: `booth_custom_${num}`,
+        name: `${num}번 부스업체`,
+        boothNumber: boothNumber,
+        country: '한국',
+        industry: 'Automotive / Mobility',
+        item: '부품 상담',
+      };
     });
-    return {
-      industries: Array.from(inds).sort(),
-      countries: Array.from(cnts).sort()
-    };
   }, []);
-
-  // Filter 250 exhibitors based on search term & distinct filters
-  const filteredExhibitors = useMemo(() => {
-    return boothExhibitors.filter(ex => {
-      const matchSearch = ex.name.toLowerCase().includes(exhibitorSearch.toLowerCase()) || 
-                          ex.boothNumber.toLowerCase().includes(exhibitorSearch.toLowerCase()) ||
-                          ex.item.toLowerCase().includes(exhibitorSearch.toLowerCase());
-      const matchInd = !exhibitorFilter.industry || ex.industry === exhibitorFilter.industry;
-      const matchCnt = !exhibitorFilter.country || ex.country === exhibitorFilter.country;
-      return matchSearch && matchInd && matchCnt;
-    });
-  }, [exhibitorSearch, exhibitorFilter]);
 
   // Generate realistic seed-based booked/available schedule for an exhibitor to ensure visual realism
   const getExhibitorSchedule = (exId) => {
@@ -196,10 +187,10 @@ export default function SchedulePage() {
         const payload = {
           companyName: selectedExhibitor.name,
           date: day,
-          timeSlot: `KOAA SHOW 2026 - 부스 #${selectedExhibitor.boothNumber.replace('Booth #', '')}`,
+          timeSlot: `KOAA SHOW 2026 - 부스 #${selectedExhibitor.boothNumber}`,
           reqType: 'OFFLINE',
           status: 'PENDING', // PENDING status represents buyer requesting & exhibitor needing to approve
-          boothNumber: selectedExhibitor.boothNumber.replace('Booth #', ''),
+          boothNumber: selectedExhibitor.boothNumber,
           meetingLink: '',
           agenda: `[KOAA SHOW 2026] B2B 현장 미팅 신청 - ${selectedExhibitor.item} 공급 및 바이어 수입 조율 상담`
         };
@@ -310,6 +301,9 @@ export default function SchedulePage() {
         .scheduler-interactive-slot:active {
           transform: translateY(0px);
         }
+        .exhibitor-dropdown-item:hover {
+          background: rgba(79, 70, 229, 0.06) !important;
+        }
       `}</style>
 
       {/* Hermes coordinator agent badge */}
@@ -355,10 +349,23 @@ export default function SchedulePage() {
             }}
             type="button"
           >
-            <span>🎪</span> {lang === 'ko' ? '글로벌 전시회 오프라인 미팅' : 'Offline Exhibition Booth'}
+            <span>🎪</span> {lang === 'ko' ? 'KOAA SHOW 현장미팅 신청' : 'KOAA SHOW Onsite Meeting Request'}
           </button>
         </div>
       </div>
+
+      {/* scheduling status info */}
+      {isScheduling && (
+        <div className="hermes-status-msg" style={{ width: '100%', maxWidth: '800px', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '12px', borderRadius: '12px', marginBottom: '2rem', background: 'rgba(79, 70, 229, 0.08)', border: '1px solid rgba(79, 70, 229, 0.15)', gap: '10px' }}>
+          <span className="pulse-loader" style={{ transform: 'scale(0.8)' }}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-dark)' }}>{agentStatus}</span>
+        </div>
+      )}
+
       <div className="schedule-grid-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '2rem', marginTop: '1rem' }}>
         
         {/* Left Side: Confirmed/Pending Appointments Lists & Target Exhibition Cards */}
@@ -366,34 +373,23 @@ export default function SchedulePage() {
           {activeTab === 'OFFLINE' && (
             <div style={{ marginBottom: '2rem' }}>
               <h3 style={{ fontSize: '15px', fontWeight: 800, marginBottom: '0.75rem', color: 'var(--fg)' }}>
-                {lang === 'ko' ? '🎪 조율 대상 글로벌 무역 전시회 (클릭 시 선택)' : '🎪 Target Global Exhibitions (Click to Select)'}
+                {lang === 'ko' ? '🎪 조율 대상 글로벌 무역 전시회' : '🎪 Target Global Exhibitions'}
               </h3>
               <div className="exhibitions-banner-row" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {[
-                  { name: 'KOAA SHOW 2026', date: '2026.10.21 - 10.23', color: '#BE123C', desc: '국제 모빌리티 산업전 - 모빌리티 솔루션 파트너 상담 (킨텍스 KINTEX 제1전시장)' },
-                  { name: 'HANNOVER MESSE 2026', date: '2026.04.13 - 04.17', color: '#4F46E5', desc: '세계 최대 산업기술 박람회 - 스마트 제조 솔루션 매칭 (독일 하노버)' },
-                  { name: 'Canton Fair 2026', date: '2026.10.15 - 10.19', color: '#10B981', desc: '중국 최대 수출입 상품 교역회 - 종합 B2B 부품 조율 (중국 광저우)' },
-                  { name: 'Automotive World 2026', date: '2026.01.21 - 01.23', color: '#F59E0B', desc: '미래 자동차 모빌리티 전문 전시회 - EV 및 자율주행 부품 조율 (일본 도쿄)' },
-                  { name: 'Vietnam Expo 2026', date: '2026.04.08 - 04.11', color: '#8B5CF6', desc: '베트남 최대 종합 B2B 박람회 - 동남아 신흥 시장 유통망 구축 (베트남 하노이)' }
+                  { name: 'KOAA SHOW 2026', date: '2026.10.21 - 10.23', color: '#BE123C', desc: '국제 모빌리티 산업전 - 모빌리티 솔루션 파트너 상담 (킨텍스 KINTEX 제1전시장)' }
                 ].map((ex, idx) => {
                   const isSelected = selectedExhibition === ex.name;
                   return (
                     <div 
                       key={idx} 
-                      onClick={() => {
-                        setSelectedExhibition(ex.name);
-                        // Optional: clear exhibitor when changing exhibition to reset schedule
-                        setSelectedExhibitor(null);
-                      }}
                       className="exhibition-banner-card" 
                       style={{ 
                         padding: '1.25rem', 
-                        border: isSelected ? '2.5px solid var(--accent)' : '1px solid rgba(226, 232, 240, 0.8)', 
-                        background: isSelected ? 'rgba(79, 70, 229, 0.02)' : '#fff', 
+                        border: '2.5px solid var(--accent)', 
+                        background: 'rgba(79, 70, 229, 0.02)', 
                         borderRadius: '16px',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        boxShadow: isSelected ? '0 10px 20px rgba(79, 70, 229, 0.06)' : 'none'
+                        boxShadow: '0 10px 20px rgba(79, 70, 229, 0.06)'
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
@@ -402,11 +398,6 @@ export default function SchedulePage() {
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <span style={{ fontSize: '12px', color: ex.color, fontWeight: 800 }}>{ex.date}</span>
-                          {isSelected && (
-                            <span style={{ fontSize: '11px', background: 'var(--accent)', color: 'white', padding: '1px 6px', borderRadius: '4px', fontWeight: 800 }}>
-                              {lang === 'ko' ? '선택됨 👉' : 'Selected 👉'}
-                            </span>
-                          )}
                         </div>
                       </div>
                       <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: 800 }}>{ex.name}</h4>
@@ -576,7 +567,7 @@ export default function SchedulePage() {
             <div className="offline-scheduler-wrapper glass" style={{ padding: '1.75rem', borderRadius: '20px', border: '1px solid rgba(226, 232, 240, 0.8)', background: '#fff', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                 <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0 }}>
-                  🎪 {lang === 'ko' ? '전시회 현장 미팅 신청' : 'Book Booth Meetup'}
+                  🎪 {lang === 'ko' ? 'KOAA SHOW 현장미팅 신청' : 'KOAA SHOW Onsite Meeting Request'}
                 </h3>
                 <span style={{ fontSize: '11px', background: 'rgba(190, 18, 60, 0.1)', color: '#BE123C', padding: '2px 8px', borderRadius: '999px', fontWeight: 800 }}>
                   {selectedExhibition}
@@ -592,27 +583,58 @@ export default function SchedulePage() {
                 {/* 250-Company selection select drop-down */}
                 <div className="booking-form-field">
                   <span style={{ fontSize: '12.5px', fontWeight: 700, display: 'block', marginBottom: '6px', color: '#374151' }}>
-                    {lang === 'ko' ? '대상 파트너 기업 선택 (250개사)' : 'Select Partner Company (250 Companies)'}
+                    {lang === 'ko' ? '대상 파트너 기업 선택' : 'Select Partner Company'}
                   </span>
                   <select 
                     value={selectedExhibitor ? selectedExhibitor.id : ''}
                     onChange={(e) => {
-                      const ex = boothExhibitors.find(item => item.id === e.target.value);
+                      const ex = customExhibitors.find(item => item.id === e.target.value);
                       setSelectedExhibitor(ex || null);
                     }}
-                    style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--border)', fontSize: '13.5px', fontWeight: 600, background: '#fafafa' }}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--border)', fontSize: '13.5px', fontWeight: 600, background: '#fafafa', cursor: 'pointer' }}
                   >
-                    <option value="">{lang === 'ko' ? '-- 기업을 선택하세요 --' : '-- Choose a Company --'}</option>
-                    {boothExhibitors.map(ex => (
+                    <option value="">{lang === 'ko' ? '-- 업체를 선택하세요 --' : '-- Choose a Company --'}</option>
+                    {customExhibitors.map((ex, index) => (
                       <option key={ex.id} value={ex.id}>
-                        [{ex.boothNumber}] {ex.name} ({ex.country}) - {ex.item}
+                        {index + 1}. {ex.name}
                       </option>
                     ))}
                   </select>
                 </div>
 
-                {/* Sub-renderer: Displays scheduler grid once company is selected */}
-                {selectedExhibitor && (
+                {/* Buyer Booth Number input (Automatically auto-filled when company is selected) */}
+                <div className="booking-form-field">
+                  <span style={{ fontSize: '12.5px', fontWeight: 700, display: 'block', marginBottom: '6px', color: '#374151' }}>
+                    {lang === 'ko' ? '바이어 부스 번호' : 'Buyer Booth Number'}
+                  </span>
+                  <input 
+                    type="text" 
+                    value={selectedExhibitor ? selectedExhibitor.boothNumber : ''}
+                    readOnly
+                    placeholder={lang === 'ko' ? '상단 업체 선택 시 자동 입력' : 'Auto-filled upon company selection'}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--border)', fontSize: '13.5px', fontWeight: 600, background: '#f1f5f9', color: '#475569', cursor: 'not-allowed' }}
+                  />
+                </div>
+
+                {/* Preferred Date Select (only 3 days) */}
+                <div className="booking-form-field">
+                  <span style={{ fontSize: '12.5px', fontWeight: 700, display: 'block', marginBottom: '6px', color: '#374151' }}>
+                    {lang === 'ko' ? '희망 일자 선택' : 'Select Preferred Date'}
+                  </span>
+                  <select 
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--border)', fontSize: '13.5px', fontWeight: 600, background: '#fff', cursor: 'pointer' }}
+                  >
+                    <option value="">{lang === 'ko' ? '-- 희망 일자를 선택하세요 --' : '-- Choose a Date --'}</option>
+                    <option value="2026-10-21">2026-10-21 (1일차)</option>
+                    <option value="2026-10-22">2026-10-22 (2일차)</option>
+                    <option value="2026-10-23">2026-10-23 (3일차)</option>
+                  </select>
+                </div>
+
+                {/* Sub-renderer: Displays scheduler grid once company and date are selected */}
+                {selectedExhibitor && selectedDate ? (
                   <div style={{ marginTop: '0.75rem', animation: 'fadeIn 0.3s ease-in-out' }}>
                     <div style={{ padding: '10px 14px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '1rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -627,7 +649,7 @@ export default function SchedulePage() {
                     </div>
 
                     <h4 style={{ fontSize: '13px', fontWeight: 800, margin: '0 0 6px 0', color: '#1f2937' }}>
-                      📅 {lang === 'ko' ? '상담 가능일 및 시간 선택 (3일간)' : 'Select Date & Time Slot'}
+                      📅 {selectedDate} {lang === 'ko' ? '시간대별 상담진행표' : 'Hourly Progress Table'}
                     </h4>
                     <p className="muted" style={{ fontSize: '11.5px', marginBottom: '0.75rem', lineHeight: 1.4 }}>
                       {lang === 'ko' 
@@ -637,76 +659,70 @@ export default function SchedulePage() {
 
                     {/* Table Scheduler Grid */}
                     <div style={{ overflowX: 'auto', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11.5px', minWidth: '400px' }}>
+                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11.5px' }}>
                         <thead>
                           <tr>
-                            <th style={{ padding: '6px 8px', background: '#f1f5f9', borderBottom: '1px solid #e2e8f0', width: '25%', fontWeight: 800 }}>Time</th>
-                            {days.map(d => (
-                              <th key={d} style={{ padding: '6px 8px', background: '#f1f5f9', borderBottom: '1px solid #e2e8f0', width: '25%', fontWeight: 800 }}>
-                                {d.substring(5)}
-                              </th>
-                            ))}
+                            <th style={{ padding: '8px 10px', background: '#f1f5f9', borderBottom: '1px solid #e2e8f0', width: '40%', fontWeight: 800, textAlign: 'center' }}>
+                              {lang === 'ko' ? '상담 시간대' : 'Time Slot'}
+                            </th>
+                            <th style={{ padding: '8px 10px', background: '#f1f5f9', borderBottom: '1px solid #e2e8f0', width: '60%', fontWeight: 800, textAlign: 'center' }}>
+                              {lang === 'ko' ? '예약 상태 및 행동' : 'Status & Action'}
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
-                          {times.map(t => (
-                            <tr key={t}>
-                              <td style={{ padding: '6px', borderBottom: '1px solid #e2e8f0', background: '#f8fafc', fontWeight: 700, textAlign: 'center', whiteSpace: 'nowrap' }}>
-                                {t}
-                              </td>
-                              {days.map(d => {
-                                const status = schedulerMap[d]?.[t] || 'AVAILABLE';
-                                const isLunch = t === '12:00 - 13:00';
-                                const isBooked = status === 'BOOKED';
-                                
-                                let cellBg = 'rgba(79, 70, 229, 0.04)';
-                                let cellColor = 'var(--accent-dark)';
-                                let cellBorder = '1px solid rgba(79, 70, 229, 0.12)';
-                                let cellText = lang === 'ko' ? '예약 가능' : 'Available';
-                                let cursorType = 'pointer';
-                                
-                                if (isLunch) {
-                                  cellBg = '#f1f5f9';
-                                  cellColor = '#94a3b8';
-                                  cellBorder = '1px solid #e2e8f0';
-                                  cellText = '🍽️ Lunch';
-                                  cursorType = 'not-allowed';
-                                } else if (isBooked) {
-                                  cellBg = 'rgba(239, 68, 68, 0.07)';
-                                  cellColor = '#dc2626';
-                                  cellBorder = '1px solid rgba(239, 68, 68, 0.12)';
-                                  cellText = '🔴 Booked';
-                                  cursorType = 'not-allowed';
-                                }
+                          {times.map(t => {
+                            const status = schedulerMap[selectedDate]?.[t] || 'AVAILABLE';
+                            const isLunch = t === '12:00 - 13:00';
+                            const isBooked = status === 'BOOKED';
+                            
+                            let cellBg = 'rgba(79, 70, 229, 0.04)';
+                            let cellColor = 'var(--accent-dark)';
+                            let cellBorder = '1px solid rgba(79, 70, 229, 0.12)';
+                            let cellText = lang === 'ko' ? '📅 미팅 신청하기 (예약 가능)' : '📅 Request Meeting (Available)';
+                            let cursorType = 'pointer';
+                            
+                            if (isLunch) {
+                              cellBg = '#f1f5f9';
+                              cellColor = '#94a3b8';
+                              cellBorder = '1px solid #e2e8f0';
+                              cellText = '🍽️ Lunch Time (점심 시간)';
+                              cursorType = 'not-allowed';
+                            } else if (isBooked) {
+                              cellBg = 'rgba(239, 68, 68, 0.07)';
+                              cellColor = '#dc2626';
+                              cellBorder = '1px solid rgba(239, 68, 68, 0.12)';
+                              cellText = '🔴 Booked (상담 진행중/예약 완료)';
+                              cursorType = 'not-allowed';
+                            }
 
-                                return (
-                                  <td 
-                                    key={d + t}
-                                    onClick={() => {
-                                      if (!isLunch && !isBooked) {
-                                        handleOfflineSlotClick(d, t);
-                                      }
-                                    }}
-                                    className={!isLunch && !isBooked ? 'scheduler-interactive-slot' : ''}
-                                    style={{
-                                      padding: '8px 4px',
-                                      borderBottom: '1px solid #e2e8f0',
-                                      background: cellBg,
-                                      color: cellColor,
-                                      fontWeight: 700,
-                                      textAlign: 'center',
-                                      cursor: cursorType,
-                                      transition: 'all 0.2s',
-                                      borderLeft: cellBorder,
-                                      borderRight: cellBorder
-                                    }}
-                                  >
-                                    <div style={{ fontSize: '10.5px' }}>{cellText}</div>
-                                  </td>
-                                );
-                              })}
-                            </tr>
-                          ))}
+                            return (
+                              <tr key={t} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                                <td style={{ padding: '10px', background: '#f8fafc', fontWeight: 700, textAlign: 'center', whiteSpace: 'nowrap', borderRight: '1px solid #e2e8f0' }}>
+                                  {t}
+                                </td>
+                                <td 
+                                  onClick={() => {
+                                    if (!isLunch && !isBooked) {
+                                      handleOfflineSlotClick(selectedDate, t);
+                                    }
+                                  }}
+                                  className={!isLunch && !isBooked ? 'scheduler-interactive-slot' : ''}
+                                  style={{
+                                    padding: '10px',
+                                    background: cellBg,
+                                    color: cellColor,
+                                    fontWeight: 700,
+                                    textAlign: 'center',
+                                    cursor: cursorType,
+                                    transition: 'all 0.2s',
+                                  }}
+                                >
+                                  <div style={{ fontSize: '12px' }}>{cellText}</div>
+                                </td>
+                              </tr>
+                            );
+                          })}
                         </tbody>
                       </table>
                     </div>
@@ -727,6 +743,10 @@ export default function SchedulePage() {
                       </div>
                     </div>
                   </div>
+                ) : (
+                  <div style={{ padding: '2rem', textAlign: 'center', background: '#f8fafc', borderRadius: '12px', border: '1px dashed #cbd5e1', color: '#64748b', fontSize: '13px' }}>
+                    📅 {lang === 'ko' ? '상단에서 업체와 희망 일자를 선택하시면 시간대별 상담진행표가 표시됩니다.' : 'Select both company and date above to view the hourly schedule.'}
+                  </div>
                 )}
 
               </div>
@@ -738,4 +758,3 @@ export default function SchedulePage() {
     </div>
   );
 }
-

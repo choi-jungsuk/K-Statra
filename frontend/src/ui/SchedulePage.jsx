@@ -27,6 +27,8 @@ export default function SchedulePage() {
   const [exhibitorFilter, setExhibitorFilter] = useState({ industry: '', country: '' });
   const [schedulerMap, setSchedulerMap] = useState({});
   const [selectedExhibition, setSelectedExhibition] = useState('KOAA SHOW 2026');
+  const [exhibitorQuery, setExhibitorQuery] = useState('');
+  const [showExhibitorDropdown, setShowExhibitorDropdown] = useState(false);
 
   // Form states (Online only)
   const [onlineForm, setOnlineForm] = useState({ 
@@ -102,6 +104,34 @@ export default function SchedulePage() {
       setSchedulerMap(getExhibitorSchedule(selectedExhibitor.id));
     }
   }, [selectedExhibitor]);
+
+  // Autocomplete B2B exhibitor list filtering for form search input
+  const filteredExhibitorsForForm = useMemo(() => {
+    if (!exhibitorQuery) {
+      return boothExhibitors.slice(0, 10); // Show top 10 recommended exhibitors by default
+    }
+    // Clean string for fuzzy check
+    const q = exhibitorQuery.toLowerCase().replace(/\[.*?\]\s*/g, ''); // Strip out [Booth #...] if already selected
+    if (!q.trim()) return boothExhibitors.slice(0, 10);
+    
+    return boothExhibitors.filter(ex => 
+      ex.name.toLowerCase().includes(q) ||
+      ex.boothNumber.toLowerCase().includes(q) ||
+      ex.item.toLowerCase().includes(q) ||
+      ex.country.toLowerCase().includes(q)
+    ).slice(0, 10); // Return top 10 matching only to keep dropdown neat
+  }, [exhibitorQuery]);
+
+  // Click outside to close custom floating dropdown
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (!e.target.closest('.booking-form-field')) {
+        setShowExhibitorDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
 
   // Load consultations & MongoDB companies on mount
   const loadData = () => {
@@ -309,6 +339,9 @@ export default function SchedulePage() {
         }
         .scheduler-interactive-slot:active {
           transform: translateY(0px);
+        }
+        .exhibitor-dropdown-item:hover {
+          background: rgba(79, 70, 229, 0.06) !important;
         }
       `}</style>
 
@@ -602,26 +635,104 @@ export default function SchedulePage() {
               {/* Form inputs */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 
-                {/* 250-Company selection select drop-down */}
-                <div className="booking-form-field">
+                {/* Autocomplete B2B Search bar */}
+                <div className="booking-form-field" style={{ position: 'relative' }}>
                   <span style={{ fontSize: '12.5px', fontWeight: 700, display: 'block', marginBottom: '6px', color: '#374151' }}>
-                    {lang === 'ko' ? '대상 파트너 기업 선택 (250개사)' : 'Select Partner Company (250 Companies)'}
+                    {lang === 'ko' ? '대상 파트너 B2B 부스업체 검색' : 'Search Partner B2B Company'}
                   </span>
-                  <select 
-                    value={selectedExhibitor ? selectedExhibitor.id : ''}
-                    onChange={(e) => {
-                      const ex = boothExhibitors.find(item => item.id === e.target.value);
-                      setSelectedExhibitor(ex || null);
-                    }}
-                    style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--border)', fontSize: '13.5px', fontWeight: 600, background: '#fafafa' }}
-                  >
-                    <option value="">{lang === 'ko' ? '-- 기업을 선택하세요 --' : '-- Choose a Company --'}</option>
-                    {boothExhibitors.map(ex => (
-                      <option key={ex.id} value={ex.id}>
-                        [{ex.boothNumber}] {ex.name} ({ex.country}) - {ex.item}
-                      </option>
-                    ))}
-                  </select>
+                  <div style={{ position: 'relative' }}>
+                    <input 
+                      type="text" 
+                      placeholder={lang === 'ko' ? '예: THACO, 배터리, 금형, 부스번호 입력...' : 'e.g. THACO, battery, mold, booth...'}
+                      value={exhibitorQuery}
+                      onChange={(e) => {
+                        setExhibitorQuery(e.target.value);
+                        setShowExhibitorDropdown(true);
+                      }}
+                      onFocus={() => setShowExhibitorDropdown(true)}
+                      style={{ 
+                        width: '100%', 
+                        padding: '10px 12px 10px 34px', 
+                        borderRadius: '10px', 
+                        border: '1px solid var(--border)', 
+                        fontSize: '13.5px', 
+                        fontWeight: 600, 
+                        background: '#fff' 
+                      }}
+                    />
+                    <span style={{ position: 'absolute', left: '10px', top: '11px', color: '#9ca3af', fontSize: '14px' }}>🔍</span>
+                    {exhibitorQuery && (
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          setExhibitorQuery('');
+                          setSelectedExhibitor(null);
+                        }}
+                        style={{ position: 'absolute', right: '10px', top: '10px', background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontSize: '12px' }}
+                      >
+                        ❌
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Floating Auto-complete Search Results Dropdown List */}
+                  {showExhibitorDropdown && (
+                    <div 
+                      className="exhibitor-floating-dropdown glass" 
+                      style={{ 
+                        position: 'absolute', 
+                        top: '100%', 
+                        left: 0, 
+                        width: '100%', 
+                        background: '#ffffff', 
+                        border: '1px solid rgba(226, 232, 240, 0.9)', 
+                        borderRadius: '12px', 
+                        marginTop: '6px', 
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.1)', 
+                        zIndex: 999, 
+                        maxHeight: '260px', 
+                        overflowY: 'auto', 
+                        padding: '6px' 
+                      }}
+                    >
+                      <div style={{ fontSize: '11px', color: '#94a3b8', padding: '4px 8px 6px 8px', borderBottom: '1px solid #f1f5f9', fontWeight: 700 }}>
+                        {exhibitorQuery ? (lang === 'ko' ? `검색 결과 (${filteredExhibitorsForForm.length}개사)` : `Results (${filteredExhibitorsForForm.length} Companies)`) : (lang === 'ko' ? '추천 B2B 파트너' : 'Recommended B2B Partners')}
+                      </div>
+                      {filteredExhibitorsForForm.map(ex => (
+                        <div 
+                          key={ex.id}
+                          onClick={() => {
+                            setSelectedExhibitor(ex);
+                            setExhibitorQuery(`[${ex.boothNumber}] ${ex.name}`);
+                            setShowExhibitorDropdown(false);
+                          }}
+                          className="exhibitor-dropdown-item"
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            transition: 'background 0.2s',
+                            margin: '2px 0'
+                          }}
+                        >
+                          <div style={{ minWidth: 0, flex: 1, paddingRight: '10px' }}>
+                            <div style={{ fontSize: '12.5px', fontWeight: 800, color: '#1f2937', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                              {ex.name}
+                            </div>
+                            <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                              {ex.country} | {ex.item}
+                            </div>
+                          </div>
+                          <span style={{ fontSize: '10.5px', background: 'rgba(79, 70, 229, 0.08)', color: 'var(--accent)', padding: '2px 6px', borderRadius: '4px', fontWeight: 800, whiteSpace: 'nowrap' }}>
+                            {ex.boothNumber}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Sub-renderer: Displays scheduler grid once company is selected */}
