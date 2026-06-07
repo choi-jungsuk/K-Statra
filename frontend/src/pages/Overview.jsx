@@ -139,7 +139,7 @@ export default function Overview() {
                             </span>
                         </div>
                         <h4 style={{ margin: '6px 0 0 0', fontWeight: 800, fontSize: '15px' }}>
-                            {lang === 'ko' ? '4대 특화 AI 에이전트 실시간 작동 정보' : '4 Specialized AI Agents Live Status'}
+                            {lang === 'ko' ? '5대 특화 AI 에이전트 실시간 작동 정보' : '5 Specialized AI Agents Live Status'}
                         </h4>
                     </div>
                     <span style={{ fontSize: '11px', fontWeight: 800, padding: '4px 12px', background: 'rgba(16, 185, 129, 0.1)', color: '#10B981', borderRadius: '999px' }}>
@@ -149,6 +149,14 @@ export default function Overview() {
 
                 <div className="command-center-grid">
                     
+                    <div className="command-center-card">
+                        <div className="command-center-card-header">
+                            <h5>{lang === 'ko' ? 'AX 데이터 수집 에이전트' : 'AX Data Collector'}</h5>
+                            <span className="command-center-status" style={{ color: '#F59E0B' }}>READY 🟡</span>
+                        </div>
+                        <p>{lang === 'ko' ? '전시회 참가기업 브로셔·웹사이트·디렉토리 수집 준비 중' : 'Collecting exhibitor brochures, websites, and directories'}</p>
+                    </div>
+
                     <div className="command-center-card">
                         <div className="command-center-card-header">
                             <h5>{lang === 'ko' ? '바이어 발굴 에이전트' : 'Buyer Discovery'}</h5>

@@ -29,6 +29,7 @@ export default [
         URLSearchParams: 'readonly',
         FormData: 'readonly',
         Blob: 'readonly',
+        EventSource: 'readonly',
         alert: 'readonly',
         confirm: 'readonly',
       },

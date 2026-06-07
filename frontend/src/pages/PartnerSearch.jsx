@@ -542,8 +542,8 @@ export default function PartnerSearch() {
           </div>
         </section>
 
-        <section className="card agent-status-board glass" style={{ padding: '1.5rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-          <div className="board-header" style={{ gridColumn: 'span 3', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(226, 232, 240, 0.6)', paddingBottom: '0.75rem', marginBottom: '0.5rem' }}>
+        <section className="card agent-status-board glass" style={{ padding: '1.5rem', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '1.5rem', marginTop: '1.5rem', marginBottom: '0.5rem' }}>
+          <div className="board-header" style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(226, 232, 240, 0.6)', paddingBottom: '0.75rem', marginBottom: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '18px' }}>🤖</span>
               <strong style={{ fontSize: '15px', color: 'var(--fg)', fontWeight: 800 }}>
@@ -556,7 +556,34 @@ export default function PartnerSearch() {
             </span>
           </div>
 
-          {/* 에이전트 1: 파트너 발굴 */}
+          {/* 에이전트 1: AX 데이터 수집 */}
+          <div 
+            className="board-agent-card" 
+            onClick={() => navigate('/companies')}
+            style={{ cursor: 'pointer' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+              <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', width: '32px', height: '32px' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ display: 'block' }}>
+                  <path d="M4 4h16v16H4z" />
+                  <path d="M8 8h8" />
+                  <path d="M8 12h8" />
+                  <path d="M8 16h5" />
+                </svg>
+                <span className="search-agent-pulse"></span>
+              </div>
+              <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
+                {lang === 'ko' ? 'AX 데이터 수집 에이전트' : 'AX Data Collection Agent'}
+              </h4>
+            </div>
+            <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
+              {lang === 'ko' 
+                ? '전시회 참가기업의 브로셔·웹사이트·디렉토리 정보를 수집해 AX 기업 프로필 기초 데이터를 준비합니다.'
+                : 'Collects exhibitor brochures, websites, and directory data to prepare AX company profiles.'}
+            </p>
+          </div>
+
+          {/* 에이전트 2: 파트너 발굴 */}
           <div 
             className="board-agent-card" 
             onClick={() => {
@@ -592,7 +619,7 @@ export default function PartnerSearch() {
             </p>
           </div>
 
-          {/* 에이전트 2: 밋업 조율 */}
+          {/* 에이전트 3: 밋업 조율 */}
           <div 
             className="board-agent-card" 
             onClick={() => navigate('/schedule')}
@@ -619,7 +646,7 @@ export default function PartnerSearch() {
             </p>
           </div>
 
-          {/* 에이전트 3: XRP 스마트 결제 */}
+          {/* 에이전트 4: XRP 스마트 결제 */}
           <div 
             className="board-agent-card" 
             onClick={() => navigate('/payments')}
