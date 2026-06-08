@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import axios from 'axios';
 import { Company, CompanyDocument } from '../companies/schemas/company.schema';
 import { EmbeddingsService } from '../embeddings/embeddings.service';
+import { getOpenAIFastModel } from '../../config/openai-models';
 
 const INDUSTRY_MAPPING: Record<string, string[]> = {
   'Automotive / EV Parts': [
@@ -1044,7 +1045,7 @@ export class PartnersService implements OnApplicationBootstrap {
 
   private async extractSearchIntent(query: string): Promise<any> {
     const apiKey = process.env.OPENAI_API_KEY;
-    const model = 'gpt-4o-mini'; // B2B intent extraction is extremely lightweight, using gpt-4o-mini to save 3-4s
+    const model = getOpenAIFastModel(); // B2B intent extraction is extremely lightweight
     if (!apiKey) return null;
 
     try {
@@ -1082,7 +1083,7 @@ export class PartnersService implements OnApplicationBootstrap {
     intent?: string,
   ): Promise<any[]> {
     const apiKey = process.env.OPENAI_API_KEY;
-    const model = 'gpt-4o-mini'; // Using super-fast gpt-4o-mini for maximum speed
+    const model = getOpenAIFastModel(); // Use configured fast model for quick lead generation
     this.logger.debug(
       `[AI Sourcing] Sourcing leads for query: "${query}" in country: "${country}" with intent: "${intent}"`,
     );

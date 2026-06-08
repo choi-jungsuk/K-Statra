@@ -3,6 +3,7 @@ import { PartnersService } from '../partners/partners.service';
 import axios from 'axios';
 import { Observable, Subject } from 'rxjs';
 import * as readline from 'readline';
+import { getOpenAIChatModel } from '../../config/openai-models';
 
 @Injectable()
 export class AgentService {
@@ -55,7 +56,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
       const response = await axios.post(
         url,
         {
-          model: 'gpt-4o',
+          model: getOpenAIChatModel(),
           messages,
           temperature: 0.5,
           max_tokens: 1000,
@@ -433,7 +434,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
       const response = await axios.post(
         'https://api.openai.com/v1/chat/completions',
         {
-          model: 'gpt-4o',
+          model: getOpenAIChatModel(),
           messages: openAIMessages,
           temperature: 0.5,
           max_tokens: 1500,

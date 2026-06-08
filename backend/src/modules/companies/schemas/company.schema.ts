@@ -28,6 +28,41 @@ class Product {
 }
 
 @Schema({ _id: true, id: false })
+class AxDataSource {
+  @Prop({
+    enum: [
+      'brochure',
+      'website',
+      'exhibitor_directory',
+      'web_search',
+      'interview',
+      'manual',
+    ],
+    required: true,
+  })
+  type: string;
+
+  @Prop({ required: true }) name: string;
+  @Prop() url: string;
+  @Prop() retrievedAt: Date;
+}
+
+@Schema({ _id: false })
+class AiMatchingReport {
+  @Prop({ default: '' }) reportId: string;
+  @Prop({ default: '' }) title: string;
+  @Prop({ default: '' }) executiveSummaryKo: string;
+  @Prop({ default: '' }) executiveSummaryEn: string;
+  @Prop({ type: [String], default: [] }) coreProducts: string[];
+  @Prop({ type: [String], default: [] }) targetBuyerPersona: string[];
+  @Prop({ type: [String], default: [] }) recommendedMarkets: string[];
+  @Prop({ type: [String], default: [] }) tradeChecklist: string[];
+  @Prop({ type: [String], default: [] }) missingInfo: string[];
+  @Prop({ default: '' }) markdown: string;
+  @Prop() generatedAt: Date;
+}
+
+@Schema({ _id: true, id: false })
 class Activity {
   @Prop({
     enum: ['export', 'award', 'exhibition', 'article', 'other'],
@@ -69,6 +104,15 @@ export class Company {
   @Prop({ default: '' }) website: string;
   @Prop({ default: '' }) videoUrl: string;
 
+  @Prop({ default: '' }) companyNameKo: string;
+  @Prop({ default: '' }) companyNameEn: string;
+  @Prop({ default: 'South Korea' }) country: string;
+  @Prop({ default: '' }) subIndustry: string;
+  @Prop({ default: '' }) boothNumber: string;
+  @Prop({ default: '' }) exhibitionName: string;
+  @Prop({ default: '' }) brochureUrl: string;
+  @Prop({ default: '' }) exhibitorCategory: string;
+
   @Prop({ type: { city: String, state: String, country: String }, default: {} })
   location: { city: string; state: string; country: string };
 
@@ -92,6 +136,31 @@ export class Company {
   @Prop({ default: '' }) matchRecommendation: string;
   @Prop({ default: '' }) dataSource: string;
   @Prop() extractedAt: Date;
+
+  @Prop({ type: [String], default: [] }) mainProducts: string[];
+  @Prop({ type: [String], default: [] }) productKeywords: string[];
+  @Prop({ type: [String], default: [] }) technologyKeywords: string[];
+  @Prop({ type: [String], default: [] }) targetBuyerTypes: string[];
+  @Prop({ type: [String], default: [] }) targetMarkets: string[];
+  @Prop({ type: [String], default: [] }) certifications: string[];
+  @Prop({ enum: ['unknown', 'low', 'medium', 'high'], default: 'unknown' })
+  exportReadiness: string;
+  @Prop({ default: '' }) companySummary: string;
+  @Prop({ type: [String], default: [] }) buyerMatchingKeywords: string[];
+  @Prop({ type: [String], default: [] }) recommendedSearchQueries: string[];
+  @Prop({ type: [AxDataSource], default: [] }) axDataSources: AxDataSource[];
+  @Prop({ enum: ['A', 'B', 'C', 'D'], default: 'D' })
+  dataConfidence: string;
+  @Prop({ type: [String], default: [] }) missingFields: string[];
+  @Prop({ type: [String], default: [] }) riskNotes: string[];
+  @Prop({ default: '' }) matchSummary: string;
+  @Prop({
+    enum: ['not_started', 'draft', 'generated', 'reviewed'],
+    default: 'not_started',
+  })
+  axProfileStatus: string;
+  @Prop() axProfileGeneratedAt: Date;
+  @Prop({ type: AiMatchingReport }) aiMatchingReport: AiMatchingReport;
 
   @Prop({ type: [CompanyImage], default: [] }) images: CompanyImage[];
   @Prop({ type: [Product], default: [] }) products: Product[];

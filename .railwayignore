@@ -1,0 +1,18 @@
+# Railway Upload Ignore List
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+.git/
+.github/
+.husky/
+tmp/
+uploads/
+*.zip
+*.log
+*.txt
+*.ps1
+migration_report.txt
+k-statra-colab.zip
+deep_scan_results.txt
+folder_sizes.txt
+unique_industries.txt
