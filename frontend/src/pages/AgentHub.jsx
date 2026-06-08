@@ -25,9 +25,9 @@ export default function AgentHub() {
 
   const terminalEndRef = useRef(null);
 
-  const BASE_URL = import.meta.env.PROD
-    ? 'https://web-production-9ceeb.up.railway.app'
-    : 'http://localhost:4000';
+  const BASE_URL = import.meta.env.VITE_API_BASE || (import.meta.env.PROD
+    ? 'https://backend-production-601f2.up.railway.app'
+    : 'http://localhost:4000');
 
   // Quick Prompts list
   const quickPrompts = lang === 'ko'

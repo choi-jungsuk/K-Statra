@@ -14,9 +14,9 @@ export default function HermesChatWidget() {
   const messagesEndRef = useRef(null);
 
   // API base endpoint configuration
-  const BASE_URL = import.meta.env.PROD
-    ? 'https://web-production-9ceeb.up.railway.app'
-    : 'http://localhost:4000';
+  const BASE_URL = import.meta.env.VITE_API_BASE || (import.meta.env.PROD
+    ? 'https://backend-production-601f2.up.railway.app'
+    : 'http://localhost:4000');
 
   // 1. 컴포넌트 마운트 시 대화 내역 불러오기
   useEffect(() => {
