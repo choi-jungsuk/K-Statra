@@ -88,7 +88,7 @@ export default function AgentHub() {
       setProgress(25);
       setAgentStatus(prev => ({ ...prev, hermes: 'Active', claude: 'Scanning' }));
       setHermesLog(lang === 'ko' 
-        ? `안녕하세요! K-Statra 플랫폼 호스트 Hermes입니다. 입력하신 "${activeQuery}" 질문을 접수했습니다.\n본 거래 매칭은 Premium AI 4총사 에이전트의 실시간 협업 체계를 가동하여 진행됩니다. 최적의 결과를 도출 중입니다!`
+        ? `안녕하세요! K-Statra 플랫폼 호스트 Hermes입니다. 입력하신 "${activeQuery}" 질문을 접수했습니다.\n본 거래 매칭은 Premium AI 4총사 Agent의 실시간 협업 체계를 가동하여 진행됩니다. 최적의 결과를 도출 중입니다!`
         : `Greetings! I am Hermes, K-Statra's host agent. I have registered your request: "${activeQuery}".\nWe have initialized our 4-Agent collaborative network. Analyzing your match profile now...`
       );
       addDeveloperLog('🤝 [Hermes Host] Routed business query to Claude Vector Search Engine.');
@@ -207,10 +207,10 @@ export default function AgentHub() {
           <span className="badge-pulse"></span>
           {lang === 'ko' ? 'AI 4총사 실시간 모니터링 시스템' : '4-Agent Live Control Center'}
         </div>
-        <h1>{lang === 'ko' ? 'B2B 에이전트 협업 관제 보드' : 'B2B Multi-Agent Collaboration Board'}</h1>
+        <h1>{lang === 'ko' ? 'B2B Agent 협업 관제 보드' : 'B2B Multi-Agent Collaboration Board'}</h1>
         <p className="subtitle">
           {lang === 'ko' 
-            ? '안티그래비티 IDE와 플랫폼 에이전트들이 실시간으로 데이터를 가공하고, 교차 검증하며 매칭하는 협업 흐름을 한눈에 관측하세요.'
+            ? '안티그래비티 IDE와 플랫폼 Agent들이 실시간으로 데이터를 가공하고, 교차 검증하며 매칭하는 협업 흐름을 한눈에 관측하세요.'
             : 'Observe the real-time interaction, data processing, and validation pipelines between Antigravity IDE and B2B agents.'}
         </p>
       </div>
@@ -244,7 +244,7 @@ export default function AgentHub() {
           </div>
           <p className="agent-desc">
             {lang === 'ko' 
-              ? '코딩, API 빌드, DB 튜닝 및 실시간 런타임 최적화를 담당하는 개발 아키텍트 에이전트.'
+              ? '코딩, API 빌드, DB 튜닝 및 실시간 런타임 최적화를 담당하는 개발 아키텍트 Agent.'
               : 'Developer architect agent in charge of coding, NestJS controllers, Neo4j tuning, and runtime safety.'}
           </p>
           <div className="agent-stats">
@@ -349,10 +349,10 @@ export default function AgentHub() {
 
       {/* 4. Interactive Collaboration Playground Console */}
       <div className="playground-panel">
-        <h3 className="section-title">⚡ {lang === 'ko' ? '에이전트 실시간 협업 가동하기' : 'Trigger Collaborative Search'}</h3>
+        <h3 className="section-title">⚡ {lang === 'ko' ? 'Agent 실시간 협업 가동하기' : 'Trigger Collaborative Search'}</h3>
         <p className="panel-desc">
           {lang === 'ko'
-            ? '관심 분야나 비즈니스 매칭 요구사항을 직접 작성하거나 퀵 프롬프트를 눌러 4총사 에이전트들의 오케스트레이션을 확인하세요.'
+            ? '관심 분야나 비즈니스 매칭 요구사항을 직접 작성하거나 퀵 프롬프트를 눌러 4총사 Agent들의 오케스트레이션을 확인하세요.'
             : 'Type your business query or choose a quick prompt to witness the live agent collaboration process.'}
         </p>
 

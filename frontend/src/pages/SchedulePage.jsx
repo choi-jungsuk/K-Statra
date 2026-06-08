@@ -127,7 +127,7 @@ export default function SchedulePage() {
     }
 
     setIsScheduling(true);
-    setAgentStatus(lang === 'ko' ? 'Hermes 에이전트가 바이어의 스케줄러를 조회하는 중...' : 'Hermes agent looking up buyer schedule...');
+    setAgentStatus(lang === 'ko' ? 'Hermes Agent가 바이어의 스케줄러를 조회하는 중...' : 'Hermes agent looking up buyer schedule...');
 
     setTimeout(async () => {
       setAgentStatus(lang === 'ko' ? '비어있는 시간대를 예약하고 Zoom 화상방 생성 중...' : 'Booking open slot and creating Zoom virtual meeting room...');
@@ -175,7 +175,7 @@ export default function SchedulePage() {
 
     setIsScheduling(true);
     setAgentStatus(lang === 'ko' 
-      ? `Hermes 에이전트가 상대방 "${selectedExhibitor.boothNumber}" 전시장 맵 위치 조회 중...` 
+      ? `Hermes Agent가 상대방 "${selectedExhibitor.boothNumber}" 전시장 맵 위치 조회 중...` 
       : `Hermes mapping path to "${selectedExhibitor.boothNumber}"...`);
 
     setTimeout(async () => {
@@ -318,7 +318,7 @@ export default function SchedulePage() {
           <span className="search-agent-pulse"></span>
         </div>
         <span className="page-agent-badge-text">
-          {lang === 'ko' ? '1:1 글로벌 밋업 조율 에이전트' : '1:1 Global Meetup Coordinator Agent'}
+          {lang === 'ko' ? '1:1 글로벌 밋업 조율 Agent' : '1:1 Global Meetup Coordinator Agent'}
         </span>
       </div>
 
@@ -653,7 +653,7 @@ export default function SchedulePage() {
                     </h4>
                     <p className="muted" style={{ fontSize: '11.5px', marginBottom: '0.75rem', lineHeight: 1.4 }}>
                       {lang === 'ko' 
-                        ? '빈 슬롯을 클릭하시면 Hermes 에이전트가 상대방 전시장 맵 위치 조회 후 수락 대기(PENDING) 예약을 자동 신청합니다. (12~1시는 점심시간 보호 잠금)'
+                        ? '빈 슬롯을 클릭하시면 Hermes Agent가 상대방 전시장 맵 위치 조회 후 수락 대기(PENDING) 예약을 자동 신청합니다. (12~1시는 점심시간 보호 잠금)'
                         : 'Click an available slot to schedule a PENDING meetup request.'}
                     </p>
 

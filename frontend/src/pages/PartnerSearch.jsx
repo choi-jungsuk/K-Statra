@@ -509,7 +509,7 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <span className="search-agent-text">
-                {lang === 'ko' ? '비즈 파트너 발굴 에이전트' : 'B2B Matching Agent'}
+                {lang === 'ko' ? '비즈 파트너 발굴 Agent' : 'B2B Matching Agent'}
               </span>
             </div>
             <textarea
@@ -547,7 +547,7 @@ export default function PartnerSearch() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '18px' }}>🤖</span>
               <strong style={{ fontSize: '15px', color: 'var(--fg)', fontWeight: 800 }}>
-                {lang === 'ko' ? 'K-Statra 실시간 AI 에이전트 작동 현황' : 'K-Statra Real-time AI Agent Status'}
+                {lang === 'ko' ? 'K-Statra 실시간 AI Agent 작동 현황' : 'K-Statra Real-time AI Agent Status'}
               </strong>
             </div>
             <span style={{ fontSize: '11px', color: 'var(--success)', fontWeight: 800, background: 'rgba(16, 185, 129, 0.1)', padding: '2px 8px', borderRadius: '999px', display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -573,7 +573,7 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? 'AX 데이터 수집 에이전트' : 'AX Data Collection Agent'}
+                {lang === 'ko' ? 'AX 데이터 수집 Agent' : 'AX Data Collection Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
@@ -609,7 +609,7 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '비즈 파트너 발굴 에이전트' : 'Partner Discovery Agent'}
+                {lang === 'ko' ? '비즈 파트너 발굴 Agent' : 'Partner Discovery Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
@@ -636,7 +636,7 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '1:1 글로벌 밋업 조율 에이전트' : 'Meetup Coordinator Agent'}
+                {lang === 'ko' ? '1:1 글로벌 밋업 조율 Agent' : 'Meetup Coordinator Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
@@ -646,7 +646,7 @@ export default function PartnerSearch() {
             </p>
           </div>
 
-          {/* 에이전트 4: XRP 스마트 결제 */}
+          {/* 에이전트 4: 스마트 결제 */}
           <div 
             className="board-agent-card" 
             onClick={() => navigate('/payments')}
@@ -661,13 +661,13 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? 'XRP 스마트 계약 결제 에이전트' : 'XRP Smart Payment Agent'}
+                {lang === 'ko' ? '스마트계약 결제 Agent' : 'Smart Payment Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
               {lang === 'ko' 
-                ? '국경 없는 신속하고 안전한 XRP 원스톱 무역대금 송금 및 스마트 지갑 간편 결제를 관리합니다.'
-                : 'Manages seamless and secure cross-border XRP trade payments and smart contract settlements.'}
+                ? '국경 없는 신속하고 안전한 원스톱 무역대금 송금 및 스마트 지갑 간편 결제를 관리합니다.'
+                : 'Manages seamless and secure cross-border trade payments and smart contract settlements.'}
             </p>
           </div>
         </section>
@@ -787,7 +787,7 @@ export default function PartnerSearch() {
               <span className="search-agent-pulse"></span>
             </div>
             <span className="page-agent-badge-text">
-              {lang === 'ko' ? '글로벌 비즈니스 컨설턴트 에이전트' : 'Global Biz Consultant Agent'}
+              {lang === 'ko' ? '글로벌 비즈니스 컨설턴트 Agent' : 'Global Biz Consultant Agent'}
             </span>
           </div>
 
@@ -840,7 +840,7 @@ export default function PartnerSearch() {
                 <span className="consultant-service-subtitle">Trade Documents</span>
                 <p>
                   {lang === 'ko'
-                    ? 'FTA 원산지 증명서(C/O), 관세 혜택 증빙 및 NDA 등 복잡한 무역 실무 서류 작성을 AI 에이전트와 전문가가 완벽히 보조합니다.'
+                    ? 'FTA 원산지 증명서(C/O), 관세 혜택 증빙 및 NDA 등 복잡한 무역 실무 서류 작성을 AI Agent와 전문가가 완벽히 보조합니다.'
                     : 'AI agents and experts assist in preparing complex trade documentation such as FTA Certificate of Origin (C/O), tariff benefits, and NDAs.'}
                 </p>
                 <span className="consultant-service-action">

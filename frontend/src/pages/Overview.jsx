@@ -135,11 +135,11 @@ export default function Overview() {
                                 <span className="search-agent-pulse"></span>
                             </div>
                             <span className="page-agent-badge-text">
-                                {lang === 'ko' ? 'K-Statra AI 에이전트 지휘 본부' : 'K-Statra AI Command Center'}
+                                {lang === 'ko' ? 'K-Statra AI Agent 지휘 본부' : 'K-Statra AI Command Center'}
                             </span>
                         </div>
                         <h4 style={{ margin: '6px 0 0 0', fontWeight: 800, fontSize: '15px' }}>
-                            {lang === 'ko' ? '5대 특화 AI 에이전트 실시간 작동 정보' : '5 Specialized AI Agents Live Status'}
+                            {lang === 'ko' ? '5대 특화 AI Agent 실시간 작동 정보' : '5 Specialized AI Agents Live Status'}
                         </h4>
                     </div>
                     <span style={{ fontSize: '11px', fontWeight: 800, padding: '4px 12px', background: 'rgba(16, 185, 129, 0.1)', color: '#10B981', borderRadius: '999px' }}>
@@ -151,7 +151,7 @@ export default function Overview() {
                     
                     <div className="command-center-card">
                         <div className="command-center-card-header">
-                            <h5>{lang === 'ko' ? 'AX 데이터 수집 에이전트' : 'AX Data Collector'}</h5>
+                            <h5>{lang === 'ko' ? 'AX 데이터 수집 Agent' : 'AX Data Collector'}</h5>
                             <span className="command-center-status" style={{ color: '#F59E0B' }}>READY 🟡</span>
                         </div>
                         <p>{lang === 'ko' ? '전시회 참가기업 브로셔·웹사이트·디렉토리 수집 준비 중' : 'Collecting exhibitor brochures, websites, and directories'}</p>
@@ -159,7 +159,7 @@ export default function Overview() {
 
                     <div className="command-center-card">
                         <div className="command-center-card-header">
-                            <h5>{lang === 'ko' ? '바이어 발굴 에이전트' : 'Buyer Discovery'}</h5>
+                            <h5>{lang === 'ko' ? '바이어 발굴 Agent' : 'Buyer Discovery'}</h5>
                             <span className="command-center-status">STANDBY 🟢</span>
                         </div>
                         <p>{lang === 'ko' ? '26,347개 무역 기업 원장 분석 완료' : '26,347 global companies indexed'}</p>
@@ -167,7 +167,7 @@ export default function Overview() {
 
                     <div className="command-center-card">
                         <div className="command-center-card-header">
-                            <h5>{lang === 'ko' ? '1:1 밋업 조율 에이전트' : 'Meetup Coordinator'}</h5>
+                            <h5>{lang === 'ko' ? '1:1 밋업 조율 Agent' : 'Meetup Coordinator'}</h5>
                             <span className="command-center-status" style={{ color: '#4F46E5' }}>ACTIVE 🔵</span>
                         </div>
                         <p>{lang === 'ko' ? 'KOAA SHOW 2026 PoC 매핑 중' : 'KOAA SHOW 2026 PoC Live'}</p>
@@ -175,7 +175,7 @@ export default function Overview() {
 
                     <div className="command-center-card">
                         <div className="command-center-card-header">
-                            <h5>{lang === 'ko' ? 'XRP 스마트 결제 에이전트' : 'XRP Escrow Agent'}</h5>
+                            <h5>{lang === 'ko' ? '스마트계약 결제 Agent' : 'XRP Escrow Agent'}</h5>
                             <span className="command-center-status">READY 🟢</span>
                         </div>
                         <p>{lang === 'ko' ? 'XRPL 공식 테스트넷 조회 성공' : 'XRPL Testnet connected'}</p>
@@ -183,7 +183,7 @@ export default function Overview() {
 
                     <div className="command-center-card">
                         <div className="command-center-card-header">
-                            <h5>{lang === 'ko' ? '비즈 컨설턴트 에이전트' : 'Biz Consultant'}</h5>
+                            <h5>{lang === 'ko' ? '비즈 컨설턴트 Agent' : 'Biz Consultant'}</h5>
                             <span className="command-center-status">READY 🟢</span>
                         </div>
                         <p>{lang === 'ko' ? '2대 전문 비즈 서비스 대기 중' : '2 Core services standing by'}</p>

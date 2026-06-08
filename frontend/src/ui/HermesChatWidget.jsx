@@ -96,7 +96,7 @@ export default function HermesChatWidget() {
     saveHistory(updatedWithUser);
 
     setIsThinking(true);
-    setStatusText(lang === 'ko' ? 'Hermes 에이전트 호출 중...' : 'Calling Hermes agent...');
+    setStatusText(lang === 'ko' ? 'Hermes Agent 호출 중...' : 'Calling Hermes agent...');
 
     // 6-2. 스트리밍 처리를 위한 어시스턴트 메시지 사전 추가
     const assistantMsgId = `assistant-${Date.now()}`;

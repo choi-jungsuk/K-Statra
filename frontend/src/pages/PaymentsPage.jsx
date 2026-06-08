@@ -123,8 +123,8 @@ export default function PaymentsPage() {
 
     setIsEscrowLoading(true)
     setAgentFeedback(lang === 'ko' 
-      ? '🟢 XRP 스마트 계약 결제 에이전트가 락업(Lockup) 트랜잭션을 작성하는 중...' 
-      : '🟢 XRP Smart Payment Agent is writing lockup transaction...')
+      ? '🟢 스마트 계약 결제 Agent가 락업(Lockup) 트랜잭션을 작성하는 중...' 
+      : '🟢 Smart Payment Agent is writing lockup transaction...')
     
     setTimeout(() => {
       setAgentFeedback(lang === 'ko'
@@ -219,13 +219,13 @@ export default function PaymentsPage() {
           <span className="search-agent-pulse"></span>
         </div>
         <span className="page-agent-badge-text">
-          {lang === 'ko' ? 'XRP 스마트 계약 결제 에이전트' : 'XRP Smart Contract Payment Agent'}
+          {lang === 'ko' ? '스마트 계약 결제 Agent' : 'Smart Contract Payment Agent'}
         </span>
       </div>
 
       {/* Title & Info */}
       <h2 style={{ marginBottom: '0.5rem', fontWeight: 800 }}>
-        {lang === 'ko' ? 'XRP 에스크로 스마트 계약 결제' : 'XRP Escrow Smart Contract Payments'}
+        {lang === 'ko' ? '에스크로 스마트 계약 결제' : 'Escrow Smart Contract Payments'}
       </h2>
       <p style={{ marginBottom: '2rem', color: '#6b7280', fontSize: '14px', maxWidth: '900px', lineHeight: 1.5 }}>
         {lang === 'ko' 
