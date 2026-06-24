@@ -6,12 +6,10 @@ const milestones = [
   {
     year: '2026',
     titleKey: 'about_milestone_2026_title',
-    descriptionKey: 'about_milestone_2026_desc',
   },
   {
     year: '2025',
     titleKey: 'about_milestone_2025_title',
-    descriptionKey: 'about_milestone_2025_desc',
   },
 ]
 
@@ -91,8 +89,7 @@ export default function About() {
                   <div className="timeline-dot"></div>
                 </div>
                 <div className="timeline-content">
-                  <h4 className="timeline-title">{t(item.titleKey)}</h4>
-                  <p className="timeline-desc muted tiny">{t(item.descriptionKey)}</p>
+                  <span className="timeline-title">{t(item.titleKey)}</span>
                 </div>
               </div>
             ))}
