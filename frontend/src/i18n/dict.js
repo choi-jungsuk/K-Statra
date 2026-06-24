@@ -348,7 +348,7 @@ Object.assign(en, {
   about_stats_countries: 'Countries served',
   about_stats_volume: 'Cross-border payment volume',
   about_milestones_title: 'The Path K-Statra Has Walked',
-  about_milestone_2026_title: 'Ain Global, AI-based Global Buyer Matching & AX Data DB Construction PoC (H2)',
+  about_milestone_2026_title: 'Ain Global, KOAA SHOW B2B Matching System PoC',
   about_milestone_2025_title: 'BERT-based B2B Matching Engine Launch',
   about_innovation_title: 'XRP-powered trade innovation',
   about_innovation_copy:
@@ -562,7 +562,7 @@ const ko = {
   about_stats_countries: '진출 국가',
   about_stats_volume: '결제 규모',
   about_milestones_title: 'K-Statra가 걸어온 길',
-  about_milestone_2026_title: '아인글로벌, KOAA SHOW 참가기업 대상 AI 기반 글로벌 바이어 매칭 및 AX 데이터 DB 구축 PoC (하반기)',
+  about_milestone_2026_title: '(재)아인글로벌, KOAA SHOW B2B 매칭시스템 PoC',
   about_milestone_2025_title: 'BERT 기반 B2B 매칭 엔진 론칭',
   about_innovation_title: '블록체인 기반 무역결제 혁신',
   about_innovation_copy: '실시간 결제와 스마트 계약 추적으로 무역금융을 혁신합니다.',
