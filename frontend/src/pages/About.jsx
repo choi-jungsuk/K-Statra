@@ -13,11 +13,6 @@ const milestones = [
     titleKey: 'about_milestone_2025_title',
     descriptionKey: 'about_milestone_2025_desc',
   },
-  {
-    year: '2023',
-    titleKey: 'about_milestone_2023_title',
-    descriptionKey: 'about_milestone_2023_desc',
-  },
 ]
 
 const leadership = [
