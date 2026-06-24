@@ -3,9 +3,21 @@ import { useI18n } from '../i18n/I18nProvider.jsx'
 import { track } from '../utils/analytics.js'
 
 const milestones = [
-  { year: '2021', title: 'Founded K-Statra', description: 'Started with a mission to connect Korean suppliers with global enterprises.' },
-  { year: '2022', title: 'Global Matchmaking', description: 'Launched AI partner search to handle 10K+ curated matches.' },
-  { year: '2023', title: 'Cross-border Payments', description: 'Integrated XRP settlement rails and contract tracking.' },
+  {
+    year: '2026',
+    titleKey: 'about_milestone_2026_title',
+    descriptionKey: 'about_milestone_2026_desc',
+  },
+  {
+    year: '2025',
+    titleKey: 'about_milestone_2025_title',
+    descriptionKey: 'about_milestone_2025_desc',
+  },
+  {
+    year: '2023',
+    titleKey: 'about_milestone_2023_title',
+    descriptionKey: 'about_milestone_2023_desc',
+  },
 ]
 
 const leadership = [
@@ -76,17 +88,20 @@ export default function About() {
         </div>
         <div>
           <h3>{t('about_milestones_title')}</h3>
-          <ul className="milestone-list">
-            {milestones.map((item) => (
-              <li key={item.year}>
-                <strong>{item.year}</strong>
-                <div>
-                  <p className="milestone-title">{item.title}</p>
-                  <p className="muted tiny">{item.description}</p>
+          <div className="timeline-container">
+            {milestones.map((item, index) => (
+              <div key={item.year} className={`timeline-item ${index === 0 ? 'active' : ''}`}>
+                <div className="timeline-year">{item.year}</div>
+                <div className="timeline-dot-wrapper">
+                  <div className="timeline-dot"></div>
                 </div>
-              </li>
+                <div className="timeline-content">
+                  <h4 className="timeline-title">{t(item.titleKey)}</h4>
+                  <p className="timeline-desc muted tiny">{t(item.descriptionKey)}</p>
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 
