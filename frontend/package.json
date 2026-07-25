@@ -7,14 +7,15 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --port 5173",
-    "start": "vite preview --host 0.0.0.0 --port ${PORT:-4000}",
+    "start": "serve -s dist -l tcp://0.0.0.0:${PORT:-4000}",
     "lint": "eslint src"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.26.1",
-    "recharts": "^3.5.0"
+    "recharts": "^3.5.0",
+    "serve": "^14.2.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
