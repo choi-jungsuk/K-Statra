@@ -1,7 +1,7 @@
 import { useI18n } from '../i18n/I18nProvider.jsx'
 import { track } from '../utils/analytics.js'
 
-const FALLBACK_LINK = 'mailto:support@k-statra.com?subject=K-Statra%20Feedback'
+const FALLBACK_LINK = 'mailto:support@demostatra.com?subject=DemoStatra%20Feedback'
 
 export default function FeedbackButton() {
   const { t } = useI18n()

@@ -36,6 +36,24 @@ const sidebarPresets = {
     { value: 'Germany', label: 'Germany' },
     { value: 'Singapore', label: 'Singapore' },
     { value: 'Vietnam', label: 'Vietnam' },
+    { value: 'Uzbekistan', label: 'Uzbekistan' },
+    { value: 'Kazakhstan', label: 'Kazakhstan' },
+    { value: 'Oman', label: 'Oman' },
+    { value: 'UAE', label: 'UAE' },
+    { value: 'Poland', label: 'Poland' },
+    { value: 'Hungary', label: 'Hungary' },
+    { value: 'Czech Republic', label: 'Czech Republic' },
+    { value: 'Brazil', label: 'Brazil' },
+    { value: 'Chile', label: 'Chile' },
+    { value: 'Panama', label: 'Panama' },
+    { value: 'Kenya', label: 'Kenya' },
+    { value: 'Nigeria', label: 'Nigeria' },
+    { value: 'Egypt', label: 'Egypt' },
+    { value: 'Morocco', label: 'Morocco' },
+    { value: 'Mexico', label: 'Mexico' },
+    { value: 'Canada', label: 'Canada' },
+    { value: 'France', label: 'France' },
+    { value: 'Spain', label: 'Spain' },
     { value: 'South Africa', label: 'South Africa' },
     { value: 'Other', label: 'Other' },
   ],
@@ -67,19 +85,28 @@ const SEARCH_PROVIDER = 'antigravity'
 const ANTIGRAVITY_BASE = API_BASE
 const ANTIGRAVITY_KEY = import.meta.env.VITE_ANTIGRAVITY_KEY || ''
 
+function inferCountry(company = {}) {
+  const nameVal = company.nameEn || company.name || '';
+  const text = `${nameVal} ${company.profileText || ''} ${company.country || ''} ${company.location?.country || ''}`.toLowerCase();
+  if (text.includes('uzbekistan')) return 'Uzbekistan';
+  return company.country || company.location?.country || '';
+}
+
 function formatCompanyLocation(company = {}) {
   const parts = []
   const loc = company.location
 
   if (company.city) parts.push(company.city)
   if (company.state) parts.push(company.state)
-  if (company.country) parts.push(company.country)
+  
+  const countryVal = inferCountry(company);
+  if (countryVal) parts.push(countryVal)
 
   if (loc && typeof loc === 'object') {
     if (loc.city && !parts.includes(loc.city)) parts.push(loc.city)
     if (loc.state && !parts.includes(loc.state)) parts.push(loc.state)
-    if (loc.country && !parts.includes(loc.country)) parts.push(loc.country)
-    // Avoid pushing the entire object or undefined labels
+    const locCountry = inferCountry({ country: loc.country, location: loc });
+    if (locCountry && !parts.includes(locCountry)) parts.push(locCountry)
     if (typeof loc.label === 'string') parts.push(loc.label)
   } else if (typeof loc === 'string') {
     parts.push(loc)
@@ -89,7 +116,18 @@ function formatCompanyLocation(company = {}) {
 }
 
 function extractWebsite(company = {}) {
-  return company.website || company.url || company.site || company.domain || ''
+  return (
+    company.website ||
+    company.url ||
+    company.sourceUrl ||
+    company.source_url ||
+    company.link ||
+    company.href ||
+    company.site ||
+    company.domain ||
+    company.metadata?.url ||
+    ''
+  )
 }
 
 function getAccuracyScore(company = {}) {
@@ -401,10 +439,11 @@ export default function PartnerSearch() {
     setFilters({ industry: '', country: '', size: '', partnership: '' })
   }
 
-  function runSearch() {
-    loadPreview({ term: search, filters })
+  function runSearch(customTerm) {
+    const termToSearch = typeof customTerm === 'string' ? customTerm : search;
+    loadPreview({ term: termToSearch, filters })
     track('search_submitted', {
-      term: search.trim(),
+      term: termToSearch.trim(),
       filters: activeFilters,
       provider: searchProviderUsed || SEARCH_PROVIDER,
     })
@@ -540,6 +579,55 @@ export default function PartnerSearch() {
               {t('search_button')}
             </button>
           </div>
+
+          {/* Quick Suggested Search Chips for Uzbekistan Demo */}
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '14px', flexWrap: 'wrap', zIndex: 10, position: 'relative' }}>
+            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', alignSelf: 'center', fontWeight: '500' }}>
+              💡 {lang === 'ko' ? '시연 단축어:' : 'Suggested:'}
+            </span>
+            <button
+              onClick={() => {
+                const q = 'Uzbekistan automotive EV parts buyer distributor importer';
+                setSearch(q);
+                runSearch(q);
+              }}
+              className="demo-chip-btn"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                border: '1px solid rgba(255, 255, 255, 0.22)',
+                borderRadius: '16px',
+                color: '#ffffff',
+                padding: '5px 12px',
+                fontSize: '11.5px',
+                cursor: 'pointer',
+                fontWeight: '500',
+                transition: 'all 0.2s'
+              }}
+            >
+              🇺🇿 Uzbekistan Auto Parts Buyers
+            </button>
+            <button
+              onClick={() => {
+                const q = 'Uzbekistan automobile spare parts importer buyer distributor';
+                setSearch(q);
+                runSearch(q);
+              }}
+              className="demo-chip-btn"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                border: '1px solid rgba(255, 255, 255, 0.22)',
+                borderRadius: '16px',
+                color: '#ffffff',
+                padding: '5px 12px',
+                fontSize: '11.5px',
+                cursor: 'pointer',
+                fontWeight: '500',
+                transition: 'all 0.2s'
+              }}
+            >
+              ⚙️ Uzbekistan Spare Parts Importers
+            </button>
+          </div>
         </section>
 
         <section className="card agent-status-board glass" style={{ padding: '1.5rem', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '1.5rem', marginTop: '1.5rem', marginBottom: '0.5rem' }}>
@@ -547,7 +635,7 @@ export default function PartnerSearch() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '18px' }}>🤖</span>
               <strong style={{ fontSize: '15px', color: 'var(--fg)', fontWeight: 800 }}>
-                {lang === 'ko' ? 'K-Statra 실시간 AI Agent 작동 현황' : 'K-Statra Real-time AI Agent Status'}
+                {lang === 'ko' ? 'DemoStatra 실시간 AI Agent 작동 현황' : 'DemoStatra Real-time AI Agent Status'}
               </strong>
             </div>
             <span style={{ fontSize: '11px', color: 'var(--success)', fontWeight: 800, background: 'rgba(16, 185, 129, 0.1)', padding: '2px 8px', borderRadius: '999px', display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -796,8 +884,8 @@ export default function PartnerSearch() {
           </h3>
           <p className="muted" style={{ fontSize: '13.5px', marginBottom: '1.75rem', maxWidth: '800px', lineHeight: 1.5 }}>
             {lang === 'ko'
-              ? '원하시는 무역 솔루션 서비스를 클릭하여 K-Statra의 현지 전문가 및 인공지능 컨설턴트에게 실시간 도움을 요청하세요.'
-              : 'Click on the trade solution service you need to request real-time help from K-Statra\'s local experts and AI consultants.'}
+              ? '원하시는 무역 솔루션 서비스를 클릭하여 DemoStatra의 현지 전문가 및 인공지능 컨설턴트에게 실시간 도움을 요청하세요.'
+              : 'Click on the trade solution service you need to request real-time help from DemoStatra\'s local experts and AI consultants.'}
           </p>
 
           {/* Premium Service Cards Grid */}
@@ -903,6 +991,21 @@ export default function PartnerSearch() {
                   </span>
                 )}
               </div>
+              {/* 후보 요약 (Candidate Summary) */}
+              {selectedCompany.profileText && (
+                <section className="detail-section" style={{ backgroundColor: '#fffbeb', padding: '1rem', borderRadius: '8px', border: '1px solid #fef3c7', marginBottom: '1.2rem' }}>
+                  <h4 style={{ color: '#b45309', margin: 0, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    📋 {lang === 'ko' ? '후보 요약 (Candidate Summary)' : 'Candidate Summary'}
+                  </h4>
+                  <p style={{ fontSize: '0.92rem', color: '#78350f', lineHeight: 1.5, margin: 0, whiteSpace: 'pre-line' }}>
+                    {selectedCompany.profileText}
+                  </p>
+                  <div style={{ fontSize: '0.75rem', color: '#b45309', marginTop: '8px', fontStyle: 'italic', fontWeight: '500' }}>
+                    * {lang === 'ko' ? '실시간 웹 기반 후보입니다. 최종 매칭 전 AX 프로필 보강과 검증이 필요합니다.' : 'Real-time web candidate. Verification and AX profile enrichment required before final matching.'}
+                  </div>
+                </section>
+              )}
+
               <section className="detail-section">
                 <h4>{t('detail_company_info')}</h4>
                 <div className="detail-line">
@@ -915,14 +1018,24 @@ export default function PartnerSearch() {
                     <span>{selectedCompany.sizeBucket}</span>
                   </div>
                 )}
-                {detailWebsite && (
-                  <div className="detail-line">
-                    <strong>{t('detail_website')}</strong>
-                    <a className="result-link" href={detailWebsite} target="_blank" rel="noreferrer">
+                <div className="detail-line">
+                  <strong>{t('detail_website') || 'Website / Source'}</strong>
+                  {detailWebsite ? (
+                    <a className="result-link" href={detailWebsite} target="_blank" rel="noreferrer" style={{ fontWeight: 'bold' }}>
                       {detailWebsite}
                     </a>
-                  </div>
-                )}
+                  ) : (
+                    <span style={{ color: '#ef4444', fontStyle: 'italic', fontSize: '0.85rem' }}>
+                      {lang === 'ko' ? '출처 URL: 검색 제공자 응답에 포함되지 않음. 별도 확인 필요.' : 'Source URL: Not provided by search provider. Verification required.'}
+                    </span>
+                  )}
+                </div>
+                <div className="detail-line" style={{ marginTop: '4px' }}>
+                  <strong>{lang === 'ko' ? '후보 상태' : 'Candidate Status'}</strong>
+                  <span style={{ color: '#b45309', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    ⚠️ {lang === 'ko' ? '실시간 웹 기반 후보 / 검증 필요' : 'Web-based candidate / Verification required'}
+                  </span>
+                </div>
               </section>
 
               {highlightCards.length > 0 && (

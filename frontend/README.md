@@ -1,4 +1,4 @@
-K-Statra Frontend (Vite + React)
+DemoStatra Frontend (Vite + React)
 
 Quick Start
 - Prereq: Backend running on `http://localhost:4000` (or set `VITE_API_BASE`)

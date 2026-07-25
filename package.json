@@ -1,5 +1,5 @@
 {
-  "name": "k-statra",
+  "name": "demostatra",
   "version": "1.0.0",
   "description": "B2B 파트너 매칭 플랫폼. NestJS + MongoDB Atlas + Neo4j + XRPL.",
   "private": true,

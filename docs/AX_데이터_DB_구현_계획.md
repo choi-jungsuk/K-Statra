@@ -1,14 +1,14 @@
-# K-Statra AX 데이터 DB 구현 계획
+# DemoStatra AX 데이터 DB 구현 계획
 
 작성일: 2026-06-07  
-대상 프로젝트: K-Statra  
-작업 기준 문서: `PROJECT_CONTEXT.md`, `docs/K-Statra AX 데이터 DB & KOAA SHOW PoC 전략 문서.md`
+대상 프로젝트: DemoStatra  
+작업 기준 문서: `PROJECT_CONTEXT.md`, `docs/DemoStatra AX 데이터 DB & KOAA SHOW PoC 전략 문서.md`
 
 ---
 
 ## 1. 목표
 
-K-Statra의 KOAA SHOW PoC를 위해 기존 회사 DB를 AX 데이터 DB 구조로 확장하고, 참가기업 원시 데이터를 AI 매칭 가능한 기업 프로필과 기업별 글로벌 바이어 매칭 리포트로 전환하는 기능을 구현한다.
+DemoStatra의 KOAA SHOW PoC를 위해 기존 회사 DB를 AX 데이터 DB 구조로 확장하고, 참가기업 원시 데이터를 AI 매칭 가능한 기업 프로필과 기업별 글로벌 바이어 매칭 리포트로 전환하는 기능을 구현한다.
 
 핵심 목표는 다음과 같다.
 
@@ -24,7 +24,7 @@ K-Statra의 KOAA SHOW PoC를 위해 기존 회사 DB를 AX 데이터 DB 구조�
 
 ### 이미 작성된 전략 문서
 
-- `docs/K-Statra AX 데이터 DB & KOAA SHOW PoC 전략 문서.md`
+- `docs/DemoStatra AX 데이터 DB & KOAA SHOW PoC 전략 문서.md`
 - `docs/AX 기업 프로필 JSON 스키마 상세.md`
 - `docs/기업별 AI 매칭 리포트 템플릿 상세.md`
 - `docs/KOAA SHOW 샘플 데이터 요청서.md`
@@ -476,7 +476,7 @@ MongoDB Atlas는 다음 원칙을 지킨다.
 다음 개발 단계로 들어갈 때 Hermes에게 다음처럼 지시하면 된다.
 
 ```text
-K-Statra에서 AX 데이터 DB 구현 계획 문서를 기준으로 Phase 2를 진행해줘.
+DemoStatra에서 AX 데이터 DB 구현 계획 문서를 기준으로 Phase 2를 진행해줘.
 먼저 company.schema.ts에 AX 필드를 추가하고, 관련 DTO와 테스트/빌드를 확인해줘.
 ```
 
@@ -484,6 +484,6 @@ K-Statra에서 AX 데이터 DB 구현 계획 문서를 기준으로 Phase 2를 �
 
 ## 13. 현재 판단
 
-지금 K-Statra는 “전략 문서 작성 단계”를 넘어 “PoC 기능 구현 단계”로 진입할 준비가 되었다.
+지금 DemoStatra는 “전략 문서 작성 단계”를 넘어 “PoC 기능 구현 단계”로 진입할 준비가 되었다.
 
 가장 중요한 것은 화면을 크게 바꾸는 것이 아니라, 기존 회사 데이터가 AX 기업 프로필과 AI 매칭 리포트로 변환되는 핵심 흐름을 실제로 작동하게 만드는 것이다.

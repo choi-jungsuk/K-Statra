@@ -12,7 +12,7 @@ import { QueryCompanyDto } from './dto/query-company.dto';
 
 const DEFAULT_IMAGE_URL =
   process.env.DEFAULT_COMPANY_IMAGE_URL ||
-  'https://placehold.co/320x160?text=K-Statra';
+  'https://placehold.co/320x160?text=DemoStatra';
 
 @Injectable()
 export class CompaniesService {

@@ -1,12 +1,31 @@
 import { useI18n } from '../i18n/I18nProvider.jsx'
 
+function inferCountry(company) {
+  const nameVal = company.nameEn || company.name || '';
+  const text = `${nameVal} ${company.profileText || ''} ${company.country || ''} ${company.location?.country || ''}`.toLowerCase();
+  if (text.includes('uzbekistan')) return 'Uzbekistan';
+  return company.country || company.location?.country || '';
+}
+
 function getLocation(company) {
-  const parts = [company.city, company.state, company.country, company.location]
-  return parts.filter(Boolean).join(', ')
+  const countryVal = inferCountry(company);
+  const parts = [company.city, company.state, countryVal].filter(Boolean);
+  return parts.length > 0 ? parts.join(', ') : 'Global';
 }
 
 function getWebsite(company) {
-  return company.website || company.url || company.site || company.domain || ''
+  return (
+    company.website ||
+    company.url ||
+    company.sourceUrl ||
+    company.source_url ||
+    company.link ||
+    company.href ||
+    company.site ||
+    company.domain ||
+    (company.metadata && company.metadata.url) ||
+    ''
+  )
 }
 
 function getPrimaryContact(company) {
@@ -27,7 +46,7 @@ function getContactEmail(company) {
 
 export default function CompanyResultCard({ company, onDetails }) {
   const c = company || {}
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
   const location = getLocation(c)
   const website = getWebsite(c)
   const contactName = getPrimaryContact(c)
@@ -79,6 +98,24 @@ export default function CompanyResultCard({ company, onDetails }) {
                 <span>✨</span> {t('ai_pick') || 'AI Pick'}
               </span>
             )}
+
+            {/* Web Candidate Badge */}
+            {tags.includes('Web Candidate') && (
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '0.25rem 0.6rem',
+                backgroundColor: '#fffbeb', // amber-50
+                color: '#b45309', // amber-700
+                border: '1px solid #fde68a', // amber-200
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                fontWeight: '600',
+                gap: '0.25rem'
+              }} title="Real-time web source. Verification and AX profile enrichment required.">
+                <span>⚠️</span> {lang === 'ko' ? '실시간 웹 후보 (검증 필요)' : 'Web Candidate (Verify)'}
+              </span>
+            )}
           </div>
 
           {c.ai_reasoning && (
@@ -100,8 +137,8 @@ export default function CompanyResultCard({ company, onDetails }) {
           </div>
         </div>
         {website && (
-          <a className="result-link" href={website} target="_blank" rel="noreferrer" style={{ fontSize: '0.9rem', color: '#2563eb' }}>
-            {t('detail_website')} &rarr;
+          <a className="result-link" href={website} target="_blank" rel="noreferrer" style={{ fontSize: '0.9rem', color: '#2563eb', fontWeight: 'bold' }}>
+            {t('detail_website') || 'Website'} / Source &rarr;
           </a>
         )}
       </div>

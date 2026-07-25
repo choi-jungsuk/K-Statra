@@ -296,14 +296,14 @@ export default function About() {
             <span className="contact-icon">📧</span>
             <div className="contact-info">
               <strong>{t('about_contact_sales')}</strong>
-              <p>sales@k-statra.com</p>
+              <p>sales@demostatra.com</p>
             </div>
           </div>
           <div className="contact-card-item">
             <span className="contact-icon">🔧</span>
             <div className="contact-info">
               <strong>{t('about_contact_support')}</strong>
-              <p>support@k-statra.com</p>
+              <p>support@demostatra.com</p>
             </div>
           </div>
           <div className="contact-card-item">

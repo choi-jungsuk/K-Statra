@@ -1,5 +1,5 @@
 /**
- * K-Statra Macro Industry Categories
+ * DemoStatra Macro Industry Categories
  * Based on KSIC (Korean Standard Industrial Classification) codes.
  */
 

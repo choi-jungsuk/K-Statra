@@ -3,7 +3,7 @@ const http = require('http');
 const testSearch = () => {
     const start = Date.now();
 
-    // Make sure the server is running on port 4000 (standard for K-Statra)
+    // Make sure the server is running on port 4000 (standard for DemoStatra)
     const options = {
         hostname: 'localhost',
         port: 4000,

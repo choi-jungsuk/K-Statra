@@ -1,4 +1,4 @@
-# K-Statra
+# DemoStatra
 
 B2B 파트너 매칭 플랫폼. NestJS + MongoDB Atlas + Neo4j + XRPL.
 

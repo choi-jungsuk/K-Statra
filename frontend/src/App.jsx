@@ -49,7 +49,7 @@ function NotFound() {
 }
 
 export default function App() {
-  console.log('K-Statra v1.0.2 - Production Build (Env Check)');
+  console.log('DemoStatra v1.0.2 - Production Build (Env Check)');
   const { t, lang } = useI18n()
   const location = useLocation()
   const navigate = useNavigate()
@@ -81,11 +81,11 @@ export default function App() {
         if (user) {
           setCurrentUser(user)
           if (user.buyerId) {
-            localStorage.setItem('kstatra_buyer_id', user.buyerId)
-            localStorage.setItem('kstatra_buyer_name', user.name)
+            localStorage.setItem('demostatra_buyer_id', user.buyerId)
+            localStorage.setItem('demostatra_buyer_name', user.name)
           } else if (user.companyId) {
-            localStorage.setItem('kstatra_buyer_id', user.companyId)
-            localStorage.setItem('kstatra_buyer_name', user.name)
+            localStorage.setItem('demostatra_buyer_id', user.companyId)
+            localStorage.setItem('demostatra_buyer_name', user.name)
           }
         }
       })
@@ -191,8 +191,8 @@ export default function App() {
       console.error('Logout failed', err)
     }
     setCurrentUser(null)
-    localStorage.removeItem('kstatra_buyer_id')
-    localStorage.removeItem('kstatra_buyer_name')
+    localStorage.removeItem('demostatra_buyer_id')
+    localStorage.removeItem('demostatra_buyer_name')
     track('logout')
   }
 
@@ -217,11 +217,11 @@ export default function App() {
       if (res && res.user) {
         setCurrentUser(res.user)
         if (res.user.buyerId) {
-          localStorage.setItem('kstatra_buyer_id', res.user.buyerId)
-          localStorage.setItem('kstatra_buyer_name', res.user.name)
+          localStorage.setItem('demostatra_buyer_id', res.user.buyerId)
+          localStorage.setItem('demostatra_buyer_name', res.user.name)
         } else if (res.user.companyId) {
-          localStorage.setItem('kstatra_buyer_id', res.user.companyId)
-          localStorage.setItem('kstatra_buyer_name', res.user.name)
+          localStorage.setItem('demostatra_buyer_id', res.user.companyId)
+          localStorage.setItem('demostatra_buyer_name', res.user.name)
         }
         setSignupStatus({ submitting: false, success: true, error: '' })
         setTimeout(() => {
@@ -248,11 +248,11 @@ export default function App() {
       if (res && res.user) {
         setCurrentUser(res.user)
         if (res.user.buyerId) {
-          localStorage.setItem('kstatra_buyer_id', res.user.buyerId)
-          localStorage.setItem('kstatra_buyer_name', res.user.name)
+          localStorage.setItem('demostatra_buyer_id', res.user.buyerId)
+          localStorage.setItem('demostatra_buyer_name', res.user.name)
         } else if (res.user.companyId) {
-          localStorage.setItem('kstatra_buyer_id', res.user.companyId)
-          localStorage.setItem('kstatra_buyer_name', res.user.name)
+          localStorage.setItem('demostatra_buyer_id', res.user.companyId)
+          localStorage.setItem('demostatra_buyer_name', res.user.name)
         }
         setLoginStatus({ submitting: false, success: true, error: '' })
         setTimeout(() => {
@@ -268,11 +268,11 @@ export default function App() {
         const buyer = res.data?.[0]
 
         if (buyer) {
-          localStorage.setItem('kstatra_buyer_id', buyer._id)
-          localStorage.setItem('kstatra_buyer_name', buyer.name)
+          localStorage.setItem('demostatra_buyer_id', buyer._id)
+          localStorage.setItem('demostatra_buyer_name', buyer.name)
           setCurrentUser({
             id: buyer._id,
-            email: 'demo@kstatra.com',
+            email: 'demo@demostatra.com',
             name: buyer.name,
             role: 'buyer',
             buyerId: buyer._id,
@@ -302,7 +302,7 @@ export default function App() {
               K
             </span>
             <Link to="/" className="brand-link">
-              K-Statra
+              DemoStatra
             </Link>
           </div>
           <div className="header-right-col">
@@ -617,7 +617,7 @@ export default function App() {
                 type="email"
                 required
                 value={signupForm.email}
-                placeholder="user@kstatra.com"
+                placeholder="user@demostatra.com"
                 onChange={(e) => setSignupForm(prev => ({ ...prev, email: e.target.value }))}
               />
             </label>

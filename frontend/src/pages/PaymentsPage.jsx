@@ -229,8 +229,8 @@ export default function PaymentsPage() {
       </h2>
       <p style={{ marginBottom: '2rem', color: '#6b7280', fontSize: '14px', maxWidth: '900px', lineHeight: 1.5 }}>
         {lang === 'ko' 
-          ? 'K-Statra는 XRPL(XRP Ledger)의 기본 에스크로 및 다중서명 스마트 계약 기술을 탑재하여 글로벌 무역 거래 대금을 중개인 없이 원장 레벨에서 동결(Lock)하고, 거래 조건이 충족되면 즉시 안전하게 송금(Release)하는 완벽한 보안 결제망을 제공합니다.'
-          : 'K-Statra leverages native XRPL escrows and multi-signature smart contracts to lock trade payments at the ledger level, securing payments until trade conditions are met.'}
+          ? 'DemoStatra는 XRPL(XRP Ledger)의 기본 에스크로 및 다중서명 스마트 계약 기술을 탑재하여 글로벌 무역 거래 대금을 중개인 없이 원장 레벨에서 동결(Lock)하고, 거래 조건이 충족되면 즉시 안전하게 송금(Release)하는 완벽한 보안 결제망을 제공합니다.'
+          : 'DemoStatra leverages native XRPL escrows and multi-signature smart contracts to lock trade payments at the ledger level, securing payments until trade conditions are met.'}
       </p>
 
       {/* 2. Network Status indicator */}
@@ -484,7 +484,7 @@ export default function PaymentsPage() {
                     </h4>
                     <p style={{ margin: '4px 0 0 0', fontSize: '11px', color: '#b45309', lineHeight: 1.4 }}>
                       {lang === 'ko'
-                        ? '이 수출 기업은 K-Statra XRP 결제를 성공한 신뢰 파트너로 지정되었습니다. 향후 글로벌 바이어 파트너 검색 시 검색 상위 노출 가중치(+30%) 혜택이 즉시 실시간 반영됩니다.'
+                        ? '이 수출 기업은 DemoStatra XRP 결제를 성공한 신뢰 파트너로 지정되었습니다. 향후 글로벌 바이어 파트너 검색 시 검색 상위 노출 가중치(+30%) 혜택이 즉시 실시간 반영됩니다.'
                         : 'This seller company is registered as a trusted partner. Match search visibility priority (+30%) is now active.'}
                     </p>
                   </div>

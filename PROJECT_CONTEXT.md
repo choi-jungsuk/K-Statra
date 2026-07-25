@@ -1,13 +1,13 @@
-# K-Statra Project Context
+# DemoStatra Project Context
 
 작성일: 2026-06-07  
-프로젝트 전용 대화 기준: 이 Hermes 대화창은 K-Statra 전용으로 사용한다.
+프로젝트 전용 대화 기준: 이 Hermes 대화창은 DemoStatra 전용으로 사용한다.
 
 ---
 
 ## 1. 프로젝트 정체성
 
-K-Statra는 국내 스타트업·수출기업과 해외 바이어를 연결하는 AI 기반 무역 매칭 플랫폼이다.
+DemoStatra는 국내 스타트업·수출기업과 해외 바이어를 연결하는 AI 기반 무역 매칭 플랫폼이다.
 
 현재 PoC의 핵심은 단순한 기업 검색 서비스가 아니라, 전시회·협회·MICE 주최자가 보유한 불완전한 참가기업 디렉토리, 브로슈어, 홈페이지, 공개 웹 정보를 AI가 활용 가능한 **AX 데이터 DB**로 전환하고, 기업별 해외 바이어 매칭 리포트를 생성하는 것이다.
 
@@ -36,7 +36,7 @@ K-Statra는 국내 스타트업·수출기업과 해외 바이어를 연결하�
 
 현재 기준 문서는 다음 파일을 우선 참조한다.
 
-- `docs/K-Statra AX 데이터 DB & KOAA SHOW PoC 전략 문서.md`
+- `docs/DemoStatra AX 데이터 DB & KOAA SHOW PoC 전략 문서.md`
 - `docs/AX 기업 프로필 JSON 스키마 상세.md`
 - `docs/기업별 AI 매칭 리포트 템플릿 상세.md`
 - `docs/KOAA SHOW 샘플 데이터 요청서.md`
@@ -54,7 +54,7 @@ K-Statra는 국내 스타트업·수출기업과 해외 바이어를 연결하�
 
 ### 인프라
 
-- Railway: K-Statra 배포
+- Railway: DemoStatra 배포
 - MongoDB Atlas: 데이터 저장, 기업/바이어 DB, 벡터 검색
 - OpenAI API: 주력 AI 예산 및 AX 프로필/리포트 생성 엔진
 
@@ -94,7 +94,7 @@ K-Statra는 국내 스타트업·수출기업과 해외 바이어를 연결하�
 
 ---
 
-## 6. K-Statra AX 데이터 DB 구현 우선순위
+## 6. DemoStatra AX 데이터 DB 구현 우선순위
 
 1. 기존 Company Schema를 AX 기업 프로필 구조와 연결한다.
 2. KOAA SHOW 참가기업 샘플 20개를 입력/저장할 수 있게 한다.
@@ -122,8 +122,8 @@ K-Statra는 국내 스타트업·수출기업과 해외 바이어를 연결하�
 다른 날 새 대화창을 열 경우 다음처럼 시작한다.
 
 ```text
-이 대화는 K-Statra 프로젝트 전용이야.
-프로젝트 폴더는 D:/k-statra-project 이야.
+이 대화는 DemoStatra 프로젝트 전용이야.
+프로젝트 폴더는 D:/demostatra-project 이야.
 먼저 PROJECT_CONTEXT.md를 읽고 현재 맥락을 파악한 뒤 작업해줘.
 ```
 

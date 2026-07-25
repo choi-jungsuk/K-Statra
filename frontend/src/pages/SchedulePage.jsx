@@ -139,7 +139,7 @@ export default function SchedulePage() {
           timeSlot: onlineForm.timeSlot,
           reqType: 'ONLINE',
           status: 'CONFIRMED',
-          meetingLink: 'https://zoom.us/j/demo-k-statra-' + Math.random().toString(36).substring(7),
+          meetingLink: 'https://zoom.us/j/demo-demostatra-' + Math.random().toString(36).substring(7),
           agenda: onlineForm.agenda || '1차 비즈니스 매칭 검토 및 제안 설명'
         };
 

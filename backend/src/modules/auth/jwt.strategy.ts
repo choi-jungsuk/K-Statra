@@ -19,7 +19,7 @@ const cookieOrHeaderExtractor = (req: any) => {
       },
       {} as Record<string, string>,
     );
-    token = cookies['kstatra_token'];
+    token = cookies['demostatra_token'];
   }
 
   // 2. Fallback to Bearer token in headers
@@ -41,7 +41,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       ignoreExpiration: false,
       secretOrKey:
         configService.get<string>('JWT_SECRET') ||
-        'kstatra_jwt_secret_key_2026',
+        'demostatra_jwt_secret_key_2026',
     });
   }
 

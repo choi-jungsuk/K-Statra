@@ -88,8 +88,8 @@ export default function AgentHub() {
       setProgress(25);
       setAgentStatus(prev => ({ ...prev, hermes: 'Active', claude: 'Scanning' }));
       setHermesLog(lang === 'ko' 
-        ? `안녕하세요! K-Statra 플랫폼 호스트 Hermes입니다. 입력하신 "${activeQuery}" 질문을 접수했습니다.\n본 거래 매칭은 Premium AI 4총사 Agent의 실시간 협업 체계를 가동하여 진행됩니다. 최적의 결과를 도출 중입니다!`
-        : `Greetings! I am Hermes, K-Statra's host agent. I have registered your request: "${activeQuery}".\nWe have initialized our 4-Agent collaborative network. Analyzing your match profile now...`
+        ? `안녕하세요! DemoStatra 플랫폼 호스트 Hermes입니다. 입력하신 "${activeQuery}" 질문을 접수했습니다.\n본 거래 매칭은 Premium AI 4총사 Agent의 실시간 협업 체계를 가동하여 진행됩니다. 최적의 결과를 도출 중입니다!`
+        : `Greetings! I am Hermes, DemoStatra's host agent. I have registered your request: "${activeQuery}".\nWe have initialized our 4-Agent collaborative network. Analyzing your match profile now...`
       );
       addDeveloperLog('🤝 [Hermes Host] Routed business query to Claude Vector Search Engine.');
       addDeveloperLog('🤝 [Hermes Host] Scheduled parallel compliance screening request to Azure AI.');
@@ -164,15 +164,15 @@ export default function AgentHub() {
         const data = await response.json();
         setAzureAnswer(data.answer || '');
         setAzureMeta({
-          source: data.data_source || 'K-Statra DB + Azure AI Agent',
+          source: data.data_source || 'DemoStatra DB + Azure AI Agent',
           companiesFound: data.companies_found || 0
         });
         addDeveloperLog(`🛡️ [Azure AI Agent] Legal & compliance evaluation completed successfully. Verified ${data.companies_found} companies.`, 'success');
       } catch (err) {
         addDeveloperLog('🛡️ [Azure AI Agent] Failed to query endpoint. Generating mock-verified certificate.', 'warning');
         setAzureAnswer(lang === 'ko'
-          ? '### Azure AI 매칭 검증 보고서\n\n- **데이터 소스**: K-Statra DB + Azure AI Agent\n- **검증 여부**: 법인 등록 상태 검증 완료 (100% 신뢰)\n- **추천 신뢰도**: 95%\n\n본 비즈니스 요청은 한국 국세청 및 무역협회 DB에 등록된 기업들과 크로스 매칭이 확인되었습니다.'
-          : '### Azure AI Matching Verification Report\n\n- **Data Source**: K-Statra DB + Azure AI Agent\n- **Legal Standing**: Corporate active status verified (100% reliable)\n- **Confidence**: 95%\n\nThis B2B entity matches verified registration listings in the KITA (Korea International Trade Association) DB.'
+          ? '### Azure AI 매칭 검증 보고서\n\n- **데이터 소스**: DemoStatra DB + Azure AI Agent\n- **검증 여부**: 법인 등록 상태 검증 완료 (100% 신뢰)\n- **추천 신뢰도**: 95%\n\n본 비즈니스 요청은 한국 국세청 및 무역협회 DB에 등록된 기업들과 크로스 매칭이 확인되었습니다.'
+          : '### Azure AI Matching Verification Report\n\n- **Data Source**: DemoStatra DB + Azure AI Agent\n- **Legal Standing**: Corporate active status verified (100% reliable)\n- **Confidence**: 95%\n\nThis B2B entity matches verified registration listings in the KITA (Korea International Trade Association) DB.'
         );
       }
     }, 5500);

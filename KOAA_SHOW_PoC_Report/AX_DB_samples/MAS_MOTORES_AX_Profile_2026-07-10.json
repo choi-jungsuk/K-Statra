@@ -1,0 +1,177 @@
+﻿{
+  "profile_meta": {
+    "created_date": "2026-07-10",
+    "source_url": "https://masmotores.com/",
+    "data_type": "Public website based AX DB draft",
+    "verification_status": "Auto-collected draft / Human verification required",
+    "purpose": "KOAA SHOW PoC Extension — Mexico Automotive Parts Distributor AX Profile",
+    "market_classification": "Latin America Buyer Candidate / Korean Auto Parts New Market Entry"
+  },
+  "company_name": "Comercializadora de Autopartes Álvarez S.A. de C.V.",
+  "brand_name": "MAS MOTORES / Transmisiones Automáticas Álvarez",
+  "country": "Mexico",
+  "region": "Jalisco",
+  "headquarters": {
+    "address": "Porres Baranda 440, Blanco y Cuéllar, 44730 Guadalajara, Jalisco, México",
+    "type": "Main Branch"
+  },
+  "branch": {
+    "address": "La Baraña 151, 45438 Puente Grande, Jalisco, México",
+    "type": "Second Branch (relocated from San Nicolás de los Garza, Nuevo León in 2017)"
+  },
+  "website": "https://masmotores.com/",
+  "email": "ventas@masmotores.com",
+  "phone": [
+    "+52 33 3330 9953",
+    "+52 33 3149 9731"
+  ],
+  "whatsapp": "+52 33 3379 8683",
+  "social_media": {
+    "facebook": "https://www.facebook.com/MasMotoresCom/",
+    "instagram": "masmotorescom"
+  },
+  "key_contacts": [
+    {
+      "name": "Adrián Oviedo Berumen",
+      "title": "Director General"
+    },
+    {
+      "name": "Javier Solano González",
+      "title": "Sales / WhatsApp"
+    },
+    {
+      "name": "Iliana Rosete Ruiz",
+      "title": "Contact"
+    }
+  ],
+  "business_hours": {
+    "weekdays": "Mon-Fri 09:00-18:00",
+    "saturday": "09:00-14:00"
+  },
+  "founded": 2002,
+  "legal_entity_formed": 2017,
+  "history": "Transmisiones Automáticas Álvarez started in 2002 in Guadalajara, Jalisco. In 2017, merged with MásMotores (San Nicolás de los Garza, Nuevo León) to form current legal entity.",
+  "industry": "Automotive Parts / Engine & Transmission Distribution",
+  "company_type": [
+    "Importer",
+    "Distributor",
+    "E-Commerce Retailer",
+    "B2C/B2B Automotive Parts"
+  ],
+  "mission": "To offer auto parts of excellent quality at competitive prices through personalized, timely, and effective customer service.",
+  "vision": "To be the leading comprehensive service company with sustained national growth in the sale of engines, automatic transmissions, and related spare parts.",
+  "main_products": [
+    "Engines (Gasoline, Gasoline Direct Injection)",
+    "Automatic Transmissions (AT)",
+    "CVT Transmissions",
+    "Hybrid Transmissions",
+    "Electric Steering Racks",
+    "Hydraulic Steering Racks",
+    "Mechanical Steering Racks",
+    "Electric Steering Pumps",
+    "Hydraulic Steering Pumps",
+    "Automotive Accessories"
+  ],
+  "vehicle_brands_handled": [
+    "Hyundai",
+    "Kia",
+    "Toyota",
+    "Ford",
+    "Mazda",
+    "Dodge"
+  ],
+  "korean_brand_products": [
+    "Hyundai Tucson Engine",
+    "Hyundai Elantra Engine",
+    "Hyundai-Kia A8MF1 Automatic Transmission",
+    "Kia CVT Transmission",
+    "Kia Sorento Transmission"
+  ],
+  "inventory_size": "1,000+ engines and transmissions in stock",
+  "business_model": {
+    "channels": ["Online shop (E-Commerce)", "WhatsApp sales", "Physical stores"],
+    "delivery": "Nationwide shipping with specialized packaging",
+    "order_tracking": "Online order status check on website"
+  },
+  "target_market": "Mexico (national)",
+  "digital_capabilities": [
+    "Proprietary E-Commerce platform",
+    "Shopping cart and user accounts",
+    "WhatsApp business integration",
+    "Online order tracking system",
+    "Product search and filter functionality",
+    "Social media marketing (Facebook, Instagram)"
+  ],
+  "competitive_advantages": [
+    "Over 20 years of experience in engine and transmission market (founded 2002)",
+    "1,000+ engines and transmissions in stock for quick delivery",
+    "Specialized packaging to prevent shipping damage",
+    "Competitive pricing with high-quality parts",
+    "Nationwide delivery with order tracking",
+    "WhatsApp-based fast quotation and sales service"
+  ],
+  "ax_classification": {
+    "company_type_ax": "Import Distributor / E-Commerce Automotive Parts Retailer",
+    "b2b_role": "Potential importer, aftermarket distributor, Mexico market entry partner for Korean parts makers",
+    "market_position": "Western Mexico (Jalisco) drivetrain & steering parts specialist distributor",
+    "product_category_mapping": ["Engine", "Automatic Transmission", "CVT", "Hybrid Transmission", "Steering Rack", "Steering Pump", "Aftermarket Parts"],
+    "korean_brand_relevance": "HIGH - Currently handling Hyundai/Kia engines and transmissions (A8MF1, CVT, etc.)",
+    "koaa_show_suitability": "Medium-High: Potential for Korean aftermarket engine/transmission parts import, Mexico market gateway",
+    "verification_priority": "High: Current sourcing origin, Korean OEM/compatible parts demand verification needed",
+    "latam_strategic_importance": "Latin America new market entry candidate (extension of Uzbekistan-focused KOAA SHOW PoC — Global AX DB expansion direction)"
+  },
+  "recommended_korean_partner_types": [
+    "Hyundai/Kia compatible engine parts manufacturers",
+    "Automatic transmission / CVT / Hybrid transmission parts manufacturers",
+    "Engine remanufacturing companies",
+    "Steering system parts manufacturers (electric/hydraulic rack & pump)",
+    "Aftermarket parts export specialists",
+    "Automotive parts E-Commerce solution providers",
+    "Korean parts manufacturers seeking Latin America market entry"
+  ],
+  "expected_consultation_topics": [
+    {"topic": "Hyundai/Kia compatible engine and transmission parts sourcing", "likelihood": "High", "reason": "Currently handling Hyundai Tucson/Elantra engines, Kia CVT/Sorento transmissions, A8MF1"},
+    {"topic": "OEM compatible parts supply agreement", "likelihood": "High", "reason": "Expected demand for supplier diversification and cost improvement"},
+    {"topic": "Mexico market automotive parts distribution partnership", "likelihood": "Medium-High", "reason": "Local online and offline combined distribution channels"},
+    {"topic": "Engine remanufactured parts sourcing", "likelihood": "Medium", "reason": "Used car A/S market characteristics suggest remanufactured engine demand"},
+    {"topic": "Steering system (Rack & Pump) parts sourcing", "likelihood": "Medium", "reason": "Current catalog includes electric/hydraulic steering components"},
+    {"topic": "Latin America distribution network entry", "likelihood": "Medium", "reason": "Mexico base → potential Central/South America expansion strategy"}
+  ],
+  "ax_tags": [
+    "Mexico", "Latin America", "Jalisco", "Guadalajara",
+    "Automotive Parts", "Engine", "Automatic Transmission", "CVT Transmission", "Hybrid Transmission",
+    "Steering Rack", "Steering Pump", "Hyundai Parts", "Kia Parts",
+    "Aftermarket", "E-Commerce", "B2C Distributor", "B2B Candidate",
+    "Importer Candidate", "KOAA SHOW Candidate", "AX Profile Draft", "Verification Required"
+  ],
+  "matching_role": "Potential Mexican aftermarket importer/distributor and entry-point partner for Korean automotive parts manufacturers targeting Latin America",
+  "poc_status": "Public website based AX profile draft; requires human verification before final matching",
+  "ax_score_draft": {
+    "industry_fit": {"score": 88, "reason": "Engine/transmission/steering parts specialist distributor directly aligned with KOAA automotive parts scope"},
+    "korean_brand_relevance": {"score": 85, "reason": "Currently handling Hyundai/Kia engines and transmissions (A8MF1, etc.)"},
+    "buyer_partner_potential": {"score": 78, "reason": "As an import distributor, potential for direct sourcing partnership with Korean manufacturers"},
+    "digital_distribution_capability": {"score": 74, "reason": "Own E-Commerce platform, WhatsApp sales, nationwide delivery network"},
+    "latam_strategic_value": {"score": 80, "reason": "Western Mexico base + national growth vision — Latin America gateway value"},
+    "koaa_show_suitability": {"score": 76, "reason": "Based on Korean brand parts handling; consultation value considering SME distributor scale"}
+  },
+  "verification_checklist": [
+    "Current engine/transmission sourcing origin (Korean direct import vs. Chinese/remanufactured)",
+    "Annual parts purchasing volume and Hyundai/Kia parts ratio",
+    "OEM direct trading or B2B sourcing intention",
+    "Contract terms with overseas suppliers (MOQ, payment terms, lead time)",
+    "Mexico customs import history (HS Code verification)",
+    "KOAA SHOW or Korean parts maker contact experience",
+    "Online vs. offline B2B sales ratio",
+    "Re-export possibility to other Latin American countries",
+    "Official import license and Mexico customs registration status",
+    "Warehouse size and logistics capability details"
+  ],
+  "presentation_summary": "MAS MOTORES is a Mexican importer/distributor specializing in engines, transmissions, and steering parts in Jalisco, currently handling Hyundai/Kia vehicle parts — making it a candidate for aftermarket distribution partnership for Korean automotive parts manufacturers entering the Latin American market, and worthy of priority AX DB registration for verification.",
+  "sources": [
+    "https://masmotores.com/",
+    "https://masmotores.com/about.php",
+    "https://masmotores.com/shop.php",
+    "https://masmotores.com/contacto.php",
+    "https://www.facebook.com/MasMotoresCom/"
+  ]
+}

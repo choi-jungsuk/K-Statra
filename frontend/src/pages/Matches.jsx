@@ -19,7 +19,7 @@ export default function Matches() {
   const [buyersList, setBuyersList] = useState([]);
   const [selectedBuyer, setSelectedBuyer] = useState(null);
   
-  const [buyerInput, setBuyerInput] = useState(searchParams.get('buyerId') || localStorage.getItem('kstatra_buyer_id') || '');
+  const [buyerInput, setBuyerInput] = useState(searchParams.get('buyerId') || localStorage.getItem('demostatra_buyer_id') || '');
   const [limitInput, setLimitInput] = useState(() => {
     const raw = Number(searchParams.get('limit') || 5);
     return Number.isFinite(raw) ? Math.min(Math.max(raw, 1), 20) : 5;
@@ -32,7 +32,7 @@ export default function Matches() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [creatingPayment, setCreatingPayment] = useState('');
-  const [activeBuyerId, setActiveBuyerId] = useState(searchParams.get('buyerId') || localStorage.getItem('kstatra_buyer_id') || '');
+  const [activeBuyerId, setActiveBuyerId] = useState(searchParams.get('buyerId') || localStorage.getItem('demostatra_buyer_id') || '');
   
   // Custom Azure Compliance Check Modal State
   const [complianceModal, setComplianceModal] = useState({ open: false, company: null, logs: [], status: 'idle' });
@@ -47,7 +47,7 @@ export default function Matches() {
         setBuyersList(buyers);
         
         // Auto-select initial buyer if query param matches
-        const initialBuyerId = searchParams.get('buyerId') || localStorage.getItem('kstatra_buyer_id');
+        const initialBuyerId = searchParams.get('buyerId') || localStorage.getItem('demostatra_buyer_id');
         if (isObjectId(initialBuyerId) && buyers.length > 0) {
           const found = buyers.find(b => b._id === initialBuyerId);
           if (found) {
@@ -288,8 +288,8 @@ export default function Matches() {
         </h3>
         <p className="section-subtitle">
           {lang === 'ko'
-            ? 'K-Statra 하이브리드 추천 매칭 알고리즘이 도출한 매칭 가중치(Score) 순위입니다.'
-            : 'Ranked results computed by K-Statra Hybrid recommendation engine combining DART, Sector & Vector weightings.'}
+            ? 'DemoStatra 하이브리드 추천 매칭 알고리즘이 도출한 매칭 가중치(Score) 순위입니다.'
+            : 'Ranked results computed by DemoStatra Hybrid recommendation engine combining DART, Sector & Vector weightings.'}
         </p>
       </div>
 

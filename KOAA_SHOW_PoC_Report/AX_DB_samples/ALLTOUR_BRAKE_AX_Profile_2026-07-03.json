@@ -1,0 +1,97 @@
+{
+  "company_name": "Shandong Alltour Automotive Co., Ltd.",
+  "local_name": "山东安途制动材料有限公司",
+  "profile_date": "2026-07-03",
+  "source_website": "https://www.alltourbrake.com/en/index.html",
+  "data_status": "public_website_based_ax_profile_draft_human_verification_required",
+  "country": "China",
+  "region": "Shandong Province, Tai'an City, Xintai Economic Development Zone",
+  "address": "山东省泰安市新泰市经济开发区国贸路10号",
+  "website": "https://www.alltourbrake.com/en/index.html",
+  "phone": "0538-7776086",
+  "contact_person": "Manager Zhang / 张经理",
+  "industry": "Automotive Parts / Brake Pads / Brake Linings / Friction Materials",
+  "company_type": [
+    "Manufacturer",
+    "Brake system parts supplier",
+    "Friction material specialist"
+  ],
+  "b2b_role": [
+    "Potential supplier",
+    "Technology cooperation candidate",
+    "Aftermarket parts candidate",
+    "Commercial vehicle brake parts partner"
+  ],
+  "main_products": [
+    "Brake pads",
+    "Brake linings",
+    "Friction materials",
+    "Commercial vehicle brake pads",
+    "Passenger car brake products",
+    "Industrial braking applications"
+  ],
+  "brands": [
+    "Alltour",
+    "ANTCH",
+    "安途安",
+    "BREX",
+    "云峰"
+  ],
+  "certifications": [
+    "ECE R90",
+    "IATF16949"
+  ],
+  "featured_product_models": [
+    "WVA29030",
+    "WVA29087",
+    "WVA29088",
+    "WVA29126",
+    "WVA29228",
+    "29246-1",
+    "29246-2"
+  ],
+  "ax_tags": [
+    "China",
+    "Shandong",
+    "Automotive Parts",
+    "Brake Pads",
+    "Brake Linings",
+    "Friction Materials",
+    "Commercial Vehicle Parts",
+    "ECE R90",
+    "IATF16949",
+    "Aftermarket Candidate",
+    "KOAA SHOW Candidate",
+    "AX Profile Draft",
+    "Verification Required"
+  ],
+  "draft_scores": {
+    "industry_fit": 90,
+    "product_group_fit": 88,
+    "certification_reliability": 86,
+    "korean_partnership_potential": 70,
+    "uzbekistan_demo_relevance": 55,
+    "koaa_show_consultation_fit": 82
+  },
+  "matching_role": "Potential brake parts supplier, friction material partner, aftermarket candidate, or technology cooperation candidate for KOAA SHOW consultation",
+  "matching_summary_ko": "Alltour Brake는 중국 산둥성의 상용차 브레이크 패드·라이닝 전문 제조사로, ECE R90과 IATF16949 인증을 보유한 제동부품 상담 후보이며, AX DB에서는 제동부품·마찰재·상용차 부품 파트너 후보로 구조화할 수 있습니다.",
+  "verification_required": [
+    "Current export markets",
+    "Uzbekistan/Central Asia trade history",
+    "Overseas sales contact email or direct phone",
+    "HS codes and product specifications",
+    "Distributor network",
+    "OEM vs aftermarket product distinction",
+    "MOQ, price terms, delivery terms",
+    "KOAA SHOW participation or consultation intent"
+  ],
+  "sources": [
+    "https://www.alltourbrake.com",
+    "https://www.alltourbrake.com/en/index.html",
+    "https://www.alltourbrake.com/page-56245.html",
+    "https://www.alltourbrake.com/page-56172.html",
+    "https://www.alltourbrake.com/cate-56160.html",
+    "https://www.alltourbrake.com/en/cate-60265.html"
+  ],
+  "storage_note": "Current session could not access D:/demostatra-project/KOAA_SHOW_PoC_Report, so this file was saved under C:/Users/P50/KOAA_SHOW_PoC_Report/AX_DB_samples as a fallback. Copy to D drive PoC folder after presentation if needed."
+}

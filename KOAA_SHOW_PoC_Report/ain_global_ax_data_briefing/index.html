@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>KOAA SHOW PoC 종료 간담회</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & General */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            color: #1e293b;
+            background-color: #f1f5f9;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* Slide Frame for Screen & Print */
+        .slide {
+            width: 1122px;
+            height: 794px;
+            background-color: #ffffff;
+            padding: 45px 55px 45px 55px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-sizing: border-box;
+            page-break-after: always;
+        }
+
+        @media print {
+            body {
+                background-color: #ffffff;
+            }
+            .slide {
+                page-break-after: always;
+                box-shadow: none;
+                border: none;
+            }
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+        }
+
+        /* Slide Header & Footer */
+        .slide-header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .slide-title-area {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .slide-title {
+            font-size: 34px;
+            font-weight: 700;
+            color: #0f1e36;
+            letter-spacing: -0.8px;
+        }
+        .slide-subtitle {
+            font-size: 16.5px;
+            color: #64748b;
+            font-weight: 400;
+        }
+        .slide-meta-top {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #475569;
+            background-color: #f1f5f9;
+            padding: 5px 12px;
+            border-radius: 4px;
+            letter-spacing: -0.2px;
+        }
+
+        .slide-footer {
+            position: absolute;
+            bottom: 25px;
+            left: 55px;
+            right: 55px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
+        }
+        .slide-footer-text {
+            font-size: 12.5px;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+        .slide-page-num {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #475569;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Cover Slide (Slide 1) */
+        .slide-cover {
+            background-color: #0b1a30;
+            color: #ffffff;
+            justify-content: flex-start;
+            padding-top: 180px; /* 제목을 위로 올림 */
+            align-items: center;
+            text-align: center;
+        }
+        .cover-circle-blue {
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #1e6cff 0%, rgba(30,108,255,0) 70%);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .cover-circle-teal {
+            position: absolute;
+            bottom: -80px;
+            right: 50px;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #0d9488 0%, rgba(13,148,136,0) 70%);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .cover-content {
+            z-index: 10;
+            max-width: 850px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cover-title {
+            font-size: 46px;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        .cover-subtitle {
+            font-size: 22px;
+            font-weight: 500;
+            color: #38bdf8;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+        }
+        .cover-desc {
+            font-size: 16px;
+            font-weight: 300;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 80px;
+            word-break: keep-all;
+        }
+        .cover-footer {
+            position: absolute;
+            bottom: 35px;
+            right: 55px;
+            font-size: 14.5px;
+            color: #cbd5e1;
+            z-index: 15;
+        }
+        .cover-footer span {
+            opacity: 0.85;
+        }
+        .cover-footer strong {
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        /* Layout Elements & Cards */
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 15px;
+            width: 100%;
+        }
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+        .grid-3col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+        }
+        .grid-4col {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            width: 100%;
+        }
+        .grid-5col {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-header-gray {
+            background-color: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 700;
+            color: #0f1e36;
+            font-size: 15px;
+            padding: 10px 16px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .card-body-with-header {
+            padding: 14px 16px;
+            flex-grow: 1;
+        }
+        .card.has-header {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* Styles for specific items */
+        .badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            width: fit-content;
+        }
+        .badge-blue { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .badge-green { background-color: #e6fcf5; color: #0ca678; border: 1px solid #c3fae8; }
+        .badge-orange { background-color: #fff4e6; color: #f76707; border: 1px solid #ffd8a8; }
+        .badge-purple { background-color: #f3f0ff; color: #7048e8; border: 1px solid #d0bfff; }
+        .badge-teal { background-color: #e6fffa; color: #0d9488; border: 1px solid #b2f5ea; }
+
+        /* Slide 2 Custom layout (Compact, fixed height overflow) */
+        .s2-main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            gap: 18px;
+            margin-bottom: 15px;
+        }
+        .s2-bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            gap: 18px;
+        }
+        .s2-timeline-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+            align-items: flex-start;
+        }
+        .s2-timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        .s2-timeline-month {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e6cff;
+            background-color: #eff6ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            min-width: 38px;
+            text-align: center;
+        }
+        .s2-timeline-body {
+            font-size: 12.5px;
+        }
+        .s2-timeline-title {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 2px;
+        }
+        .s2-timeline-desc {
+            color: #64748b;
+        }
+        .s2-scope-item {
+            margin-bottom: 8px;
+        }
+        .s2-scope-item:last-child {
+            margin-bottom: 0;
+        }
+        .s2-scope-title {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .s2-scope-desc {
+            font-size: 11.5px;
+            color: #475569;
+            line-height: 1.4;
+        }
+        .s2-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .s2-tag {
+            font-size: 11px;
+            background-color: #f1f5f9;
+            color: #334155;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+        .s2-list-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 12px;
+        }
+        .s2-list-column {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .s2-list-item {
+            display: flex;
+            gap: 4px;
+            color: #475569;
+            line-height: 1.4;
+        }
+        .s2-list-item-bullet {
+            color: #64748b;
+        }
+
+        /* Slide 3 Horizontal lists */
+        .s3-row-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            justify-content: center;
+            flex-grow: 0.8;
+        }
+        .s3-card-row {
+            display: flex;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 14px 22px;
+            background-color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
+        }
+        .s3-row-badge {
+            font-size: 14px;
+            font-weight: 700;
+            min-width: 110px;
+            padding-right: 20px;
+            border-right: 2px solid #e2e8f0;
+            margin-right: 20px;
+        }
+        .s3-badge-direction { color: #1d4ed8; }
+        .s3-badge-output { color: #0ca678; }
+        .s3-badge-security { color: #d97706; }
+        .s3-badge-next { color: #4f46e5; }
+        .s3-row-text {
+            font-size: 13.5px;
+            color: #334155;
+            line-height: 1.5;
+            word-break: keep-all;
+        }
+
+        /* Slide 4 AS-IS TO-BE compare */
+        .s4-top-card {
+            margin-bottom: 20px;
+        }
+        .s4-principle-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        .s4-principle-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .s4-principle-num {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #2563eb;
+            background-color: #eff6ff;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+        }
+        .s4-principle-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0f1e36;
+            word-break: keep-all;
+        }
+        .s4-principle-desc {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.45;
+            word-break: keep-all;
+        }
+        .s4-compare-card {
+            border-top: 4px solid;
+        }
+        .s4-compare-asis {
+            border-top-color: #94a3b8;
+        }
+        .s4-compare-tobe {
+            border-top-color: #0d9488;
+            background-color: #fbfdfd;
+        }
+        .s4-compare-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .s4-compare-list li {
+            font-size: 13px;
+            color: #334155;
+            position: relative;
+            padding-left: 14px;
+            line-height: 1.4;
+        }
+        .s4-compare-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #94a3b8;
+        }
+        .s4-compare-tobe .s4-compare-list li::before {
+            color: #0d9488;
+            content: "✓";
+            font-size: 11px;
+            font-weight: 700;
+            left: -1px;
+        }
+
+        /* Slide 5 Stats Dashboard */
+        .s5-stats-container {
+            margin-bottom: 25px;
+        }
+        .s5-stat-card {
+            align-items: center;
+            text-align: center;
+            padding: 22px 15px;
+            background-color: #ffffff;
+            border-top: 4px solid #3b82f6;
+        }
+        .s5-stat-card:nth-child(2) { border-top-color: #10b981; }
+        .s5-stat-card:nth-child(3) { border-top-color: #f59e0b; }
+        .s5-stat-card:nth-child(4) { border-top-color: #8b5cf6; }
+
+        .s5-stat-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: #0f1e36;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+        .s5-stat-card:nth-child(1) .s5-stat-number { color: #2563eb; }
+        .s5-stat-card:nth-child(2) .s5-stat-number { color: #059669; }
+        .s5-stat-card:nth-child(3) .s5-stat-number { color: #d97706; }
+        .s5-stat-card:nth-child(4) .s5-stat-number { color: #7c3aed; }
+
+        .s5-stat-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .s5-stat-desc {
+            font-size: 11.5px;
+            color: #64748b;
+            word-break: keep-all;
+        }
+        .s5-callout {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid #0f1e36;
+            border-radius: 6px;
+            padding: 16px 20px;
+        }
+        .s5-callout-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f1e36;
+            margin-bottom: 6px;
+        }
+        .s5-callout-desc {
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.45;
+            word-break: keep-all;
+        }
+
+        /* Slide 6 Vertical Cards */
+        .s6-card {
+            padding: 24px 20px;
+            border-top: 4px solid #2563eb;
+            background-color: #ffffff;
+            height: 100%;
+        }
+        .s6-card:nth-child(2) { border-top-color: #10b981; }
+        .s6-card:nth-child(3) { border-top-color: #f59e0b; }
+
+        .s6-step-num {
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            opacity: 0.15;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+        }
+        .s6-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f1e36;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 8px;
+        }
+        .s6-card-desc {
+            font-size: 12.5px;
+            color: #475569;
+            line-height: 1.6;
+            word-break: keep-all;
+        }
+
+        /* Slide 7 Beautiful Table */
+        .s7-table-container {
+            width: 100%;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
+        }
+        .s7-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+        .s7-table th {
+            background-color: #0f1e36;
+            color: #ffffff;
+            font-weight: 700;
+            padding: 12px 18px;
+            border: none;
+        }
+        .s7-table td {
+            padding: 13px 18px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+            line-height: 1.45;
+        }
+        .s7-table tr:last-child td {
+            border-bottom: none;
+        }
+        .s7-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .s7-col-header {
+            font-weight: 700;
+            color: #0f1e36;
+            background-color: #f1f5f9;
+            width: 12%;
+            text-align: center;
+        }
+        .s7-col-domestic {
+            width: 44%;
+        }
+        .s7-col-overseas {
+            width: 44%;
+        }
+
+        /* Slide 8 / 9 Flow Steps */
+        .s8-flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 25px;
+            flex-grow: 0.5;
+        }
+        .s8-flow-card {
+            width: 21%;
+            border-top: 4px solid #0d9488;
+            padding: 16px 14px;
+            text-align: center;
+        }
+        .s8-flow-card:nth-child(1) { border-top-color: #2563eb; }
+        .s8-flow-card:nth-child(3) { border-top-color: #10b981; }
+        .s8-flow-card:nth-child(5) { border-top-color: #d97706; }
+        .s8-flow-card:nth-child(7) { border-top-color: #8b5cf6; }
+
+        .s8-flow-num {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #475569;
+            background-color: #f1f5f9;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px auto;
+        }
+        .s8-flow-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #0f1e36;
+            margin-bottom: 6px;
+        }
+        .s8-flow-desc {
+            font-size: 11.5px;
+            color: #64748b;
+            line-height: 1.45;
+            word-break: keep-all;
+        }
+        .s8-flow-arrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
+            color: #94a3b8;
+            font-weight: 700;
+            user-select: none;
+        }
+        .s8-banner {
+            background-color: #0f1e36;
+            color: #ffffff;
+            border-radius: 6px;
+            padding: 14px 20px;
+            font-size: 13px;
+            text-align: center;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Slide 9 Step flow (5 Steps) */
+        .s9-flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            flex-grow: 0.5;
+        }
+        .s9-flow-card {
+            width: 17.5%;
+            padding: 16px 12px;
+            text-align: center;
+            border-top: 4px solid #3b82f6;
+        }
+        .s9-flow-card:nth-child(3) { border-top-color: #10b981; }
+        .s9-flow-card:nth-child(5) { border-top-color: #f59e0b; }
+        .s9-flow-card:nth-child(7) { border-top-color: #8b5cf6; }
+        .s9-flow-card:nth-child(9) { border-top-color: #ec4899; }
+
+        .s9-flow-num {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: #2563eb;
+            background-color: #eff6ff;
+            padding: 3px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .s9-flow-card:nth-child(3) .s9-flow-num { color: #059669; background-color: #e6fcf5; }
+        .s9-flow-card:nth-child(5) .s9-flow-num { color: #d97706; background-color: #fff4e6; }
+        .s9-flow-card:nth-child(7) .s9-flow-num { color: #7c3aed; background-color: #f3f0ff; }
+        .s9-flow-card:nth-child(9) .s9-flow-num { color: #db2777; background-color: #fdf2f8; }
+
+        .s9-flow-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f1e36;
+            margin-bottom: 6px;
+        }
+        .s9-flow-desc {
+            font-size: 11.5px;
+            color: #64748b;
+            line-height: 1.45;
+            word-break: keep-all;
+        }
+
+        /* Slide 10 Budget Cards */
+        .s10-stats-container {
+            margin-bottom: 25px;
+        }
+        .s10-stat-card {
+            align-items: center;
+            text-align: center;
+            padding: 22px 15px;
+            background-color: #ffffff;
+            border-top: 4px solid #3b82f6;
+        }
+        .s10-stat-card:nth-child(2) { border-top-color: #10b981; }
+        .s10-stat-card:nth-child(3) { border-top-color: #f59e0b; }
+        .s10-stat-card:nth-child(4) { border-top-color: #8b5cf6; }
+
+        .s10-stat-number {
+            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f1e36;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+        .s10-stat-card:nth-child(1) .s10-stat-number { color: #2563eb; }
+        .s10-stat-card:nth-child(2) .s10-stat-number { color: #059669; }
+        .s10-stat-card:nth-child(3) .s10-stat-number { color: #d97706; }
+        .s10-stat-card:nth-child(4) .s10-stat-number { color: #7c3aed; }
+
+        .s10-stat-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .s10-stat-desc {
+            font-size: 11.5px;
+            color: #64748b;
+            word-break: keep-all;
+        }
+
+        /* Slide 11 Roadmap Columns */
+        .s11-card {
+            padding: 22px 18px;
+            border-top: 4px solid #3b82f6;
+            background-color: #ffffff;
+            height: 100%;
+        }
+        .s11-card:nth-child(2) { border-top-color: #10b981; }
+        .s11-card:nth-child(3) { border-top-color: #f59e0b; }
+
+        .s11-month {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #2563eb;
+            background-color: #eff6ff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .s11-card:nth-child(2) .s11-month { color: #059669; background-color: #e6fcf5; }
+        .s11-card:nth-child(3) .s11-month { color: #d97706; background-color: #fff4e6; }
+
+        .s11-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f1e36;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 8px;
+        }
+        .s11-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .s11-list li {
+            font-size: 12px;
+            color: #475569;
+            position: relative;
+            padding-left: 14px;
+            line-height: 1.45;
+        }
+        .s11-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #94a3b8;
+        }
+
+        /* Slide 12 Expectation Effects Grid */
+        .s12-card {
+            padding: 24px 28px;
+            background-color: #ffffff;
+            border-left: 4px solid #3b82f6;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .s12-card:nth-child(2) { border-left-color: #10b981; }
+        .s12-card:nth-child(3) { border-left-color: #f59e0b; }
+        .s12-card:nth-child(4) { border-left-color: #8b5cf6; }
+
+        .s12-card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f1e36;
+            margin-bottom: 8px;
+        }
+        .s12-card-desc {
+            font-size: 15px;
+            color: #475569;
+            line-height: 1.6;
+            word-break: keep-all;
+        }
+
+        /* Slide 13 Agenda list */
+        .s13-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 0.6;
+            justify-content: center;
+        }
+        .s13-item {
+            display: flex;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+            background-color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
+        }
+        .s13-num {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #2563eb;
+            background-color: #eff6ff;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            flex-shrink: 0;
+        }
+        .s13-text {
+            font-size: 13.5px;
+            color: #334155;
+            font-weight: 500;
+            word-break: keep-all;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Cover -->
+    <div class="slide slide-cover">
+        <div class="cover-circle-blue"></div>
+        <div class="cover-circle-teal"></div>
+        <div class="cover-content">
+            <h1 class="cover-title">KOAA SHOW PoC 종료 간담회</h1>
+            <h2 class="cover-subtitle">- AX 데이터 구축의 필요성을 중심으로 -</h2>
+        </div>
+        <div class="cover-footer">
+            <span>작성: <strong>(주)그란오소AI</strong></span>
+        </div>
+    </div>
+
+    <!-- Slide 2: 그간의 진행경과와 범위 조정 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area" style="max-width: 900px;">
+                <h2 class="slide-title">그간의 진행경과와 범위 조정</h2>
+                <p class="slide-subtitle" style="font-size: 13.5px; color: #475569; margin-top: 4px; word-break: keep-all;">
+                    당초에는 보유 DB 기반의 B2B 매칭 고도화를 검증하려 했으나, 원천 데이터 직접 이전에 대한 보안 우려로 실제 DB 마이그레이션은 보류하고 AX 데이터 구조와 보안 운영 방식 검토 중심으로 범위를 조정했습니다.
+                </p>
+            </div>
+            <div class="slide-meta-top">PoC 진행 경과</div>
+        </div>
+
+        <!-- 2-Column Cards for Plans and Scope Adjustments -->
+        <div class="grid-2col" style="height: 195px; gap: 15px; margin-bottom: 12px;">
+            <!-- Left Card: 당초 PoC 계획 -->
+            <div class="card" style="padding: 12px 18px; border-top: 4px solid #2563eb; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h4 style="font-size: 14.5px; font-weight: 700; color: #1e293b; margin: 0 0 6px 0;">1. 당초 PoC 계획</h4>
+                    <p style="font-size: 12px; color: #475569; line-height: 1.45; word-break: keep-all; margin-bottom: 6px;">
+                        (재)아인글로벌이 보유한 국내업체 약 6만 개사와 해외 바이어 약 3만 개사 디렉토리 DB를 기반으로, KOAA SHOW 참가기업과 해외 바이어 간 B2B 매칭 고도화 가능성을 검토할 계획이었습니다.
+                    </p>
+                </div>
+                <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 11px; color: #64748b; display: flex; flex-direction: row; gap: 15px;">
+                    <li>• 국내업체 약 60,000개사</li>
+                    <li>• 해외 바이어 약 30,000개사</li>
+                </ul>
+            </div>
+
+            <!-- Right Card: 진행 중 범위 조정 -->
+            <div class="card" style="padding: 12px 18px; border-top: 4px solid #f59e0b; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <h4 style="font-size: 14.5px; font-weight: 700; color: #1e293b; margin: 0 0 6px 0;">2. 진행 중 범위 조정</h4>
+                    <p style="font-size: 12px; color: #475569; line-height: 1.45; word-break: keep-all; margin-bottom: 6px;">
+                        원천 DB의 직접 이전·마이그레이션은 보안 우려로 보류하고, 이번 PoC는 실데이터 기반 성능 검증보다는 AI 매칭을 위해 필요한 AX 데이터 구조, 보안 운영 방식, 단계적 구축 방향을 확인하는 형태로 범위를 조정했습니다.
+                    </p>
+                </div>
+                <div style="font-size: 11px; color: #64748b; font-weight: 500;">
+                    🔒 보안상 원천 이전 보류 ➡️ AX 프로필 표준 구조화 및 파일럿 비용 산정 제안
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Card: 검토 대상 범위 (Expanded to fit targets and items) -->
+        <div class="card" style="padding: 14px 20px; display: flex; flex-direction: column; justify-content: space-between; height: 265px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 4px; margin-bottom: 8px;">
+                <h4 style="font-size: 14px; font-weight: 700; color: #0f1e36; margin: 0;">3. PoC 검토 대상 범위: 대륙별 타겟시장 및 품목군</h4>
+                <span style="font-size: 11px; color: #64748b; font-weight: 500;">* 23개 타겟국가 / 19개 주요 자동차산업 품목군 검토</span>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1.1fr 1.3fr; gap: 15px; height: calc(100% - 30px);">
+                <!-- Left: Continental Target Markets -->
+                <div style="border-right: 1px solid #f1f5f9; padding-right: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <strong style="color: #2563eb; display: block; margin-bottom: 6px; font-size: 12px;">🌍 권역별 주요 타겟국가 (23개국)</strong>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 10.5px; color: #475569; line-height: 1.3;">
+                        <div style="background-color: #f8fafc; padding: 4px 6px; border-radius: 4px;"><span style="font-weight: 700; color: #1e3a8a;">[북미]</span> 미국, 멕시코, 캐나다</div>
+                        <div style="background-color: #f8fafc; padding: 4px 6px; border-radius: 4px;"><span style="font-weight: 700; color: #1e3a8a;">[유럽]</span> 독일, 프랑스, 스페인</div>
+                        <div style="background-color: #f8fafc; padding: 4px 6px; border-radius: 4px;"><span style="font-weight: 700; color: #1e3a8a;">[동유럽]</span> 폴란드, 헝가리, 체코</div>
+                        <div style="background-color: #f8fafc; padding: 4px 6px; border-radius: 4px;"><span style="font-weight: 700; color: #1e3a8a;">[아시아]</span> 베트남, 인도네시아, 태국</div>
+                        <div style="background-color: #f8fafc; padding: 4px 6px; border-radius: 4px;"><span style="font-weight: 700; color: #1e3a8a;">[중동]</span> UAE, 오만</div>
+                        <div style="background-color: #f8fafc; padding: 4px 6px; border-radius: 4px;"><span style="font-weight: 700; color: #1e3a8a;">[중남미]</span> 브라질, 칠레, 파나마</div>
+                        <div style="background-color: #f8fafc; padding: 4px 6px; border-radius: 4px;"><span style="font-weight: 700; color: #1e3a8a;">[CIS]</span> 우즈베키스탄, 카자흐스탄</div>
+                        <div style="background-color: #f8fafc; padding: 4px 6px; border-radius: 4px;"><span style="font-weight: 700; color: #1e3a8a;">[아프리카]</span> 케냐, 나이지리아, 이집트, 모로코</div>
+                    </div>
+                    <div style="font-size: 9.5px; color: #94a3b8; line-height: 1.2; margin-top: 4px;">
+                        * 제공 목록 기준 23개국 수록 (기존 24개국 중 1개국 추가 확인 필요)
+                    </div>
+                </div>
+
+                <!-- Right: Target Items (4 Clusters + Detailed list) -->
+                <div style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <strong style="color: #10b981; display: block; margin-bottom: 6px; font-size: 12px;">⚙️ 타겟 아이템/품목군 4대 분류 (19개 품목군)</strong>
+                    <div style="display: flex; flex-direction: column; gap: 4px; font-size: 10.5px; color: #334155; line-height: 1.3;">
+                        <div style="display: flex; gap: 4px;"><strong style="color: #047857; min-width: 110px;">• 차체·샤시·시트:</strong> <span>시트, 샤시, 시트프레임, 브라켓 생산, 다이캐스팅 제품</span></div>
+                        <div style="display: flex; gap: 4px;"><strong style="color: #047857; min-width: 110px;">• 금형·범퍼·기계:</strong> <span>가전/자동차 금형, 범퍼, 크래쉬 패드, 조향, 펌프, 밸브, 기어박스</span></div>
+                        <div style="display: flex; gap: 4px;"><strong style="color: #047857; min-width: 110px;">• 특수·특장·복지:</strong> <span>특수 차량, 특장차량, 복지차량 제조 및 전용 부품</span></div>
+                        <div style="display: flex; gap: 4px;"><strong style="color: #047857; min-width: 110px;">• 미래차·전장·제조:</strong> <span>차량 전장(냉장고, LED 등), LiDAR 자율주행, 2차전지 설비, 스마트팩토리, 탄소중립소재, 포터블 TV</span></div>
+                    </div>
+                    <!-- Detailed tiny list for validation context -->
+                    <div style="font-size: 9px; color: #8c8c8c; border-top: 1px dashed #e2e8f0; padding-top: 4px; line-height: 1.35; margin-top: 4px;">
+                        <strong>[19개 품목군 전체 리스트]</strong> 시트, 자동차 금형, 포터블 TV, 조향시스템/펌프/밸브, 특수 차량, 차량용 전장부품, 시트프레임, 특장차량, 브라켓 생산, 탄소중립소재, 자동차 범퍼, 알루미늄 다이캐스팅, 가전 금형, 차체/샤시, 기어박스, 복지차량, LiDAR 자율주행, 2차전지 설비, 스마트팩토리
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bridge transition text at the bottom -->
+        <div style="font-size: 12px; color: #475569; margin-top: 10px; font-weight: 500; text-align: center; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; word-break: keep-all;">
+            💡 이 검토 범위를 바탕으로 확인한 핵심 과제가 바로 AX DB 구축과 기관 주도형 보안 운영 구조입니다.
+        </div>
+
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI · DemoStatra PoC</span>
+            <span class="slide-page-num">02 / 14</span>
+        </div>
+    </div>
+<!-- Slide 3: PoC를 통해 확인한 핵심 과제 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area" style="max-width: 900px;">
+                <h2 class="slide-title">PoC를 통해 확인한 핵심 과제: AX DB와 보안 운영 구조</h2>
+                <p class="slide-subtitle" style="font-size: 13.5px; line-height: 1.5; color: #475569; margin-top: 6px; word-break: keep-all;">
+                    이번 PoC는 단순 알고리즘 문제가 아니라, AI가 이해할 수 있는 AX 데이터 구조와 기관 주도형 보안 DB 운영 체계가 먼저 필요하다는 점을 확인하는 과정이었습니다.
+                </p>
+            </div>
+            <div class="slide-meta-top">PoC 핵심 결론</div>
+        </div>
+
+        <div class="grid-3col" style="height: 410px; gap: 16px; margin-bottom: 20px;">
+            <!-- Card 1: AX DB 구축이 우선 -->
+            <div class="card" style="padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; border-top: 4px solid #2563eb;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 15px; font-weight: 700; color: #0f1e36;">1. AX DB 구축이 우선</span>
+                        <span class="badge badge-blue" style="margin-bottom: 0; font-size: 10px;">데이터 구조화</span>
+                    </div>
+                    <p style="font-size: 12.5px; color: #475569; line-height: 1.6; word-break: keep-all; margin-bottom: 12px;">
+                        현재 보유 DB는 기업 기본정보 중심이므로, AI 기반 B2B 매칭에 필요한 품목·인증·수요·타겟국가·거래조건·바이어 유형 등의 필드를 표준화한 AX 프로필 구조로 전환할 필요가 있습니다.
+                    </p>
+                </div>
+                <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 10px; font-size: 11.5px; color: #1e3a8a; font-weight: 500; line-height: 1.45; word-break: keep-all;">
+                    💡 AI 매칭의 출발점은 알고리즘보다 데이터 구조입니다.
+                </div>
+            </div>
+
+            <!-- Card 2: 기관 주도형 보안 DB 운영 -->
+            <div class="card" style="padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; border-top: 4px solid #10b981;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-size: 15px; font-weight: 700; color: #0f1e36;">2. 원천 DB는 기관이 직접 통제</span>
+                        <span class="badge badge-green" style="margin-bottom: 0; font-size: 10px;">보안 관리</span>
+                    </div>
+                    <p style="font-size: 12px; color: #475569; line-height: 1.5; word-break: keep-all; margin-bottom: 8px;">
+                        보안상 원천 DB를 외부로 이전하지 않고, (재)아인글로벌이 직접 MongoDB Atlas 등 클라우드 DB 계정을 개설·관리합니다. 담당자가 비밀번호·API Key·접속 권한을 통제하고, 개발자는 승인된 계정과 기간에 한해 접속하여 작업합니다.
+                    </p>
+                    
+                    <!-- DB Workflow Diagram -->
+                    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 10px; display: flex; flex-direction: column; gap: 2px; font-size: 10px; margin-bottom: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong style="color: #0f5132;">(재)아인글로벌</strong>
+                            <span style="color: #64748b; font-size: 9px;">DB 개설 / PW·API 제어 🔑</span>
+                        </div>
+                        <div style="text-align: center; color: #94a3b8; font-size: 8px; line-height: 1;">▼ 승인 접속</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong style="color: #2563eb;">개발팀 (DemoStatra)</strong>
+                            <span style="color: #64748b; font-size: 9px;">승인 계정·기간 내 접속 💻</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div style="font-size: 10px; color: #64748b; margin-bottom: 6px; text-align: center; font-weight: 500;">
+                        * MongoDB Atlas 중심 검토 / 필요 시 Vector·Graph DB 연계
+                    </div>
+                    <div style="background-color: #f0fdf4; border: 1px solid #b2f5ea; border-radius: 6px; padding: 8px; font-size: 11px; color: #0f5132; font-weight: 500; line-height: 1.4; word-break: keep-all;">
+                        🔒 승인 기반 접속 + 권한 관리 + 작업 로그 + 데이터 반출 기록으로 보안 위험을 최소화합니다.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: 2~3개월 연장 PoC -->
+            <div class="card" style="padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; border-top: 4px solid #f59e0b;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 15px; font-weight: 700; color: #0f1e36;">3. 2~3개월 연장 검증</span>
+                        <span class="badge badge-orange" style="margin-bottom: 0; font-size: 10px;">단계적 검증</span>
+                    </div>
+                    <p style="font-size: 12.5px; color: #475569; line-height: 1.6; word-break: keep-all; margin-bottom: 12px;">
+                        당초 계획된 기배정 연산·운영 예산 범위 내에서 약 2~3개월간 AX DB 샘플 구축, 보안 운영 방식 검증, B2B 매칭 추천 품질 개선을 단계적으로 진행합니다.
+                    </p>
+                </div>
+                <div style="background-color: #fff9db; border: 1px solid #ffe3e3; border-radius: 6px; padding: 10px; font-size: 11.5px; color: #b24b00; font-weight: 500; line-height: 1.45; word-break: keep-all;">
+                    🎯 목표는 단기 완성이 아니라, 운영 가능한 구조와 개선 가능성을 확인하는 것입니다.
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusion callout -->
+        <div class="s5-callout" style="border-left-color: #2563eb; padding: 12px 18px; margin-top: 0;">
+            <div class="s5-callout-title" style="color: #1e3a8a; font-size: 13.5px; margin-bottom: 4px;">💡 제안 결론</div>
+            <p class="s5-callout-desc" style="font-size: 12.5px; line-height: 1.5; color: #374151; word-break: keep-all; margin-bottom: 6px;">
+                원천 DB는 (재)아인글로벌이 직접 보관·통제하고, DemoStatra 개발팀은 승인된 환경에서만 접속하여 AX DB 구조화와 매칭 엔진 고도화를 수행합니다. 이를 통해 데이터 보안 우려를 낮추면서도, 향후 KOAA SHOW 참가기업과 해외 바이어 간 B2B 매칭의 실질적 효용성을 검증할 수 있습니다.
+            </p>
+            <div style="font-size: 11px; color: #64748b; font-weight: 500; border-top: 1px dashed #e2e8f0; padding-top: 4px; margin-top: 4px; line-height: 1.4;">
+                ※ 자동 수집은 AX 프로필의 초안이며, 최종 DB는 담당자 검수와 외부 거래 데이터 보강을 통해 완성합니다.<br>
+                ※ AX DB 구축비용은 전체 규모를 현재 단정하지 않고, 국내업체 1,000개사와 해외 바이어 1,000개사 파일럿의 실측값을 기준으로 단계별 확장 비용을 산정합니다.
+            </div>
+        </div>
+
+        <div style="font-size: 12px; color: #475569; margin-top: 15px; font-weight: 500; text-align: center; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; word-break: keep-all;">
+            💡 이후 페이지에서는 AX DB가 무엇인지, 어떻게 구축·검수하고, 어떤 보안 구조에서 운영할 수 있는지 순서대로 설명합니다.
+        </div>
+
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI · DemoStatra PoC</span>
+            <span class="slide-page-num">03 / 14</span>
+        </div>
+    </div>
+
+    <!-- Slide 4: AI 시대 고객 정보 관리 고도화 방향 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <h2 class="slide-title">AI 시대 고객 정보 관리 고도화 방향</h2>
+                <p class="slide-subtitle">현재 보유 고객 정보의 가치를 높여, AI 매칭·타깃 마케팅·전시 후속관리까지 이어지는 AX 데이터 DB로 발전시키는 구조입니다.</p>
+            </div>
+            <div class="slide-meta-top">고도화 방향성</div>
+        </div>
+
+        <!-- Top: 매칭 설계 원칙 -->
+        <div class="card s4-top-card has-header">
+            <div class="card-header-gray" style="color: #2563eb;">DemoStatra B2B 매칭 설계 원칙</div>
+            <div class="card-body-with-header" style="padding: 16px 20px;">
+                <div class="s4-principle-grid">
+                    <div class="s4-principle-item">
+                        <div class="s4-principle-num">1</div>
+                        <div class="s4-principle-title">롱테일의 머리 부분은 낮추고, 꼬리 부분은 두툼하게 한다.</div>
+                        <div class="s4-principle-desc">추천이 일부 우수기업에 집중되는 현상을 완화하고, 더 많은 적격 기업에 기회를 제공합니다.</div>
+                    </div>
+                    <div class="s4-principle-item">
+                        <div class="s4-principle-num">2</div>
+                        <div class="s4-principle-title">매칭 정확도와 함께 참신성(serendipity)을 반영한다.</div>
+                        <div class="s4-principle-desc">기존 거래선 중심을 넘어 신규 바이어 발굴 가능성을 높입니다.</div>
+                    </div>
+                    <div class="s4-principle-item">
+                        <div class="s4-principle-num">3</div>
+                        <div class="s4-principle-title">업체를 찾는 매칭에서, 수요를 읽는 매칭으로 전환한다</div>
+                        <div class="s4-principle-desc">정적인 기업정보에만 의존하지 않고, 품목·국가·시장 트렌드와 바이어의 현재 관심 변화를 함께 반영해 거래 가능성이 높은 방향으로 추천 기준을 조정합니다.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom: AS-IS vs TO-BE -->
+        <div class="grid-2col">
+            <div class="card s4-compare-card s4-compare-asis has-header">
+                <div class="card-header-gray" style="background-color: #f1f5f9; color: #475569;">AS-IS: 현재 고객 정보 활용 구조</div>
+                <div class="card-body-with-header">
+                    <ul class="s4-compare-list">
+                        <li>업체명·연락처·기본 분류 중심 관리</li>
+                        <li>전시·상담 과정에서 사람이 직접 확인</li>
+                        <li>국가·품목별 세분화 마케팅 활용 범위 제한</li>
+                        <li>전시 후 상담 이력과 다음 전시 데이터의 연결이 약함</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card s4-compare-card s4-compare-tobe has-header">
+                <div class="card-header-gray" style="background-color: #f0fdf4; color: #0d9488;">TO-BE: AX 데이터 DB 활용 구조</div>
+                <div class="card-body-with-header">
+                    <ul class="s4-compare-list">
+                        <li>제품·인증·수출경험·희망시장 구조화</li>
+                        <li>해외바이어 수요·취급품목·관심국가 구조화</li>
+                        <li>AI가 검색·분류·추천·추천 이유 설명</li>
+                        <li>전시 전후 상담 이력과 마케팅 데이터가 누적</li>
+                    </ul>
+                </div>
+            </div>
+        <div style="font-size: 11.5px; color: #64748b; margin-top: 15px; font-weight: 500; text-align: center;">
+            이 전환의 핵심 단위가 바로 AX 프로필입니다.
+        </div>
+
+        </div>
+
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI · DemoStatra PoC</span>
+            <span class="slide-page-num">04 / 14</span>
+        </div>
+    </div>
+
+    <!-- Slide 6: AX 프로필 데이터 (양식) -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <h2 class="slide-title">AX 프로필 데이터 (양식)</h2>
+                <p class="slide-subtitle">AI 기반 비즈니스 매칭 고도화를 위해 수집·구축되어야 하는 국내업체 및 해외바이어 프로필의 표준 데이터 구조 제안입니다.</p>
+            </div>
+            <div class="slide-meta-top">AX 프로필 표준 양식</div>
+        </div>
+
+        <div class="grid-3col" style="flex-grow: 0.8; margin-bottom: 15px;">
+            <!-- Card 1: 업체 기본 정보 -->
+            <div class="card has-header">
+                <div class="card-header-gray" style="border-top: 4px solid #2563eb;">업체 기본 정보 (Basic Info)</div>
+                <div class="card-body-with-header" style="padding: 16px 18px;">
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #2563eb;">• 업체명</span>
+                            <span style="color: #475569; padding-left: 10px;">공식 법인명 및 영문명</span>
+                        </li>
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #2563eb;">• 업체 기본 정보</span>
+                            <span style="color: #475569; padding-left: 10px;">소재지 주소, 대표 연락처, 이메일</span>
+                        </li>
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #2563eb;">• 공식 홈페이지 (URL) <span style="font-size: 10.5px; font-weight: normal; color: #0d9488;">[AI 학습 핵심]</span></span>
+                            <span style="color: #475569; padding-left: 10px;">AI의 웹서치 및 크롤링 대상 소스</span>
+                        </li>
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #2563eb;">• 설립 정보 & 규모</span>
+                            <span style="color: #475569; padding-left: 10px;">대표자명, 설립년도, 고용 인원수</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 2: 업체 부가 정보 -->
+            <div class="card has-header">
+                <div class="card-header-gray" style="border-top: 4px solid #10b981;">업체 부가 정보 (B2B Matching)</div>
+                <div class="card-body-with-header" style="padding: 16px 18px;">
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #10b981;">• KOAA SHOW 참가이력</span>
+                            <span style="color: #475569; padding-left: 10px;">참가 횟수, 최근 참가 연도 등 신뢰도 지표</span>
+                        </li>
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #10b981;">• 취득 인증 현황</span>
+                            <span style="color: #475569; padding-left: 10px;">ISO, CE, IATF 16949 등 국내외 인증</span>
+                        </li>
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #10b981;">• 기존 거래선 & 해외 실적</span>
+                            <span style="color: #475569; padding-left: 10px;">주요 수출 실적 국가 및 거래선 현황</span>
+                        </li>
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #10b981;">• 확장 희망 국가 <span style="font-size: 10.5px; font-weight: normal; color: #0d9488;">[AI 매칭 핵심]</span></span>
+                            <span style="color: #475569; padding-left: 10px;">우선 수출 희망 지역 및 타깃 국가</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 3: 상품 및 AI 정보 -->
+            <div class="card has-header">
+                <div class="card-header-gray" style="border-top: 4px solid #f59e0b;">상품 및 AI 매칭 정보 (Product & AI)</div>
+                <div class="card-body-with-header" style="padding: 16px 18px;">
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #f59e0b;">• 상품 정보 & HS Code</span>
+                            <span style="color: #475569; padding-left: 10px;">대표 상품명, 세부 스펙, 관세 분류 코드</span>
+                        </li>
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #f59e0b;">• 상품 설명서 및 사진 <span style="font-size: 10.5px; font-weight: normal; color: #0d9488;">[AI 분석 핵심]</span></span>
+                            <span style="color: #475569; padding-left: 10px;">설명 텍스트 및 이미지 멀티모달 매칭 리소스</span>
+                        </li>
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #f59e0b;">• AI 요약 프로필 <span style="font-size: 10.5px; font-weight: normal; color: #2563eb;">[AI 생성 필드]</span></span>
+                            <span style="color: #475569; padding-left: 10px;">바이어 추천서에 제공될 한·영 AI 요약본</span>
+                        </li>
+                        <li style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 700; color: #f59e0b;">• 데이터 품질 등급 <span style="font-size: 10.5px; font-weight: normal; color: #2563eb;">[AX 전용]</span></span>
+                            <span style="color: #475569; padding-left: 10px;">수집 출처 및 신뢰도 검증 상태 (A~D 등급)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI · DemoStatra PoC</span>
+            <span class="slide-page-num">06 / 14</span>
+        </div>
+    </div>
+
+    <!-- Slide 7: AX DB 구축 방식 (자동 수집 + AI 분류 + 담당자 검수) -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area" style="max-width: 900px;">
+                <h2 class="slide-title">AX DB 구축 방식: 자동 수집 + AI 분류 + 담당자 검수</h2>
+                <p class="slide-subtitle" style="font-size: 13.5px; color: #475569; margin-top: 4px; word-break: keep-all;">웹사이트 공개정보를 AI가 AX 프로필 초안으로 구조화하고, 담당자 검수와 외부 거래 데이터로 신뢰도를 보강합니다.</p>
+            </div>
+            <div class="slide-meta-top">AX DB 구축 프로세스</div>
+        </div>
+
+        <!-- 3-Step Flow Diagram -->
+        <div class="grid-3col" style="height: 160px; gap: 15px; margin-bottom: 20px;">
+            <div class="card" style="padding: 12px 16px; border-top: 3px solid #2563eb; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 11px; font-weight: bold; color: #2563eb; background-color: #eff6ff; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 6px;">1단계: 추천 후보 도출</span>
+                    <p style="font-size: 12px; color: #475569; line-height: 1.45; word-break: keep-all;">
+                        DemoStatra에서 자동차부품 바이어 후보를 검색하고, 추천된 후보 기업의 웹사이트를 확인합니다.
+                    </p>
+                </div>
+                <span style="font-size: 10.5px; color: #64748b; font-style: italic;">예: 미국 부품 바이어 검색 ➡️ 후보 기업 확인</span>
+            </div>
+            
+            <div class="card" style="padding: 12px 16px; border-top: 3px solid #10b981; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 11px; font-weight: bold; color: #10b981; background-color: #f0fdf4; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 6px;">2단계: AX 프로필 초안 생성</span>
+                    <p style="font-size: 12px; color: #475569; line-height: 1.45; word-break: keep-all;">
+                        웹사이트, 제품, 인증, 네트워크 등 공개 정보를 크롤링해 품목·시장·유형 등 AX 프로필 초안을 자동 생성합니다.
+                    </p>
+                </div>
+                <span style="font-size: 10.5px; color: #64748b; font-style: italic;">AI 기반 데이터 구조화</span>
+            </div>
+            
+            <div class="card" style="padding: 12px 16px; border-top: 3px solid #f59e0b; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 11px; font-weight: bold; color: #f59e0b; background-color: #fff9db; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 6px;">3단계: 검수 및 보강</span>
+                    <p style="font-size: 12px; color: #475569; line-height: 1.45; word-break: keep-all;">
+                        추정 항목은 담당자가 검수하고, 수입 이력·담당자 정보 등은 TradeAtlas, Kompass 등 외부 데이터로 보완합니다.
+                    </p>
+                </div>
+                <span style="font-size: 10.5px; color: #64748b; font-style: italic;">인간 검수 + 외부 DB 결합</span>
+            </div>
+        </div>
+
+        <!-- 2-Column Split: Left (Data Classification Table) / Right (AX Profile Draft Demo & Flow) -->
+        <div class="grid-2col" style="height: 310px; gap: 15px; margin-bottom: 15px;">
+            <!-- Left: Data Classification Table -->
+            <div class="card" style="padding: 12px 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                <h4 style="font-size: 13.5px; font-weight: 700; color: #0f1e36; margin-bottom: 6px;">📋 AX DB 수집 범위 및 데이터 신뢰성 구분</h4>
+                <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; text-align: left; line-height: 1.4;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: bold;">
+                            <th style="padding: 4px 6px; width: 25%;">구분</th>
+                            <th style="padding: 4px 6px; width: 35%;">항목</th>
+                            <th style="padding: 4px 6px; width: 40%;">설명</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #f1f5f9; background-color: #f6ffed;">
+                            <td style="padding: 5px 6px; font-weight: bold; color: #389e0d;">자동 수집 가능</td>
+                            <td style="padding: 5px 6px;">회사명, 국가, 웹사이트, 주요 품목, 산업 분야, 공개 인증</td>
+                            <td style="padding: 5px 6px; color: #52c41a;">웹사이트 공개 영역에서 자동 크롤링 가능</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9; background-color: #fffbe6;">
+                            <td style="padding: 5px 6px; font-weight: bold; color: #d46b08;">AI 추정 / 검수 필요</td>
+                            <td style="padding: 5px 6px;">바이어 유형, 수요 가능성, 부품 관련성, 적합성</td>
+                            <td style="padding: 5px 6px; color: #d46b08;">AI 분류 초안 생성 후 담당자 최종 검수 권장</td>
+                        </tr>
+                        <tr style="background-color: #fafafa;">
+                            <td style="padding: 5px 6px; font-weight: bold; color: #595959;">추가 데이터 필요</td>
+                            <td style="padding: 5px 6px;">실제 수입 이력, HS Code 거래 기록, 담당자 연락처, 거래조건</td>
+                            <td style="padding: 5px 6px; color: #8c8c8c;">TradeAtlas 등 외부 DB 및 전시회 상담 데이터 연계</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="font-size: 10px; color: #8c8c8c; line-height: 1.3; margin-top: 4px;">
+                    * 공개 웹사이트 기반 크롤러 및 AI 추론 엔진을 통해 1, 2단계를 자동 수행하며, 3단계에서 기관의 실제 비즈니스 데이터를 연계하여 완성도를 올립니다.
+                </div>
+            </div>
+
+            <!-- Right: Profile Demo & Simulation Flow -->
+            <div class="card" style="padding: 12px 15px; display: flex; flex-direction: column; justify-content: space-between; background-color: #fafbfc;">
+                <div>
+                    <h4 style="font-size: 13.5px; font-weight: 700; color: #0f1e36; margin-bottom: 6px;">🔍 시연 흐름 & AX 프로필 초안 예시</h4>
+                    <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 8px;">
+                        <!-- Flow -->
+                        <div style="font-size: 11px; color: #475569; display: flex; flex-direction: column; gap: 4px; border-right: 1px solid #e2e8f0; padding-right: 8px;">
+                            <span style="font-weight: 700; color: #2563eb; font-size: 11.5px;">📢 간담회 시연 시나리오</span>
+                            <span style="line-height: 1.4;">① DemoStatra에서 바이어 후보 검색</span>
+                            <span style="line-height: 1.4;">② 추천 후보군 중 기업 웹사이트 접속</span>
+                            <span style="line-height: 1.4;">③ 공개정보에서 품목·산업·인증 정보 추출</span>
+                            <span style="line-height: 1.4;">④ AI 추론 기반 AX 프로필 초안 생성</span>
+                            <span style="line-height: 1.4;">⑤ 검수 및 추가 보완 항목 화면 표시</span>
+                        </div>
+                        <!-- Profile draft -->
+                        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 4px; padding: 6px 8px; font-size: 10.5px; color: #334155; line-height: 1.35;">
+                            <strong style="color: #2563eb; display: block; border-bottom: 1px solid #f1f5f9; padding-bottom: 2px; margin-bottom: 3px; font-size: 11px;">[AX 프로필 초안 예시]</strong>
+                            <div>• <strong>기업명:</strong> 후보 바이어 A (미국)</div>
+                            <div>• <strong>관련품목:</strong> 자동차부품, 산업용 부품 등</div>
+                            <div>• <strong>바이어유형:</strong> 부품 유통/제조 솔루션 기업 (추정)</div>
+                            <div>• <strong>인증/표준:</strong> 웹사이트 내 공개 규격 추출</div>
+                            <div>• <strong>거래조건:</strong> 확인 불가 (외부 데이터 연계 필요)</div>
+                            <div>• <strong>신뢰도:</strong> 중간 (담당자 최종 검수 필요)</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background-color: #fff2e8; border: 1px solid #ffd591; border-radius: 4px; padding: 6px; font-size: 11px; color: #d46b08; font-weight: 500; line-height: 1.4; word-break: keep-all; text-align: center;">
+                    ⚠️ 자동 수집은 초안이며, 최종 AX DB는 담당자 검수와 외부 거래 데이터 보강을 통해 완성됩니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI · DemoStatra PoC</span>
+            <span class="slide-page-num">07 / 14</span>
+        </div>
+    </div>
+    <!-- Slide 8: AX DB 구축비용은 파일럿 실측 후 단계별로 산정합니다 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area" style="max-width: 900px;">
+                <h2 class="slide-title">AX DB 구축비용은 파일럿 실측 후 단계별로 산정합니다</h2>
+                <p class="slide-subtitle" style="font-size: 13.5px; color: #475569; margin-top: 4px; word-break: keep-all;">국내업체 1,000개사와 해외 바이어 1,000개사의 AX 프로필을 먼저 구축하고, 실제 소요시간·비용·품질지표를 기준으로 전체 확장 계획을 조정합니다.</p>
+            </div>
+            <div class="slide-meta-top">단계별 비용산정 모델</div>
+        </div>
+
+        <!-- 3-Column Phase Info -->
+        <div class="grid-3col" style="height: 160px; gap: 15px; margin-bottom: 20px;">
+            <div class="card" style="padding: 12px 16px; border-top: 3px solid #2563eb; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 11px; font-weight: bold; color: #2563eb; background-color: #eff6ff; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 6px;">1단계: 2,000개사 파일럿 구축</span>
+                    <p style="font-size: 12px; color: #475569; line-height: 1.45; word-break: keep-all;">
+                        국내 1,000개 / 해외 1,000개사의 AX 프로필 초안을 생성하며, 자동 수집 및 추정/검수, 외부 데이터 필요 항목을 구분합니다.
+                    </p>
+                </div>
+                <span style="font-size: 10.5px; color: #64748b; font-style: italic;">평균 페이지수·접속률·API/토큰량 실측</span>
+            </div>
+            
+            <div class="card" style="padding: 12px 16px; border-top: 3px solid #10b981; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 11px; font-weight: bold; color: #10b981; background-color: #f0fdf4; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 6px;">2단계: 실측값 기반 확장비용 산정</span>
+                    <p style="font-size: 12px; color: #475569; line-height: 1.45; word-break: keep-all;">
+                        파일럿 결과를 기준으로 1만, 3만, 6만, 10만 개사 확장 시 필요한 API 사용량, 토큰 비용, 검수 인적 소요 비용 등을 합리적으로 추정합니다.
+                    </p>
+                </div>
+                <span style="font-size: 10.5px; color: #64748b; font-style: italic;">2천 ➡️ 1만 ➡️ 3만 ➡️ 6만 ➡️ 10만 단계</span>
+            </div>
+            
+            <div class="card" style="padding: 12px 16px; border-top: 3px solid #f59e0b; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 11px; font-weight: bold; color: #f59e0b; background-color: #fff9db; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 6px;">3단계: 단계별 비용·품질 튜닝</span>
+                    <p style="font-size: 12px; color: #475569; line-height: 1.45; word-break: keep-all;">
+                        각 단계마다 실제 수집 성공률과 검수 시간을 재측정해 다음 단계의 비용과 기간을 보정하며, 과소·과대 추정을 예방합니다.
+                    </p>
+                </div>
+                <span style="font-size: 10.5px; color: #64748b; font-style: italic;">실시간 재측정 기반 모델 확립</span>
+            </div>
+        </div>
+
+        <!-- 2-Column Split: Diagram & Table -->
+        <div class="grid-2col" style="height: 310px; gap: 15px; margin-bottom: 15px;">
+            <!-- Left: Workflow Diagram -->
+            <div class="card" style="padding: 12px 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                <h4 style="font-size: 13.5px; font-weight: 700; color: #0f1e36; margin-bottom: 8px;">📈 파일럿 실측 기반 단계별 확장 및 보정 구조</h4>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11.5px; color: #334155; padding: 5px 10px;">
+                    <!-- Step Nodes -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; background-color: #eff6ff; padding: 8px 12px; border-radius: 6px; border: 1px solid #bfdbfe;">
+                        <span style="font-weight: 700; color: #1e3a8a;">[실측] 2,000개사 파일럿 구축</span>
+                        <span style="font-size: 10.5px; color: #64748b;">국내 1,000 + 해외 1,000</span>
+                    </div>
+                    <div style="text-align: center; color: #94a3b8; font-size: 10px; line-height: 1;">▼ 데이터 수집 단가 / API & 토큰 실측</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background-color: #f6ffed; padding: 8px 12px; border-radius: 6px; border: 1px solid #b7eb8f;">
+                        <span style="font-weight: 700; color: #389e0d;">[추정] 10,000개사 및 30,000개사 확장</span>
+                        <span style="font-size: 10.5px; color: #64748b;">국가·품목별 품질 보정</span>
+                    </div>
+                    <div style="text-align: center; color: #94a3b8; font-size: 10px; line-height: 1;">▼ 수집 성공률 및 검수 시간 보정</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background-color: #fafafa; padding: 8px 12px; border-radius: 6px; border: 1px solid #d9d9d9;">
+                        <span style="font-weight: 700; color: #595959;">[완료] 6만 및 10만 개사 AX DB 초안 구축</span>
+                        <span style="font-size: 10.5px; color: #64748b;">전체 확장 단가 산정</span>
+                    </div>
+                </div>
+                <div style="font-size: 10.5px; color: #8c8c8c; text-align: center; font-weight: 500;">
+                    * 실측 ➡️ 추정 ➡️ 확장 ➡️ 재측정 ➡️ 보정의 순환적 추정 프로세스 도입
+                </div>
+            </div>
+
+            <!-- Right: Estimation Table -->
+            <div class="card" style="padding: 12px 15px; display: flex; flex-direction: column; justify-content: space-between;">
+                <h4 style="font-size: 13.5px; font-weight: 700; color: #0f1e36; margin-bottom: 6px;">📋 AX DB 구축 단계별 추정 로드맵 (비용 비공개)</h4>
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; line-height: 1.35;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #e2e8f0; color: #475569; font-weight: bold;">
+                            <th style="padding: 4px; width: 18%;">단계</th>
+                            <th style="padding: 4px; width: 22%;">대상 규모</th>
+                            <th style="padding: 4px; width: 30%;">주요 목적</th>
+                            <th style="padding: 4px; width: 30%;">산정 방식</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 4px; font-weight: bold; color: #2563eb;">파일럿</td>
+                            <td style="padding: 4px;">2,000개사</td>
+                            <td style="padding: 4px;">AX 필드 추출 가능성 실측</td>
+                            <td style="padding: 4px; color: #555;">실제 API·토큰·검수시간 측정</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 4px; font-weight: bold; color: #3b82f6;">1차 확장</td>
+                            <td style="padding: 4px;">10,000개사</td>
+                            <td style="padding: 4px;">국가/품목별 품질 편차 확인</td>
+                            <td style="padding: 4px; color: #555;">파일럿 단가 기반 추정 후 보정</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 4px; font-weight: bold; color: #10b981;">2차 확장</td>
+                            <td style="padding: 4px;">30,000개사</td>
+                            <td style="padding: 4px;">해외 바이어 DB 중심 확장</td>
+                            <td style="padding: 4px; color: #555;">수집 실패율·검수시간 재측정</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 4px; font-weight: bold; color: #f59e0b;">3차 확장</td>
+                            <td style="padding: 4px;">60,000개사</td>
+                            <td style="padding: 4px;">국내업체 DB 중심 확장</td>
+                            <td style="padding: 4px; color: #555;">자동화율과 검수범위 조정</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 4px; font-weight: bold; color: #7c3aed;">전체 확장</td>
+                            <td style="padding: 4px;">100,000개사</td>
+                            <td style="padding: 4px;">AI 매칭용 AX DB 초안 구축</td>
+                            <td style="padding: 4px; color: #555;">단계별 실측값 누적 기반 산정</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 6px; font-size: 11px; color: #475569; font-weight: 500; line-height: 1.4; word-break: keep-all; text-align: center;">
+                    ※ 전체 비용은 예측이 아니라 파일럿 실측값을 기준으로 산정합니다.
+                </div>
+            </div>
+        <div style="font-size: 11.5px; color: #64748b; margin-top: 10px; font-weight: 500; text-align: center;">
+            이 모든 과정은 원천 DB를 기관이 직접 통제하는 보안 구조 안에서 진행합니다.
+        </div>
+
+        </div>
+
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI · DemoStatra PoC</span>
+            <span class="slide-page-num">08 / 14</span>
+        </div>
+    </div>
+
+<!-- Slide 9: (재)아인글로벌 자체 DB 중심의 보안 운영 구조 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <h2 class="slide-title">(재)아인글로벌 자체 DB 중심의 보안 운영 구조</h2>
+                <p class="slide-subtitle">고객 정보는 (재)아인글로벌이 통제하는 MongoDB 또는 Vector Search 가능 클라우드 DB에 보관하고, 작업 시점에만 제한적으로 접근합니다.</p>
+            </div>
+            <div class="slide-meta-top">보안 운영 구조</div>
+        </div>
+
+        <div class="s8-flow-container">
+            <div class="card s8-flow-card">
+                <div class="s8-flow-num" style="color: #2563eb; background-color: #eff6ff;">1</div>
+                <h4 class="s8-flow-title">Ain Global 자체 DB</h4>
+                <p class="s8-flow-desc">원천 고객 정보 보관. MongoDB 또는 Vector Search 가능 클라우드 DB</p>
+            </div>
+            <div class="s8-flow-arrow">→</div>
+            <div class="card s8-flow-card">
+                <div class="s8-flow-num" style="color: #0d9488; background-color: #e6fffa;">2</div>
+                <h4 class="s8-flow-title">접근권한 승인</h4>
+                <p class="s8-flow-desc">작업 기간·담당자·대상 범위 제한. 접근 로그 관리</p>
+            </div>
+            <div class="s8-flow-arrow">→</div>
+            <div class="card s8-flow-card">
+                <div class="s8-flow-num" style="color: #059669; background-color: #e6fcf5;">3</div>
+                <h4 class="s8-flow-title">DemoStatra 매칭 작업</h4>
+                <p class="s8-flow-desc">허가된 필드만 활용. 원본 반출 없이 결과 생성</p>
+            </div>
+            <div class="s8-flow-arrow">→</div>
+            <div class="card s8-flow-card">
+                <div class="s8-flow-num" style="color: #7c3aed; background-color: #f3f0ff;">4</div>
+                <h4 class="s8-flow-title">결과·품질 보고</h4>
+                <p class="s8-flow-desc">매칭 후보, 추천 이유, 품질 리포트 제공</p>
+            </div>
+        </div>
+
+        <!-- DB 보안 고도화 계획 -->
+        <div style="margin-top: 20px; font-size: 13px; flex-grow: 0.2;">
+            <div class="card" style="border-left: 4px solid #10b981; padding: 18px 24px; background-color: #f0fdf4; border-top: none; border-right: none; border-bottom: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <strong style="color: #047857; display: block; margin-bottom: 8px; font-size: 14.5px;">🔒 [보안 강화] (재)아인글로벌 소유의 독립적인 DB 운영 구조 확립</strong>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 6px; padding-left: 0; color: #374151; font-size: 13px; line-height: 1.6;">
+                    <li>• <strong>공식 어카운트 개설</strong>: (재)아인글로벌 명의의 공식 MongoDB Atlas 계정을 신규 생성하여 인프라 독립성 확보</li>
+                    <li>• <strong>독립 프로젝트 관리</strong>: 아인글로벌 조직(Organization) 하위에 전용 <code>KOAA SHOW</code> 프로젝트를 개설하여 데이터 주권 100% 귀속</li>
+                    <li>• <strong>보안 접근 통제</strong>: 개발자는 작업 수행을 위해 사전 승인된 IP 및 기간에 한해서만 제한적으로 접근하여 원천 데이터 반출 위험을 최소화</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI · DemoStatra PoC</span>
+            <span class="slide-page-num">08 / 13</span>
+        </div>
+    </div>
+
+    <!-- Slide 10: AX 데이터 구축 절차 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <h2 class="slide-title">AX 데이터 구축 절차</h2>
+                <p class="slide-subtitle">데이터를 많이 모으는 것보다, 출처·표준·품질·검색 가능성을 갖춘 운영 데이터로 만드는 것이 중요합니다.</p>
+            </div>
+            <div class="slide-meta-top">데이터 구축 절차</div>
+        </div>
+
+        <div class="s9-flow-container">
+            <div class="card s9-flow-card">
+                <div class="s9-flow-num">01 수집</div>
+                <h4 class="s9-flow-title">수집 단계</h4>
+                <p class="s9-flow-desc">보유자료·공개자료·전시자료 확인</p>
+            </div>
+            <div class="s8-flow-arrow">→</div>
+            <div class="card s9-flow-card">
+                <div class="s9-flow-num">02 표준화</div>
+                <h4 class="s9-flow-title">표준화 단계</h4>
+                <p class="s9-flow-desc">회사명·국가·품목·URL·태그 정리</p>
+            </div>
+            <div class="s8-flow-arrow">→</div>
+            <div class="card s9-flow-card">
+                <div class="s9-flow-num">03 검증</div>
+                <h4 class="s9-flow-title">검증 단계</h4>
+                <p class="s9-flow-desc">중복·누락·출처·품질 상태 확인</p>
+            </div>
+            <div class="s8-flow-arrow">→</div>
+            <div class="card s9-flow-card">
+                <div class="s9-flow-num">04 검색화</div>
+                <h4 class="s9-flow-title">검색화 단계</h4>
+                <p class="s9-flow-desc">AI 검색/추천용 텍스트와 벡터 구조 생성</p>
+            </div>
+            <div class="s8-flow-arrow">→</div>
+            <div class="card s9-flow-card">
+                <div class="s9-flow-num">05 활용</div>
+                <h4 class="s9-flow-title">활용 단계</h4>
+                <p class="s9-flow-desc">기업-바이어 매칭, 타깃 마케팅, 후속관리</p>
+            </div>
+        </div>
+
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI · DemoStatra PoC</span>
+            <span class="slide-page-num">09 / 13</span>
+        </div>
+    </div>
+
+    <!-- Slide 11: AX B2B 매칭 서비스의 원리 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <h2 class="slide-title">AX B2B 매칭 서비스의 원리</h2>
+                <p class="slide-subtitle">기업 및 바이어의 정보를 다차원 벡터화(Embedding)하고, 관계형 지식 그래프(GraphDB)를 통해 매칭의 정확도와 신뢰도를 극대화합니다.</p>
+            </div>
+            <div class="slide-meta-top">B2B 매칭 작동 원리</div>
+        </div>
+
+        <div class="grid-2col" style="flex-grow: 0.8; margin-bottom: 20px;">
+            <!-- Left Card: Vector Embedding & Search -->
+            <div class="card has-header">
+                <div class="card-header-gray" style="border-top: 4px solid #10b981; display: flex; justify-content: space-between; align-items: center;">
+                    <span>1단계: 텍스트 벡터화 및 유사도 검색 (MongoDB)</span>
+                    <span class="badge badge-green" style="margin-bottom: 0;">Vector Search</span>
+                </div>
+                <div class="card-body-with-header" style="padding: 20px; display: flex; flex-direction: column; gap: 12px; justify-content: center; height: 100%;">
+                    <!-- Step 1: Input text -->
+                    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px; font-size: 12.5px;">
+                        <strong style="color: #0f1e36; display: block; margin-bottom: 4px;">📝 정형/비정형 텍스트 데이터</strong>
+                        <span style="color: #64748b;">"국내 시트 제조사, 친환경 가죽 소재 적용, 북미 수출 희망..."</span>
+                    </div>
+                    
+                    <div style="text-align: center; color: #94a3b8; font-size: 14px; font-weight: 700;">⬇️ AI 임베딩 모델 (Embedding)</div>
+                    
+                    <!-- Step 2: Vector conversion -->
+                    <div style="background-color: #f0fdf4; border: 1px solid #b2f5ea; border-radius: 6px; padding: 10px 14px; font-size: 12.5px;">
+                        <strong style="color: #0d9488; display: block; margin-bottom: 4px;">🔢 고차원 벡터 임베딩 (Embedding Vector)</strong>
+                        <span style="font-family: 'Inter', sans-serif; color: #0d9488; font-weight: 500;">[0.142, -0.893, 0.052, ..., 0.711] (1,536차원)</span>
+                    </div>
+                    
+                    <div style="text-align: center; color: #94a3b8; font-size: 14px; font-weight: 700;">⬇️ MongoDB Vector Store 적재</div>
+                    
+                    <!-- Step 3: Similarity matching -->
+                    <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 10px 14px; font-size: 12.5px;">
+                        <strong style="color: #2563eb; display: block; margin-bottom: 4px;">🔍 코사인 유사도 검색 (Similarity Search)</strong>
+                        <span style="color: #475569;">텍스트 간 의미적(Semantic) 거리가 가장 가까운 바이어 풀 고속 검색</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Card: Knowledge GraphDB -->
+            <div class="card has-header">
+                <div class="card-header-gray" style="border-top: 4px solid #2563eb; display: flex; justify-content: space-between; align-items: center;">
+                    <span>2단계: 다차원 관계 연결 및 검증 (Neo4j GraphDB)</span>
+                    <span class="badge badge-blue" style="margin-bottom: 0;">Graph Database</span>
+                </div>
+                <div class="card-body-with-header" style="padding: 20px; display: flex; flex-direction: column; gap: 15px; justify-content: center; height: 100%;">
+                    <!-- Visual Graph Representation -->
+                    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; display: flex; justify-content: space-around; align-items: center; min-height: 120px; position: relative;">
+                        <!-- Node 1 -->
+                        <div style="width: 75px; height: 75px; border-radius: 50%; background-color: #eff6ff; border: 2px solid #3b82f6; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 10.5px; z-index: 5;">
+                            <strong style="color: #1e3a8a;">국내기업</strong>
+                            <span style="color: #2563eb; font-size: 9px; scale: 0.9;">시트 제조</span>
+                        </div>
+                        
+                        <!-- Connecting Line 1 -->
+                        <div style="position: absolute; left: 105px; width: 80px; height: 2px; background-color: #cbd5e1; z-index: 1; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 9px; background-color: #f8fafc; padding: 0 4px; color: #64748b; font-weight: 500;">참가이력</span>
+                        </div>
+                        
+                        <!-- Node 2 (Center) -->
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #f3f0ff; border: 2px solid #8b5cf6; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 11px; z-index: 5;">
+                            <strong style="color: #4c1d95;">KOAA SHOW</strong>
+                            <span style="color: #7c3aed; font-size: 9px;">매칭 허브</span>
+                        </div>
+
+                        <!-- Connecting Line 2 -->
+                        <div style="position: absolute; right: 105px; width: 80px; height: 2px; background-color: #cbd5e1; z-index: 1; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-size: 9px; background-color: #f8fafc; padding: 0 4px; color: #64748b; font-weight: 500;">희망국가</span>
+                        </div>
+
+                        <!-- Node 3 -->
+                        <div style="width: 75px; height: 75px; border-radius: 50%; background-color: #fdf2f8; border: 2px solid #db2777; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 10.5px; z-index: 5;">
+                            <strong style="color: #831843;">해외바이어</strong>
+                            <span style="color: #db2777; font-size: 9px; scale: 0.9;">북미 유통</span>
+                        </div>
+                    </div>
+
+                    <!-- Description list -->
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 12.5px; color: #475569;">
+                        <li style="display: flex; gap: 6px; align-items: flex-start;">
+                            <span style="color: #2563eb; font-weight: 700;">• 네트워크 매칭</span>
+                            <span>기업의 인증, HS Code, 과거 상담 이력, 해외바이어의 취급 국가 등 복잡한 비즈니스 관계를 그래프 노드로 연결</span>
+                        </li>
+                        <li style="display: flex; gap: 6px; align-items: flex-start;">
+                            <span style="color: #2563eb; font-weight: 700;">• 다차원 검증</span>
+                            <span>의미적 유사성(Vector)뿐 아니라, 거래 조건 및 규제(인증/국가 등)의 부합 가능성을 함께 검토하여 적격 파트너 후보를 선별</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Callout box -->
+        <div class="s5-callout" style="border-left-color: #8b5cf6;">
+            <div class="s5-callout-title" style="color: #4c1d95;">💡 하이브리드(Hybrid) B2B 매칭</div>
+            <p class="s5-callout-desc">MongoDB의 텍스트 벡터 임베딩을 통해 "잠재적 의미 유사 바이어"를 고속 검색한 뒤, Neo4j GraphDB의 관계 추적 알고리즘으로 "실제 거래 성사 규격(인증, 국가, 거래조건 등)에 부합하는 바이어"로 검증하는 2중 고도화 로직입니다.</p>
+        <div style="font-size: 11.5px; color: #64748b; margin-top: 15px; font-weight: 500; text-align: center;">
+            AX DB가 축적되면 단순 유사도 추천을 넘어 실거래 패턴 기반 추천으로 확장할 수 있습니다.
+        </div>
+
+        </div>
+
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI · DemoStatra PoC</span>
+            <span class="slide-page-num">11 / 14</span>
+        </div>
+    </div>
+
+    <!-- Slide 12: 실거래 기반 군집 추천 가설과 3개월 검증 로드맵 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <h2 class="slide-title">실거래 기반 군집 추천 가설과 3개월 검증 로드맵</h2>
+                <p class="slide-subtitle">단순히 비슷한 업체를 연결하는 것이 아니라, 실제 거래가 성사된 업체쌍의 패턴을 학습해 거래 가능성이 높은 군집을 찾는 방향으로 매칭 알고리즘을 고도화합니다.</p>
+            </div>
+            <div class="slide-meta-top">차별화 가설 / 검증 로드맵</div>
+        </div>
+
+        <!-- 2-Column Comparison Diagrams -->
+        <div class="grid-2col" style="flex-grow: 0.6; margin-bottom: 12px; gap: 16px;">
+            <!-- Left: Traditional Method -->
+            <div class="card has-header">
+                <div class="card-header-gray" style="border-top: 4px solid #ef4444; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px;">
+                    <span style="font-weight: 700; color: #1e293b; font-size: 13.5px;">기존 방식: 프로필 유사도 중심 추천</span>
+                    <span class="badge badge-red" style="margin-bottom: 0; font-size: 10.5px; padding: 2px 6px;">유사도 = 거래 가능성?</span>
+                </div>
+                <div class="card-body-with-header" style="padding: 14px; display: flex; flex-direction: column; justify-content: space-between; height: calc(100% - 37px);">
+                    <!-- Diagram -->
+                    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 15px; min-height: 95px; position: relative;">
+                        <!-- Node A -->
+                        <div style="width: 58px; height: 58px; border-radius: 50%; background-color: #eff6ff; border: 2px solid #3b82f6; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 10.5px; z-index: 5;">
+                            <strong style="color: #1e3a8a;">국내업체 A</strong>
+                        </div>
+                        <!-- Arrow -->
+                        <div style="color: #94a3b8; font-weight: bold; font-size: 16px;">➡️</div>
+                        <!-- Node B/C/D Cluster with Danger label -->
+                        <div style="display: flex; flex-direction: column; gap: 6px; align-items: center; background-color: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 8px 10px;">
+                            <div style="display: flex; gap: 6px;">
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #f1f5f9; border: 1px solid #94a3b8; display: flex; align-items: center; justify-content: center; font-size: 9.5px; color: #475569;">B</div>
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #f1f5f9; border: 1px solid #94a3b8; display: flex; align-items: center; justify-content: center; font-size: 9.5px; color: #475569;">C</div>
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #f1f5f9; border: 1px solid #94a3b8; display: flex; align-items: center; justify-content: center; font-size: 9.5px; color: #475569;">D</div>
+                            </div>
+                            <span style="font-size: 9.5px; font-weight: bold; color: #ef4444; background-color: #fef2f2; padding: 1px 6px; border-radius: 4px; border: 1px solid #fee2e2;">⚠️ 경쟁 가능성 (Competitor Risk)</span>
+                        </div>
+                    </div>
+                    <!-- Description -->
+                    <p style="font-size: 11.5px; color: #64748b; line-height: 1.5; margin: 8px 0 0 0;">
+                        지나치게 프로필 유사도가 높은 업체를 연결할 경우, 협력 파트너가 아닌 <strong>동종 경쟁업체(Competitor)</strong>를 추천하여 거래 성사로 이어지지 못하는 위험이 존재합니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right: DemoStatra Method -->
+            <div class="card has-header">
+                <div class="card-header-gray" style="border-top: 4px solid #10b981; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px;">
+                    <span style="font-weight: 700; color: #1e293b; font-size: 13.5px;">DemoStatra 방식: 실거래 수출·수입 업체쌍 기반 군집 추천</span>
+                    <span class="badge badge-green" style="margin-bottom: 0; font-size: 10.5px; padding: 2px 6px;">거래 패턴 매칭</span>
+                </div>
+                <div class="card-body-with-header" style="padding: 12px; display: flex; flex-direction: column; justify-content: space-between; height: calc(100% - 37px);">
+                    <!-- Diagram (SVG Scatter Plot Clustering) -->
+                    <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px; display: flex; align-items: center; justify-content: center; min-height: 155px; position: relative;">
+                        <svg width="340" height="150" style="background-color: #f8fafc;">
+                            <!-- 신규 업체 A (왼쪽) -->
+                            <circle cx="30" cy="75" r="20" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+                            <text x="30" y="72" font-size="9" font-weight="bold" fill="#1e3a8a" text-anchor="middle">신규</text>
+                            <text x="30" y="83" font-size="9" font-weight="bold" fill="#1e3a8a" text-anchor="middle">업체 A</text>
+
+                            <!-- 매핑 화살표 -->
+                            <path d="M 54 75 L 76 75" stroke="#10b981" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+                            <text x="65" y="68" font-size="8" font-weight="bold" fill="#047857" text-anchor="middle">매핑</text>
+
+                            <!-- Marker definition -->
+                            <defs>
+                                <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#10b981"/>
+                                </marker>
+                                <marker id="arrow-dot" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+                                    <path d="M 0 2 L 8 5 L 0 8 z" fill="#f59e0b"/>
+                                </marker>
+                            </defs>
+
+                            <!-- Cluster A: 애프터마켓 (연한 민트) -->
+                            <circle cx="125" cy="40" r="30" fill="rgba(167, 243, 208, 0.35)" stroke="#a7f3d0" stroke-width="1"/>
+                            <text x="125" y="16" font-size="7.5" font-weight="bold" fill="#065f46" text-anchor="middle">예시 군집 A: 애프터마켓</text>
+                            <!-- Cluster A Dots -->
+                            <circle cx="112" cy="35" r="2" fill="#047857"/>
+                            <circle cx="122" cy="48" r="2" fill="#047857"/>
+                            <circle cx="138" cy="38" r="2" fill="#047857"/>
+                            <circle cx="130" cy="45" r="2" fill="#047857"/>
+                            <circle cx="118" cy="45" r="2" fill="#047857"/>
+
+                            <!-- Cluster B: 전장·미래차 (강조, 연한 초록/민트) -->
+                            <circle cx="140" cy="102" r="33" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3,3"/>
+                            <text x="140" y="146" font-size="7.5" font-weight="bold" fill="#065f46" text-anchor="middle">★ 예시 군집 B: 전장·미래차</text>
+                            
+                            <!-- Cluster B Dots (실거래쌍 성공사례 매핑) -->
+                            <!-- Point 1 (수출 K1 ↔ 바이어 U1) -->
+                            <circle cx="124" cy="96" r="2.5" fill="#059669"/>
+                            <text x="124" y="90" font-size="6.5" fill="#047857" font-weight="bold" text-anchor="middle">K1↔U1</text>
+                            <!-- Point 2 (수출 K2 ↔ 바이어 M1) -->
+                            <circle cx="152" cy="94" r="2.5" fill="#059669"/>
+                            <text x="152" y="88" font-size="6.5" fill="#047857" font-weight="bold" text-anchor="middle">K2↔M1</text>
+                            <!-- Point 3 (수출 K3 ↔ 바이어 V1) -->
+                            <circle cx="131" cy="112" r="2.5" fill="#059669"/>
+                            <text x="131" y="121" font-size="6.5" fill="#047857" font-weight="bold" text-anchor="middle">K3↔V1</text>
+
+                            <!-- Highlighted Recommended Buyer (강조된 별표/굵은 노란 테두리 점) -->
+                            <circle cx="158" cy="112" r="4.5" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
+                            <text x="158" y="123" font-size="6.5" font-weight="bold" fill="#b45309" text-anchor="middle">추천 후보</text>
+
+                            <!-- Cluster C: 특장·상용차 -->
+                            <circle cx="195" cy="50" r="26" fill="rgba(191, 219, 254, 0.35)" stroke="#bfdbfe" stroke-width="1"/>
+                            <text x="195" y="20" font-size="7.5" font-weight="bold" fill="#1e3a8a" text-anchor="middle">예시 군집 C: 특장</text>
+                            <!-- Cluster C Dots -->
+                            <circle cx="185" cy="45" r="2" fill="#1e3a8a"/>
+                            <circle cx="205" cy="48" r="2" fill="#1e3a8a"/>
+                            <circle cx="195" cy="58" r="2" fill="#1e3a8a"/>
+                            <circle cx="190" cy="52" r="2" fill="#1e3a8a"/>
+
+                            <!-- 신규 업체 A에서 Cluster B로의 점선 화살표 연결 -->
+                            <path d="M 48 83 C 75 98, 98 102, 107 102" stroke="#f59e0b" stroke-dasharray="2,2" stroke-width="1.5" fill="none" marker-end="url(#arrow-dot)"/>
+
+                            <!-- 매핑 결과 추천 흐름 박스 (오른쪽 끝) -->
+                            <g transform="translate(255, 30)">
+                                <rect x="0" y="0" width="80" height="90" rx="4" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+                                <text x="40" y="14" font-size="8" font-weight="bold" fill="#1e3a8a" text-anchor="middle">적격 바이어 추천</text>
+                                <text x="40" y="27" font-size="8" fill="#2563eb" text-anchor="middle">⬇️</text>
+                                <text x="40" y="39" font-size="8" font-weight="bold" fill="#1e3a8a" text-anchor="middle">KOAA SHOW 초청</text>
+                                <text x="40" y="52" font-size="8" fill="#2563eb" text-anchor="middle">⬇️</text>
+                                <text x="40" y="64" font-size="8" font-weight="bold" fill="#1e3a8a" text-anchor="middle">사전 상담 매칭</text>
+                                <text x="40" y="78" font-size="7" fill="#64748b" text-anchor="middle">(성공 가능성 제고)</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <!-- Description -->
+                    <p style="font-size: 11.5px; color: #374151; line-height: 1.45; margin: 6px 0 0 0; word-break: keep-all;">
+                        실거래가 성사된 수출·수입 업체쌍을 거래 패턴별로 군집화하고, 신규 참가기업과 가까운 군집에서 KOAA SHOW 상담으로 연결할 적격 바이어 후보를 추천합니다.
+                    </p>
+
+                    <!-- 3-Step Logical Process -->
+                    <div style="display: flex; gap: 6px; margin-top: 8px; border-top: 1px dashed #e2e8f0; padding-top: 8px;">
+                        <div style="flex: 1; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px; font-size: 10px;">
+                            <strong style="color: #2563eb; display: block; margin-bottom: 2px;">① 실거래쌍 학습</strong>
+                            <span style="color: #64748b; font-size: 8.5px; line-height: 1.35; display: block;">수출·수입업체 간 실제 계약 사례를 거래 패턴 단위로 구조화</span>
+                        </div>
+                        <div style="flex: 1; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px; font-size: 10px;">
+                            <strong style="color: #10b981; display: block; margin-bottom: 2px;">② 패턴 군집화</strong>
+                            <span style="color: #64748b; font-size: 8.5px; line-height: 1.35; display: block;">품목, 국가, 인증, 수요가 유사한 거래쌍을 클러스터로 묶음</span>
+                        </div>
+                        <div style="flex: 1; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px; font-size: 10px;">
+                            <strong style="color: #f59e0b; display: block; margin-bottom: 2px;">③ 적격 추천</strong>
+                            <span style="color: #64748b; font-size: 8.5px; line-height: 1.35; display: block;">신규 기업 근접 군집에서 전시 초청 및 매칭 상담 선별</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 3-Month Validation Roadmap (Reduced size to prevent overflow) -->
+        <div class="grid-3col" style="flex-grow: 0.35; gap: 12px; margin-top: 5px;">
+            <div class="card" style="padding: 10px 14px; box-shadow: none; border: 1px solid #e2e8f0; border-top: 3px solid #2563eb;">
+                <span style="font-size: 11px; font-weight: bold; color: #2563eb; background-color: #eff6ff; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 6px;">1개월차</span>
+                <h4 style="font-size: 13px; font-weight: 700; color: #1e293b; margin: 0 0 6px 0;">AX 파일럿 구축 및 실측</h4>
+                <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 11px; color: #475569; display: flex; flex-direction: column; gap: 3px; line-height: 1.4; word-break: keep-all;">
+                    <li>• 국내업체 1,000개사 및 해외 바이어 1,000개사 파일럿 구축</li>
+                    <li>• 실제 수집 성공률, API 및 AI 토큰 사용량 실측</li>
+                    <li>• 기배정 연산·운영 예산 범위 내 단계적 실행</li>
+                </ul>
+            </div>
+            <div class="card" style="padding: 10px 14px; box-shadow: none; border: 1px solid #e2e8f0; border-top: 3px solid #10b981;">
+                <span style="font-size: 11px; font-weight: bold; color: #10b981; background-color: #f0fdf4; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 6px;">2개월차</span>
+                <h4 style="font-size: 13px; font-weight: 700; color: #1e293b; margin: 0 0 6px 0;">실측 기반 단계별 확장비 산정</h4>
+                <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 11px; color: #475569; display: flex; flex-direction: column; gap: 3px; line-height: 1.4; word-break: keep-all;">
+                    <li>• 파일럿 데이터 기반 1만·3만·6만·10만 개사 확장 비용 산정</li>
+                    <li>• 실거래 수출자-해외바이어 정보 기반 군집 모델 고도화</li>
+                    <li>• 수입업체 매칭 패턴 군집화 분석</li>
+                </ul>
+            </div>
+            <div class="card" style="padding: 10px 14px; box-shadow: none; border: 1px solid #e2e8f0; border-top: 3px solid #f59e0b;">
+                <span style="font-size: 11px; font-weight: bold; color: #f59e0b; background-color: #fdfaf2; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 6px;">3개월차</span>
+                <h4 style="font-size: 13px; font-weight: 700; color: #1e293b; margin: 0 0 6px 0;">비용·품질 보정 및 엔진 안정화</h4>
+                <ul style="list-style: none; padding-left: 0; margin: 0; font-size: 11px; color: #475569; display: flex; flex-direction: column; gap: 3px; line-height: 1.4; word-break: keep-all;">
+                    <li>• 단계별 수집 성공률, API/토큰량, 검수시간 등 품질지표 보정</li>
+                    <li>• 담당자 피드백 기반 추천 품질 점검 및 시스템 안정화</li>
+                    <li>• 실측값 누적을 통한 전체 확장비 파인튜닝</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI · DemoStatra PoC</span>
+            <span class="slide-page-num">12 / 14</span>
+        </div>
+    </div>
+
+    <!-- Slide 13: 향후 검토 가능 정부 사업 -->
+    <div class="slide">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <h2 class="slide-title">향후 검토 가능 정부 사업</h2>
+                <p class="slide-subtitle">(재)아인글로벌과 (주)그란오소AI의 공동 참여를 통해 데이터 구축 및 매칭 고도화 비용을 절감할 수 있는 정부 지원 사업 제안입니다.</p>
+            </div>
+            <div class="slide-meta-top">정부 지원사업 연계안</div>
+        </div>
+
+        <div class="grid-2col" style="height: 380px; margin-bottom: 25px;">
+            <!-- Left Card: 데이터 바우처 지원사업 -->
+            <div class="card has-header">
+                <div class="card-header-gray" style="border-top: 4px solid #2563eb; display: flex; justify-content: space-between; align-items: center; padding: 12px 18px;">
+                    <span style="font-size: 16px; font-weight: 700;">데이터 바우처 지원사업</span>
+                    <span class="badge badge-blue" style="margin-bottom: 0; font-size: 11px;">데이터 구축 지원</span>
+                </div>
+                <div class="card-body-with-header" style="padding: 24px; display: flex; flex-direction: column; gap: 14px; justify-content: center; height: 100%;">
+                    <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px 16px; font-size: 14.5px;">
+                        <strong style="color: #1e3a8a; display: block; margin-bottom: 4px;">🎯 사업 목적</strong>
+                        <span style="color: #475569;">데이터 활용을 통한 비즈니스 혁신 및 신제품/서비스 개발 비용 지원 (과기정통부/KDATA)</span>
+                    </div>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: #475569;">
+                        <li style="display: flex; gap: 8px;">
+                            <span style="color: #2563eb; font-weight: 700; min-width: 120px;">• 지원 대상 & 규모:</span>
+                            <span>초기/성장 단계 기업 대상, 구매 바우처 최대 1,000만원 / 가공 바우처 최대 4,000만원 지원</span>
+                        </li>
+                        <li style="display: flex; gap: 8px;">
+                            <span style="color: #2563eb; font-weight: 700; min-width: 120px;">• 컨설팅 연계:</span>
+                            <span>수요기업 선정 시 가공기업인 그란오소AI를 통해 아인글로벌의 AX DB 정밀 가공 가능</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Right Card: 중소기업 혁신바우처 사업 -->
+            <div class="card has-header">
+                <div class="card-header-gray" style="border-top: 4px solid #10b981; display: flex; justify-content: space-between; align-items: center; padding: 12px 18px;">
+                    <span style="font-size: 16px; font-weight: 700;">중소기업 혁신바우처 사업</span>
+                    <span class="badge badge-teal" style="margin-bottom: 0; font-size: 11px;">매칭 기술 고도화</span>
+                </div>
+                <div class="card-body-with-header" style="padding: 24px; display: flex; flex-direction: column; gap: 14px; justify-content: center; height: 100%;">
+                    <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 12px 16px; font-size: 14.5px;">
+                        <strong style="color: #14532d; display: block; margin-bottom: 4px;">🎯 사업 목적</strong>
+                        <span style="color: #475569;">제조 중소기업의 경쟁력 강화를 위한 맞춤형 패키지 서비스 바우처 지원 (중기부)</span>
+                    </div>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: #475569;">
+                        <li style="display: flex; gap: 8px;">
+                            <span style="color: #10b981; font-weight: 700; min-width: 120px;">• 지원 분야:</span>
+                            <span>컨설팅, 기술지원(시제품/품질/시스템 구축), 마케팅 등 분야별 최대 5,000만원 한도 바우처 발행</span>
+                        </li>
+                        <li style="display: flex; gap: 8px;">
+                            <span style="color: #10b981; font-weight: 700; min-width: 120px;">• PoC 사업비 지원:</span>
+                            <span>선정 시 협업 PoC 자금(정부 지원금)을 통한 개발 및 고도화 인프라 비용 조달 가능</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="s5-callout" style="border-left-color: #2563eb; padding: 16px 20px;">
+            <div class="s5-callout-title" style="color: #1e3a8a; font-size: 15px; margin-bottom: 6px;">💡 정부 사업 연계를 통한 비용 조달 방향</div>
+            <p class="s5-callout-desc" style="font-size: 13.5px; line-height: 1.5;">그란오소AI의 기술 공급력과 아인글로벌의 B2B 데이터 자산을 융합하여 상반기/하반기 공모 사업에 공동 지원함으로써, 자체 예산 부담을 줄이고 고부가가치 AI B2B 추천 매칭 엔진 및 DB를 단계적으로 자산화할 수 있습니다.</p>
+        </div>
+
+        <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 10px; font-size: 12.5px; color: #1e3a8a; font-weight: 500; line-height: 1.45; word-break: keep-all; text-align: center; margin-top: 15px;">
+            💡 이번 연장 PoC는 단기 시스템 완성이 아니라, 향후 정부사업·데이터 바우처·전시회 AX 플랫폼 고도화로 확장하기 위한 실측 기반 준비 단계입니다.
+        </div>
+
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI</span>
+            <span class="slide-page-num">13 / 14</span>
+        </div>
+    </div>
+
+    <!-- Slide 14: 감사합니다 (Ending) -->
+    <div class="slide slide-cover" style="position: relative; overflow: hidden; background-color: #0b1a30; color: #ffffff; justify-content: center; align-items: center; text-align: center; padding: 0;">
+        <div class="cover-circle-blue"></div>
+        <div class="cover-circle-teal"></div>
+        <div class="cover-content" style="z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px;">
+            <h1 style="font-size: 72px; font-weight: 900; color: #ffffff; letter-spacing: -2px; margin-bottom: 10px;">감사합니다</h1>
+            
+            <!-- 악수하는 큰 손 SVG 일러스트 -->
+            <div style="width: 280px; height: 160px; display: flex; align-items: center; justify-content: center;">
+                <svg width="220" height="130" viewBox="0 0 120 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Left hand (그란오소 AI - 블루 그라데이션) -->
+                    <path d="M10 32C10 32 25 32 30 35C35 38 42 41 45 42C48 43 52 38 52 35C52 32 45 28 42 27C39 26 22 25 22 25" stroke="url(#ending_paint0_linear)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 25C10 25 22 25 26 23C30 21 37 19 40 18C43 17 48 20 48 24C48 28 41 31 38 32" stroke="url(#ending_paint0_linear)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Right hand (아인글로벌 - 테일 그라데이션) -->
+                    <path d="M110 32C110 32 95 32 90 35C85 38 78 41 75 42C72 43 68 38 68 35C68 32 75 28 78 27C81 26 98 25 98 25" stroke="url(#ending_paint1_linear)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M110 25C110 25 98 25 94 23C90 21 83 19 80 18C77 17 72 20 72 24C72 28 79 31 82 32" stroke="url(#ending_paint1_linear)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    
+                    <!-- Shaking interaction lines -->
+                    <path d="M60 22C60 20 60 16 60 16" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M64 24C66 22 69 19 69 19" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M56 24C54 22 51 19 51 19" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M60 48C60 50 60 54 60 54" stroke="#0d9488" stroke-width="2" stroke-linecap="round"/>
+                    
+                    <!-- Gradients -->
+                    <defs>
+                        <linearGradient id="ending_paint0_linear" x1="10" y1="28.5" x2="52" y2="28.5" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#3b82f6"/>
+                            <stop offset="1" stop-color="#60a5fa"/>
+                        </linearGradient>
+                        <linearGradient id="ending_paint1_linear" x1="110" y1="28.5" x2="68" y2="28.5" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0d9488"/>
+                            <stop offset="1" stop-color="#14b8a6"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            
+            <p style="font-size: 19.5px; font-weight: 500; color: #cbd5e1; max-width: 800px; line-height: 1.65; word-break: keep-all; letter-spacing: -0.5px;">
+                그란오소AI는 (재)아인글로벌의 연구조직으로,<br>
+                (재)아인글로벌은 그란오소AI의 실증검증기관으로 협력을 희망합니다.
+            </p>
+        </div>
+        <div class="slide-footer">
+            <span class="slide-footer-text">(재)아인글로벌 PoC 종료 간담회 · 작성: (주)그란오소AI</span>
+            <span class="slide-page-num">13 / 13</span>
+        </div>
+    </div>
+</body>
+</html>

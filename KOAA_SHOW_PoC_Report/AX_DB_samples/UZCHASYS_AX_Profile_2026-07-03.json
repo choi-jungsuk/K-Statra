@@ -1,0 +1,138 @@
+{
+  "company_name": "JV LLC UzChasys",
+  "local_name": "СП ООО «УзЧасис»",
+  "profile_date": "2026-07-03",
+  "source_website": "http://uzchasys.uz/en/",
+  "data_status": "public_website_based_ax_profile_draft_human_verification_required",
+  "country": "Uzbekistan",
+  "website": "http://uzchasys.uz/en/",
+  "email": "info@uzchasys.uz",
+  "phone": "+99869 228 72 22",
+  "industry": "Automotive Parts / Vehicle Lighting / Polymer-based Automotive Lighting Components",
+  "company_type": [
+    "Manufacturer",
+    "OEM Supplier",
+    "Automotive Lighting Specialist"
+  ],
+  "b2b_role": [
+    "Potential partner",
+    "Local OEM supply-chain node",
+    "Technology cooperation candidate",
+    "KOAA SHOW consultation candidate"
+  ],
+  "main_products": [
+    "Front headlamps",
+    "Rear lamps",
+    "Tail lamps",
+    "LED projector headlamps",
+    "Halogen headlamps",
+    "Polymer-based automotive lighting components"
+  ],
+  "customers": [
+    "UzAuto",
+    "UzAuto Motors",
+    "LLC PSMA Rus"
+  ],
+  "technical_partners": [
+    "AMS Co. Ltd. (South Korea)",
+    "Neolit ZKW Lighting (India)"
+  ],
+  "vehicle_models": [
+    "CITROEN Berlingo B9",
+    "TRACKER",
+    "ONIX",
+    "COBALT",
+    "SPARK M300",
+    "NEXIA R3 T250",
+    "GENTRA J200"
+  ],
+  "product_details": [
+    {
+      "model": "CITROEN Berlingo B9",
+      "product": "Rear Light",
+      "customer": "LLC PSMA Rus",
+      "annual_volume": "VU 25,000 sets / VP 15,000 sets"
+    },
+    {
+      "model": "TRACKER",
+      "product": "Front Lamp",
+      "customer": "UzAuto",
+      "annual_volume": "Halogen Projector 14,500 sets / LED Projector 36,500 sets"
+    },
+    {
+      "model": "TRACKER",
+      "product": "Rear Lamp",
+      "customer": "UzAuto",
+      "annual_volume": "Bulb Version 14,500 sets / LED Version 36,500 sets"
+    },
+    {
+      "model": "ONIX",
+      "product": "Front Lamp",
+      "customer": "UzAuto",
+      "annual_volume": "Halogen Head Lamp 5,000 sets / LED Projector 26,000 sets"
+    },
+    {
+      "model": "ONIX",
+      "product": "Rear Lamp",
+      "customer": "UzAuto",
+      "annual_volume": "Bulb Version 5,000 sets / LED Version 26,000 sets"
+    },
+    {
+      "model": "COBALT",
+      "product": "Front / Rear Lamp",
+      "customer": "UzAuto Motors",
+      "annual_volume": "Cobalt Base 155,000 sets / Cobalt Midnight 10,000 sets"
+    }
+  ],
+  "ax_tags": [
+    "Uzbekistan",
+    "Automotive Parts",
+    "Vehicle Lighting",
+    "Headlamp",
+    "Tail Lamp",
+    "Rear Lamp",
+    "LED Projector",
+    "Polymer Materials",
+    "OEM Supplier",
+    "UzAuto Supplier",
+    "KOAA SHOW Candidate",
+    "AX Profile Draft",
+    "Verification Required"
+  ],
+  "recommended_korean_partners": [
+    "Automotive lighting component suppliers",
+    "LED module suppliers",
+    "Automotive electronics suppliers",
+    "Polymer injection and mold companies",
+    "Automotive inspection and automation equipment companies"
+  ],
+  "draft_scores": {
+    "industry_fit": 92,
+    "uzbekistan_market_relevance": 95,
+    "korean_partnership_potential": 78,
+    "buyer_or_partner_candidate": 74,
+    "koaa_show_invitation_fit": 86
+  },
+  "matching_summary_ko": "UzChasys는 우즈베키스탄의 자동차 조명부품 OEM 제조사로, UzAuto 공급망과 연결되어 있으며, 한국 부품·전장·금형·자동화 기업과의 상담 후보로 AX DB에 우선 등록해 검수할 가치가 있는 기업입니다.",
+  "verification_required": [
+    "Current purchasing/import contact person",
+    "Actual import history and HS codes",
+    "Demand for Korean components/equipment",
+    "KOAA SHOW participation intent",
+    "Current role in UzAuto supply chain",
+    "Certificate types and validity",
+    "Revenue, employees, current production capacity",
+    "Existing Korean cooperation details"
+  ],
+  "sources": [
+    "http://uzchasys.uz/en/",
+    "http://uzchasys.uz/en/about-us/about-the-company/general-information",
+    "http://uzchasys.uz/en/products",
+    "http://uzchasys.uz/en/products/citroen-berlingo-b9",
+    "http://uzchasys.uz/en/products/cobalt-base",
+    "http://uzchasys.uz/en/products/onix-front-headlamps",
+    "http://uzchasys.uz/en/products/onix-rear-lights-tail-lamps",
+    "http://uzchasys.uz/en/products/tracker-front-headlamps",
+    "http://uzchasys.uz/en/products/tracker-tail-lamps"
+  ]
+}

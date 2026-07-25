@@ -2,17 +2,17 @@
 import Badge from './Badge'
 import Button from './Button'
 
-const PLACEHOLDER_IMAGE = 'https://placehold.co/320x160?text=K-Statra'
+const PLACEHOLDER_IMAGE = 'https://placehold.co/320x160?text=DemoStatra'
 
 export default function CompanyCard({ company, onDetails, onRequestPayment }) {
   const c = company || {}
   const hasImg = Array.isArray(c.images) && c.images.length > 0
-  const heroImage = hasImg ? c.images[0] : { url: PLACEHOLDER_IMAGE, alt: 'K-Statra default image' }
+  const heroImage = hasImg ? c.images[0] : { url: PLACEHOLDER_IMAGE, alt: 'DemoStatra default image' }
   return (
     <Card>
       <img
         src={heroImage.url}
-        alt={heroImage.alt || c.name || 'K-Statra company image'}
+        alt={heroImage.alt || c.name || 'DemoStatra company image'}
         style={{ width: '100%', height: 140, objectFit: 'cover', borderRadius: 6, marginBottom: 8 }}
         loading="lazy"
       />

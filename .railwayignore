@@ -12,7 +12,7 @@ uploads/
 *.txt
 *.ps1
 migration_report.txt
-k-statra-colab.zip
+demostatra-colab.zip
 deep_scan_results.txt
 folder_sizes.txt
 unique_industries.txt

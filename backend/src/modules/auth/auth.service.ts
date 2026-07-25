@@ -24,7 +24,7 @@ export class AuthService {
 
   private hashPassword(password: string): string {
     // Standard secure SHA-256 hashing (zero dependency)
-    const salt = 'kstatra_secure_salt_2026';
+    const salt = 'demostatra_secure_salt_2026';
     return crypto
       .createHash('sha256')
       .update(password + salt)
@@ -51,7 +51,7 @@ export class AuthService {
         industries: industries || [],
         needs: [],
         tags: [],
-        profileText: `${name} is an active trade buyer registered on K-Statra.`,
+        profileText: `${name} is an active trade buyer registered on DemoStatra.`,
       });
       buyerId = buyer._id.toString();
     } else if (role === 'company') {
@@ -59,7 +59,7 @@ export class AuthService {
         name,
         industry: industries?.[0] || 'K-Beauty',
         tags: industries || [],
-        profileText: `${name} is an export-ready supplier on K-Statra.`,
+        profileText: `${name} is an export-ready supplier on DemoStatra.`,
       });
       companyId = company._id.toString();
     }

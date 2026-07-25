@@ -1,0 +1,103 @@
+{
+  "company_name": "AIN Global Foundation",
+  "local_name": "재단법인 아인글로벌",
+  "country": "South Korea",
+  "region": "Gyeonggi-do / Anyang area, detail verification required",
+  "address": null,
+  "website": "https://www.ainglobal.org/",
+  "phone": "+82-31-384-0301",
+  "fax": "+82-31-384-0302",
+  "email": "ainglobal@ainglobal.org",
+  "industry": [
+    "Export support",
+    "Global marketing",
+    "Automotive parts",
+    "Mobility industry",
+    "Trade exhibitions",
+    "B2B consultation"
+  ],
+  "company_type": "Export Promotion Organization / Trade Marketing Support Agency / Exhibition Organizer",
+  "b2b_role": [
+    "Domestic SME export support hub",
+    "Overseas buyer discovery and consultation connector",
+    "Trade exhibition and Korean pavilion operator",
+    "KOAA SHOW / mobility industry event-linked support organization"
+  ],
+  "main_services": [
+    "Domestic exhibition hosting",
+    "Overseas exhibition Korean pavilion participation/support",
+    "Online and offline export consultation events",
+    "Overseas market development missions",
+    "Buyer discovery",
+    "Overseas marketing support",
+    "Marketing and promotional design support"
+  ],
+  "brands_or_events": [
+    "KOAA SHOW",
+    "International Mobility Industry Exhibition"
+  ],
+  "certifications_or_authority_mentions": [
+    "Founded/approved under the Ministry of Trade, Industry and Energy in December 2000, according to public website",
+    "KOTRA integrated co-hosting agreement mentioned in history"
+  ],
+  "network_mentions": "7 continents, 19 countries, 26 global alliance companies mentioned on official website",
+  "customer_or_partner_mentions": [
+    "Local governments",
+    "SME overseas marketing associations and organizations",
+    "Individual companies",
+    "KOTRA"
+  ],
+  "featured_programs": [
+    "2026 domestic and overseas automotive parts exhibition e-catalog",
+    "KOAA SHOW participation recruitment",
+    "Overseas automotive parts exhibitions",
+    "Online export consultations"
+  ],
+  "ax_tags": [
+    "South Korea",
+    "AIN Global Foundation",
+    "Export Support",
+    "Global Marketing",
+    "Automotive Parts",
+    "Mobility Industry",
+    "KOAA SHOW",
+    "International Mobility Industry Exhibition",
+    "KOTRA Collaboration",
+    "Buyer Discovery",
+    "Trade Mission",
+    "Online Export Consultation",
+    "Offline Export Consultation",
+    "Korean Pavilion",
+    "SME Export Support",
+    "B2B Matching",
+    "AX Profile Draft",
+    "Verification Required"
+  ],
+  "draft_scores": {
+    "automotive_mobility_fit": 95,
+    "export_support_role_fit": 94,
+    "ax_db_collaboration_potential": 88,
+    "data_review_need": 90,
+    "koaa_show_operation_fit": 96,
+    "scaled_business_potential": 82
+  },
+  "matching_summary_ko": "(재)아인글로벌은 자동차부품·모빌리티 분야 국내 기업의 해외진출, 전시회, 수출상담회, 바이어 발굴을 연결하는 수출지원 허브 기관으로 분류할 수 있습니다. AX DB 관점에서는 KOAA SHOW 참가기업과 해외 바이어 후보를 구조화하여 상담 후보 선별·초청·사후관리 품질을 높이는 협력 대상입니다. 다만 실제 데이터 제공 범위, 보유 DB 구조, 개인정보·영업정보 처리 기준은 담당자 승인 후 단계적으로 확인해야 합니다.",
+  "verification_required": [
+    "Official address and foundation/company registration details",
+    "2026 KOAA SHOW and overseas exhibition department/contact owners",
+    "Owned company/buyer DB field structure and shareable scope",
+    "Public vs internal data classification rules",
+    "Data ownership and access control for exhibitor, buyer, and consultation-result databases",
+    "Required intake fields: company name and website",
+    "Optional intake fields: country, products, exhibition name, priority, past consultation history",
+    "Privacy, trade-secret, consultation-record storage and access-log rules",
+    "2,000-company pilot metrics: success rate, failed URLs, review time, API/ops cost",
+    "10,000+ expansion budget, review workforce, and server-operation scope"
+  ],
+  "sources": [
+    "https://www.ainglobal.org/",
+    "https://www.koaashow.com/overseas/info.php?boardid=e_info&mode=view&idx=34"
+  ],
+  "data_status": "공개 웹사이트 기반 AX DB 초안 / 자동 수집·정리 초안 / 담당자 검수 필요",
+  "created_at": "2026-07-05"
+}

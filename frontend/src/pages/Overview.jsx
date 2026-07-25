@@ -135,7 +135,7 @@ export default function Overview() {
                                 <span className="search-agent-pulse"></span>
                             </div>
                             <span className="page-agent-badge-text">
-                                {lang === 'ko' ? 'K-Statra AI Agent 지휘 본부' : 'K-Statra AI Command Center'}
+                                {lang === 'ko' ? 'DemoStatra AI Agent 지휘 본부' : 'DemoStatra AI Command Center'}
                             </span>
                         </div>
                         <h4 style={{ margin: '6px 0 0 0', fontWeight: 800, fontSize: '15px' }}>
@@ -219,7 +219,7 @@ export default function Overview() {
                         {t('analytics_top_industries')}
                     </h3>
                     <p style={{ margin: '0 0 1.5rem 0', fontSize: '12px', color: 'var(--fg-secondary)' }}>
-                        {lang === 'ko' ? 'K-Statra 글로벌 기업들의 거래 실적 상위 업종 통계입니다.' : 'Top industrial sectors by global partnership volume.'}
+                        {lang === 'ko' ? 'DemoStatra 글로벌 기업들의 거래 실적 상위 업종 통계입니다.' : 'Top industrial sectors by global partnership volume.'}
                     </p>
                     
                     <ul className="industry-list" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', padding: 0, listStyle: 'none' }}>

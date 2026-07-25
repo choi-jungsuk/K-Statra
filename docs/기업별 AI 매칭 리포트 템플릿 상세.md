@@ -1,9 +1,9 @@
-# [템플릿] K-Statra AI 글로벌 바이어 매칭 리포트
+# [템플릿] DemoStatra AI 글로벌 바이어 매칭 리포트
 
 **리포트 ID:** KS-2026-KOAA-{COMPANY_ID}  
 **발행일:** 2026년 6월 6일  
 **대상 기업:** {국문 기업명} ({영문 기업명})  
-**분석 엔진:** K-Statra AI Matching Engine v1.2 (Powered by Web Intelligence)  
+**분석 엔진:** DemoStatra AI Matching Engine v1.2 (Powered by Web Intelligence)  
 **데이터 품질 등급:** {A / B / C / D} (신뢰도: {High / Medium / Low})  
 
 ---
@@ -78,5 +78,5 @@
 ## 7. 데이터 무결성 평가 및 다음 프로세스 (Next Steps)
 * **보강이 필요한 정보 (Missing Info):**
   * *예시: 귀사의 미국 현지 사후 서비스(A/S) 파트너십 구축 여부가 확인되지 않았습니다.*
-* **K-Statra 글로벌 전문가 연계 추천:**
-  * 바이어 접촉 및 현지 미팅 조율을 위해 K-Statra 플랫폼 하단의 **[Global Biz Consultant Agent]** 서비스에 상담 신청을 접수할 수 있습니다.
+* **DemoStatra 글로벌 전문가 연계 추천:**
+  * 바이어 접촉 및 현지 미팅 조율을 위해 DemoStatra 플랫폼 하단의 **[Global Biz Consultant Agent]** 서비스에 상담 신청을 접수할 수 있습니다.

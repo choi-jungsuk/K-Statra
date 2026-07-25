@@ -33,8 +33,8 @@ export default function HermesChatWidget() {
         id: 'welcome',
         role: 'assistant',
         content: lang === 'ko'
-          ? '안녕하세요! K-Statra의 공식 AI 매칭 비서 **Hermes(헤르메스)**입니다. 🤖✨\n원하시는 비즈니스 파트너나 협업하고 싶은 업종을 알려주시면, 실시간으로 데이터베이스를 검색해 최적의 파트너를 매칭해 드립니다!\n\n예: *"전기차 부품 제조업체 추천해줘"*, *"바이오 헬스케어 관련 기업 찾아줘"*'
-          : 'Hello! I am **Hermes**, the official AI matching assistant of K-Statra. 🤖✨\nTell me what kind of business partner or industry you are looking for, and I will search our database in real time to find the perfect match for you!\n\nTry: *"Recommend electric vehicle parts manufacturers"*, *"Find bio-healthcare companies"*',
+          ? '안녕하세요! DemoStatra의 공식 AI 매칭 비서 **Hermes(헤르메스)**입니다. 🤖✨\n원하시는 비즈니스 파트너나 협업하고 싶은 업종을 알려주시면, 실시간으로 데이터베이스를 검색해 최적의 파트너를 매칭해 드립니다!\n\n예: *"전기차 부품 제조업체 추천해줘"*, *"바이오 헬스케어 관련 기업 찾아줘"*'
+          : 'Hello! I am **Hermes**, the official AI matching assistant of DemoStatra. 🤖✨\nTell me what kind of business partner or industry you are looking for, and I will search our database in real time to find the perfect match for you!\n\nTry: *"Recommend electric vehicle parts manufacturers"*, *"Find bio-healthcare companies"*',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages([welcomeMsg]);
@@ -68,8 +68,8 @@ export default function HermesChatWidget() {
         id: 'welcome',
         role: 'assistant',
         content: lang === 'ko'
-          ? '안녕하세요! K-Statra의 공식 AI 매칭 비서 **Hermes(헤르메스)**입니다. 🤖✨\n원하시는 비즈니스 파트너나 협업하고 싶은 업종을 알려주시면, 실시간으로 데이터베이스를 검색해 최적의 파트너를 매칭해 드립니다!'
-          : 'Hello! I am **Hermes**, the official AI matching assistant of K-Statra. 🤖✨\nTell me what kind of business partner or industry you are looking for, and I will search our database in real time to find the perfect match for you!',
+          ? '안녕하세요! DemoStatra의 공식 AI 매칭 비서 **Hermes(헤르메스)**입니다. 🤖✨\n원하시는 비즈니스 파트너나 협업하고 싶은 업종을 알려주시면, 실시간으로 데이터베이스를 검색해 최적의 파트너를 매칭해 드립니다!'
+          : 'Hello! I am **Hermes**, the official AI matching assistant of DemoStatra. 🤖✨\nTell me what kind of business partner or industry you are looking for, and I will search our database in real time to find the perfect match for you!',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       saveHistory([welcomeMsg]);
@@ -240,7 +240,7 @@ export default function HermesChatWidget() {
         { label: '🚗 자동차 부품 수출', value: '자동차 부품 수출업체 추천해줘' },
         { label: '🔬 바이오/메디컬 기업', value: '바이오 헬스케어 메디컬 분야 관련 기업 추천해줘' },
         { label: '💻 IT/AI/SaaS 벤처', value: 'IT 및 AI 기술력을 가진 신생 벤처기업 찾아줘' },
-        { label: '🤝 매칭 신청 방법', value: 'K-Statra 플랫폼에서 파트너 매칭 신청 절차를 알려줘' }
+        { label: '🤝 매칭 신청 방법', value: 'DemoStatra 플랫폼에서 파트너 매칭 신청 절차를 알려줘' }
       ]
     : [
         { label: '🚗 Auto Parts Export', value: 'Recommend automotive parts exporters' },
@@ -289,7 +289,7 @@ export default function HermesChatWidget() {
               </div>
               <div>
                 <h4 className="hermes-title">Hermes AI</h4>
-                <p className="hermes-subtitle">K-Statra 스마트 매칭 비서</p>
+                <p className="hermes-subtitle">DemoStatra 스마트 매칭 비서</p>
               </div>
             </div>
             <div className="hermes-actions">

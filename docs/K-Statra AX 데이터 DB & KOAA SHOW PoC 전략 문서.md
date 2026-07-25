@@ -1,15 +1,15 @@
-# K-Statra AX 데이터 DB & KOAA SHOW PoC 전략 문서
+# DemoStatra AX 데이터 DB & KOAA SHOW PoC 전략 문서
 
 작성일: 2026-06-06  
-프로젝트: K-Statra  
+프로젝트: DemoStatra  
 PoC 대상: 아인글로벌 / KOAA SHOW  
-문서 목적: K-Statra의 제품 방향, KOAA SHOW PoC 전략, AX 데이터 DB 구축 방향, 기업별 AI 매칭 리포트 구조를 정리하고 향후 대화와 개발 과정에서 계속 업데이트하기 위한 기준 문서
+문서 목적: DemoStatra의 제품 방향, KOAA SHOW PoC 전략, AX 데이터 DB 구축 방향, 기업별 AI 매칭 리포트 구조를 정리하고 향후 대화와 개발 과정에서 계속 업데이트하기 위한 기준 문서
 
 ---
 
 ## 1. 핵심 결론
 
-K-Statra는 단순한 “기업 DB 검색 플랫폼”이 아니라, 국내 전시회·협회·MICE 주최자가 보유한 불완전한 기업 디렉토리와 브로슈어 데이터를 AI 매칭 가능한 AX 데이터 DB로 전환하고, 이를 기반으로 국내 스타트업·수출기업과 해외 바이어를 연결하는 AI 기반 무역 매칭 플랫폼으로 포지셔닝해야 한다.
+DemoStatra는 단순한 “기업 DB 검색 플랫폼”이 아니라, 국내 전시회·협회·MICE 주최자가 보유한 불완전한 기업 디렉토리와 브로슈어 데이터를 AI 매칭 가능한 AX 데이터 DB로 전환하고, 이를 기반으로 국내 스타트업·수출기업과 해외 바이어를 연결하는 AI 기반 무역 매칭 플랫폼으로 포지셔닝해야 한다.
 
 기존 가정은 다음과 같았다.
 
@@ -20,19 +20,19 @@ K-Statra는 단순한 “기업 DB 검색 플랫폼”이 아니라, 국내 전�
 - 전시회 주최자는 20년 이상 행사를 운영했더라도 AI 매칭에 필요한 정제된 기업 프로필 DB를 보유하지 못한 경우가 많다.
 - 보유 데이터는 참가기업 브로슈어, 업체 디렉토리, 기업명, 주소, 연락처, 전시 품목 수준에 머물러 있다.
 - 이 데이터만으로는 AI가 적격 바이어·공급사를 정밀 추천하기 어렵다.
-- 따라서 K-Statra의 1차 핵심 가치는 “이미 구축된 DB 검색”이 아니라 “부실한 전시회 DB를 AI 매칭 가능한 데이터 자산으로 바꾸는 것”이어야 한다.
+- 따라서 DemoStatra의 1차 핵심 가치는 “이미 구축된 DB 검색”이 아니라 “부실한 전시회 DB를 AI 매칭 가능한 데이터 자산으로 바꾸는 것”이어야 한다.
 
 새로운 핵심 방향은 다음과 같다.
 
-> K-Statra는 전시회 참가기업 디렉토리, 브로슈어, 홈페이지, 공개 웹 정보를 분석하여 AI 매칭 가능한 AX 데이터 DB를 구축하고, 기업별 해외 바이어 추천 및 컨설팅 리포트를 제공하는 플랫폼이다.
+> DemoStatra는 전시회 참가기업 디렉토리, 브로슈어, 홈페이지, 공개 웹 정보를 분석하여 AI 매칭 가능한 AX 데이터 DB를 구축하고, 기업별 해외 바이어 추천 및 컨설팅 리포트를 제공하는 플랫폼이다.
 
 ---
 
-## 2. K-Statra의 정체성
+## 2. DemoStatra의 정체성
 
 ### 2.1 이름의 의미
 
-K-Statra는 다음 의미를 담는다.
+DemoStatra는 다음 의미를 담는다.
 
 - K-startup
 - Trade
@@ -41,7 +41,7 @@ K-Statra는 다음 의미를 담는다.
 
 ### 2.2 초기 지향점
 
-초기 K-Statra는 다음과 같은 양면 플랫폼을 지향했다.
+초기 DemoStatra는 다음과 같은 양면 플랫폼을 지향했다.
 
 1. 국내 스타트업·수출기업에게 적합한 해외 바이어 추천
 2. 해외 바이어가 국내 수출업체를 쉽게 검색·발견
@@ -52,7 +52,7 @@ K-Statra는 다음 의미를 담는다.
 
 현재 PoC 상황에서는 다음과 같이 재정의하는 것이 적절하다.
 
-> K-Statra는 전시회 주최자와 협회가 보유한 비정형·저품질 기업 데이터를 AI 매칭 가능한 AX 데이터 DB로 전환하고, 국내 기업과 해외 바이어 간의 적격 매칭 후보와 상담 리포트를 생성하는 AI 무역 인텔리전스 플랫폼이다.
+> DemoStatra는 전시회 주최자와 협회가 보유한 비정형·저품질 기업 데이터를 AI 매칭 가능한 AX 데이터 DB로 전환하고, 국내 기업과 해외 바이어 간의 적격 매칭 후보와 상담 리포트를 생성하는 AI 무역 인텔리전스 플랫폼이다.
 
 ---
 
@@ -122,7 +122,7 @@ AI 매칭, 수출 컨설팅, 바이어 추천, 참가기업 리포트 생성에 
 
 초기 구상은 보유 DB 80%, 웹서치 20%였으나, 현실적으로는 100% 웹서치에 가까운 상황이다.
 
-이는 약점처럼 보일 수 있지만, K-Statra의 기능을 다음처럼 재정의하면 강점으로 전환할 수 있다.
+이는 약점처럼 보일 수 있지만, DemoStatra의 기능을 다음처럼 재정의하면 강점으로 전환할 수 있다.
 
 > 전시회 원시 데이터와 공개 웹 정보를 결합해 AI가 실시간으로 해외 바이어 후보를 발굴하고 추천한다.
 
@@ -130,7 +130,7 @@ AI 매칭, 수출 컨설팅, 바이어 추천, 참가기업 리포트 생성에 
 
 전시회 주최자는 부스 판매 외에 참가기업에게 제공할 수 있는 고부가가치 서비스가 필요하다.
 
-K-Statra는 다음 서비스를 제공할 수 있다.
+DemoStatra는 다음 서비스를 제공할 수 있다.
 
 - 참가기업별 해외 바이어 추천 리포트
 - 참가기업 데이터 보강 서비스
@@ -147,7 +147,7 @@ K-Statra는 다음 서비스를 제공할 수 있다.
 
 AX 데이터 DB는 단순 기업명·연락처 DB가 아니라, AI가 분석·추천·리포트 생성에 사용할 수 있도록 구조화된 기업 프로필 데이터베이스를 의미한다.
 
-K-Statra에서 AX 데이터 DB는 다음 목적을 가진다.
+DemoStatra에서 AX 데이터 DB는 다음 목적을 가진다.
 
 1. 국내 기업의 제품·기술·수출 가능성을 구조화
 2. 해외 바이어 후보를 찾기 위한 검색 키워드 생성
@@ -157,7 +157,7 @@ K-Statra에서 AX 데이터 DB는 다음 목적을 가진다.
 
 ### 5.2 기존 디렉토리 DB와 AX 데이터 DB의 차이
 
-| 구분 | 기존 전시회 디렉토리 | K-Statra AX 데이터 DB |
+| 구분 | 기존 전시회 디렉토리 | DemoStatra AX 데이터 DB |
 |---|---|---|
 | 중심 정보 | 기업명, 주소, 연락처 | 제품, 기술, 시장, 바이어 적합성 |
 | 데이터 형태 | 정적 목록 | AI 분석용 구조화 프로필 |
@@ -165,9 +165,9 @@ K-Statra에서 AX 데이터 DB는 다음 목적을 가진다.
 | 데이터 출처 | 신청서, 브로슈어 | 브로슈어 + 홈페이지 + 공개 웹 + AI 추론 |
 | 가치 | 운영 편의 | 수출 지원·바이어 발굴·데이터 자산화 |
 
-### 5.3 K-Statra의 핵심 전환
+### 5.3 DemoStatra의 핵심 전환
 
-K-Statra는 기업 DB를 “보유한 플랫폼”보다 기업 DB를 “만들어주는 플랫폼”으로 출발해야 한다.
+DemoStatra는 기업 DB를 “보유한 플랫폼”보다 기업 DB를 “만들어주는 플랫폼”으로 출발해야 한다.
 
 즉, 핵심 제품은 다음과 같다.
 
@@ -233,7 +233,7 @@ KOAA SHOW PoC의 목표는 다음과 같이 재정의한다.
 
 ### 7.3 출력 데이터
 
-K-Statra가 생성해야 할 출력은 다음과 같다.
+DemoStatra가 생성해야 할 출력은 다음과 같다.
 
 - AX 기업 프로필 JSON
 - 데이터 품질 등급
@@ -303,7 +303,7 @@ K-Statra가 생성해야 할 출력은 다음과 같다.
 
 ## 9. 기업별 AI 매칭 리포트 구조
 
-기업별 리포트는 K-Statra의 핵심 산출물이 될 수 있다.
+기업별 리포트는 DemoStatra의 핵심 산출물이 될 수 있다.
 
 ### 9.1 리포트 기본 구조
 
@@ -367,13 +367,13 @@ B등급: 브로슈어와 홈페이지 기반. 인증 정보 추가 확인 필요
 - Global Buyer Discovery Report
 - Export Opportunity Report
 - KOAA SHOW AI Match Report
-- K-Statra Global Partner Report
+- DemoStatra Global Partner Report
 
 ---
 
 ## 10. 글로벌 컨설턴트 에이전트와의 연결
 
-K-Statra 사이트 하단의 Global Biz Consultant Agent는 다음 서비스와 연결될 수 있다.
+DemoStatra 사이트 하단의 Global Biz Consultant Agent는 다음 서비스와 연결될 수 있다.
 
 ### 10.1 지역전문가 컨설팅
 
@@ -411,11 +411,11 @@ AI 매칭 리포트 제공
 무역서류·미팅·계약 지원
 ```
 
-이 구조는 K-Statra의 수익 모델과도 직접 연결된다.
+이 구조는 DemoStatra의 수익 모델과도 직접 연결된다.
 
 ---
 
-## 11. K-Statra 사이트 메시지 수정 방향
+## 11. DemoStatra 사이트 메시지 수정 방향
 
 ### 11.1 기존 메시지
 
@@ -429,7 +429,7 @@ Monitor demand, shortlist export-ready suppliers, and track progress.
 ```text
 Turn Exhibition Data into Global Buyer Matches
 
-K-Statra enriches exhibitor directories, brochures, websites, and public web sources into AI-ready trade profiles, then recommends qualified overseas buyers for Korean startups and exporters.
+DemoStatra enriches exhibitor directories, brochures, websites, and public web sources into AI-ready trade profiles, then recommends qualified overseas buyers for Korean startups and exporters.
 ```
 
 한국어:
@@ -437,7 +437,7 @@ K-Statra enriches exhibitor directories, brochures, websites, and public web sou
 ```text
 전시회 참가기업 데이터를 글로벌 바이어 매칭 자산으로 전환합니다.
 
-K-Statra는 브로슈어, 홈페이지, 전시회 디렉토리, 공개 웹 정보를 분석하여 국내 스타트업과 수출기업에 적합한 해외 바이어 후보를 추천합니다.
+DemoStatra는 브로슈어, 홈페이지, 전시회 디렉토리, 공개 웹 정보를 분석하여 국내 스타트업과 수출기업에 적합한 해외 바이어 후보를 추천합니다.
 ```
 
 ### 11.3 검색 결과 화면 개선 방향
@@ -465,13 +465,13 @@ K-Statra는 브로슈어, 홈페이지, 전시회 디렉토리, 공개 웹 정�
 ### 12.2 권장 표현
 
 ```text
-K-Statra combines exhibitor data and public web intelligence to discover potential overseas buyers in real time.
+DemoStatra combines exhibitor data and public web intelligence to discover potential overseas buyers in real time.
 ```
 
 한국어:
 
 ```text
-K-Statra는 전시회 참가기업 데이터와 공개 웹 인텔리전스를 결합하여 실시간으로 해외 바이어 후보를 발굴합니다.
+DemoStatra는 전시회 참가기업 데이터와 공개 웹 인텔리전스를 결합하여 실시간으로 해외 바이어 후보를 발굴합니다.
 ```
 
 ---
@@ -501,7 +501,7 @@ K-Statra는 전시회 참가기업 데이터와 공개 웹 인텔리전스를 �
 - 추천 사유 생성
 - 기업별 AI 매칭 리포트 생성
 
-### Phase 4: K-Statra UI 최소 수정
+### Phase 4: DemoStatra UI 최소 수정
 
 - Hero 메시지 수정
 - 검색 결과 카드에 데이터 출처·신뢰도 표시
@@ -540,7 +540,7 @@ KOAA SHOW PoC가 성공하면 동일 모델을 다른 협회와 MICE 영역으�
 - 해외 바이어 발굴은 여전히 수작업·인맥·웹검색 중심
 - 참가기업에게 제공할 고부가가치 리포트가 부족
 
-K-Statra는 이 문제를 해결하는 AX 데이터 DB 전환 플랫폼으로 제안할 수 있다.
+DemoStatra는 이 문제를 해결하는 AX 데이터 DB 전환 플랫폼으로 제안할 수 있다.
 
 ---
 
@@ -579,7 +579,7 @@ K-Statra는 이 문제를 해결하는 AX 데이터 DB 전환 플랫폼으로 �
 - [x] AX 기업 프로필 스키마 확정
 - [x] 데이터 품질 등급 기준 확정
 - [x] 기업별 AI 매칭 리포트 템플릿 작성
-- [ ] 현재 K-Statra 사이트 문구를 PoC 방향에 맞게 수정
+- [ ] 현재 DemoStatra 사이트 문구를 PoC 방향에 맞게 수정
 - [ ] 검색 결과에 데이터 출처·신뢰도 표시 설계
 
 ### 이후 해야 할 일
@@ -595,11 +595,11 @@ K-Statra는 이 문제를 해결하는 AX 데이터 DB 전환 플랫폼으로 �
 
 ## 17. 현재 판단
 
-K-Statra의 핵심 기회는 “이미 완벽한 기업 DB를 가진 매칭 플랫폼”이 되는 것이 아니다.
+DemoStatra의 핵심 기회는 “이미 완벽한 기업 DB를 가진 매칭 플랫폼”이 되는 것이 아니다.
 
 오히려 국내 전시회·협회·MICE 시장의 현실적 문제는 대부분의 주최자가 완성된 AI 매칭 DB를 보유하지 못한다는 점이다.
 
-따라서 K-Statra는 다음 문제를 해결하는 플랫폼으로 출발해야 한다.
+따라서 DemoStatra는 다음 문제를 해결하는 플랫폼으로 출발해야 한다.
 
 > 전시회 주최자와 협회가 가진 브로슈어·디렉토리 수준의 데이터를 AI 매칭 가능한 AX 데이터 DB로 전환하고, 이를 바탕으로 국내 기업과 해외 바이어를 연결하는 리포트와 워크플로우를 제공한다.
 

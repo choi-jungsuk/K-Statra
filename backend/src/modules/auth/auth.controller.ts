@@ -29,7 +29,7 @@ export class AuthController {
     const result = await this.authService.register(dto);
 
     // Set secure cookie
-    res.cookie('kstatra_token', result.accessToken, {
+    res.cookie('demostatra_token', result.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Automatically secure on HTTPS in production
       sameSite: 'lax',
@@ -50,7 +50,7 @@ export class AuthController {
     const result = await this.authService.login(dto);
 
     // Set secure cookie
-    res.cookie('kstatra_token', result.accessToken, {
+    res.cookie('demostatra_token', result.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Automatically secure on HTTPS in production
       sameSite: 'lax',
@@ -64,7 +64,7 @@ export class AuthController {
   @Post('logout')
   @ApiOperation({ summary: 'Log out and clear session cookie' })
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('kstatra_token', { path: '/' });
+    res.clearCookie('demostatra_token', { path: '/' });
     return { message: '로그아웃 되었습니다.' };
   }
 

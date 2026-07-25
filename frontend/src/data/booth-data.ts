@@ -1,4 +1,4 @@
-// d:\k-statra-project\frontend\src\data\booth-data.ts
+// d:\demostatra-project\frontend\src\data\booth-data.ts
 
 export interface BoothExhibitor {
   id: string;

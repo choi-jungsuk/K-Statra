@@ -42,8 +42,8 @@ async function bootstrap() {
 
   // Swagger
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('K-Statra API')
-    .setDescription('K-Statra 백엔드 API')
+    .setTitle('DemoStatra API')
+    .setDescription('DemoStatra 백엔드 API')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

@@ -34,7 +34,7 @@ router.post('/', async (req, res, next) => {
     let boothNumber = undefined;
 
     if (payload.reqType === 'ONLINE') {
-        const roomName = `K-Statra-Meeting-${crypto.randomBytes(6).toString('hex')}`;
+        const roomName = `DemoStatra-Meeting-${crypto.randomBytes(6).toString('hex')}`;
         meetingLink = `https://meet.jit.si/${roomName}`;
     } else {
         boothNumber = `Booth-${Math.floor(Math.random() * 900) + 100}`;

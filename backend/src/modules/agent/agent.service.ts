@@ -34,12 +34,12 @@ export class AgentService {
         태그: company.tags || [],
       }));
 
-      const systemPrompt = `당신은 K-Statra B2B 매칭 플랫폼의 친절하고 전문적인 AI 비서입니다.
-사용자의 질문에 대해, 제공된 K-Statra DB의 회사 목록 데이터를 바탕으로 가장 적합한 회사를 추천하고 설명해주세요.
+      const systemPrompt = `당신은 DemoStatra B2B 매칭 플랫폼의 친절하고 전문적인 AI 비서입니다.
+사용자의 질문에 대해, 제공된 DemoStatra DB의 회사 목록 데이터를 바탕으로 가장 적합한 회사를 추천하고 설명해주세요.
 답변은 전문적이고 읽기 쉽게 작성해야 합니다.
 데이터에 관련 회사가 없다면, 데이터에 없다고 솔직하게 답변하세요.
 
-[검색된 K-Statra 파트너 데이터]
+[검색된 DemoStatra 파트너 데이터]
 ${JSON.stringify(companiesInfo, null, 2)}
 `;
 
@@ -71,7 +71,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
 
       return {
         answer: response.data.choices[0].message.content,
-        data_source: 'K-Statra DB + Azure AI Agent',
+        data_source: 'DemoStatra DB + Azure AI Agent',
         companies_found: companiesInfo.length,
       };
     } catch (error: any) {
@@ -113,7 +113,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
       }
     }
 
-    const systemPrompt = `당신은 K-Statra B2B 매칭 플랫폼의 친절하고 스마트한 대표 AI 에이전트 Hermes(헤르메스)입니다.
+    const systemPrompt = `당신은 DemoStatra B2B 매칭 플랫폼의 친절하고 스마트한 대표 AI 에이전트 Hermes(헤르메스)입니다.
 사용자에게 가장 적합한 비즈니스 파트너(기업)를 추천하고 플랫폼 안내 및 컨설팅 질문에 정성껏 답변해 주세요.
 반드시 마크다운(Markdown) 형식을 사용하여 단락, 글머리 기호, 굵은 글씨 등을 적용해 답변을 보기 좋고 세련되게 꾸며야 합니다.
 
@@ -125,7 +125,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
       {
         name: 'search_partners',
         description:
-          'K-Statra 파트너 데이터베이스에서 매칭이 필요한 비즈니스 파트너(기업) 목록을 실시간으로 검색합니다.',
+          'DemoStatra 파트너 데이터베이스에서 매칭이 필요한 비즈니스 파트너(기업) 목록을 실시간으로 검색합니다.',
         input_schema: {
           type: 'object',
           properties: {
@@ -377,7 +377,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
         }),
       });
 
-      // 1. K-Statra DB에서 파트너 검색 (도구를 미리 가동)
+      // 1. DemoStatra DB에서 파트너 검색 (도구를 미리 가동)
       const searchResult = await this.partnersService.search({
         q: message,
         limit: 5,
@@ -403,7 +403,7 @@ ${JSON.stringify(companiesInfo, null, 2)}
         });
       }
 
-      const systemPrompt = `당신은 K-Statra B2B 매칭 플랫폼의 친절하고 스마트한 대표 AI 에이전트 Hermes(헤르메스)입니다.
+      const systemPrompt = `당신은 DemoStatra B2B 매칭 플랫폼의 친절하고 스마트한 대표 AI 에이전트 Hermes(헤르메스)입니다.
 사용자에게 가장 적합한 비즈니스 파트너(기업)를 추천하고 플랫폼 안내 및 컨설팅 질문에 정성껏 답변해 주세요.
 반드시 마크다운(Markdown) 형식을 사용하여 단락, 글머리 기호, 굵은 글씨 등을 적용해 답변을 보기 좋고 세련되게 꾸며야 합니다.
 
