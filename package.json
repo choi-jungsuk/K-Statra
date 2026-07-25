@@ -19,5 +19,10 @@
   "devDependencies": {
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "mongoose": "^9.8.0",
+    "xlsx": "^0.18.5"
   }
 }
