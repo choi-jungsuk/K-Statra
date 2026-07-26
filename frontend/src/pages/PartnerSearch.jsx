@@ -647,7 +647,7 @@ export default function PartnerSearch() {
           {/* 에이전트 1: AX 데이터 수집 */}
           <div 
             className="board-agent-card" 
-            onClick={() => navigate('/companies')}
+            onClick={() => navigate('/ax-data')}
             style={{ cursor: 'pointer' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
@@ -734,28 +734,29 @@ export default function PartnerSearch() {
             </p>
           </div>
 
-          {/* 에이전트 4: 스마트 결제 */}
+          {/* 에이전트 4: 비즈 컨설턴트 */}
           <div 
             className="board-agent-card" 
-            onClick={() => navigate('/payments')}
+            onClick={() => navigate('/consultants')}
             style={{ cursor: 'pointer' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
               <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', width: '32px', height: '32px' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ display: 'block' }}>
-                  <rect width="20" height="14" x="2" y="5" rx="2" />
-                  <line x1="2" y1="10" x2="22" y2="10" />
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 16v-4" />
+                  <path d="M12 8h.01" />
                 </svg>
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '스마트계약 결제 Agent' : 'Smart Payment Agent'}
+                {lang === 'ko' ? '글로벌 비즈 컨설턴트 Agent' : 'Global Biz Consultant Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
               {lang === 'ko' 
-                ? '국경 없는 신속하고 안전한 원스톱 무역대금 송금 및 스마트 지갑 간편 결제를 관리합니다.'
-                : 'Manages seamless and secure cross-border trade payments and smart contract settlements.'}
+                ? '지역전문가 컨설팅, 무역서류 지원, 맞춤형 바이어 매칭 등 1:1 맞춤형 컨설팅을 제공합니다.'
+                : 'Provides 1:1 tailored consulting including regional experts, trade docs, and custom buyer matching.'}
             </p>
           </div>
         </section>

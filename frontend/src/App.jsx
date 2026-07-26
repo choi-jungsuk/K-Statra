@@ -32,7 +32,7 @@ import { track } from './utils/analytics.js'
 const navItems = [
   { to: '/overview', key: 'nav_overview' },
   { to: '/partners', key: 'nav_my_partners' },
-  { to: '/agent-hub', key: 'nav_agent_hub' },
+  { to: '/', key: 'nav_agent_hub' },
   { to: '/ax-data', key: 'nav_ax_data' },
   { to: '/schedule', key: 'nav_schedule' },
   { to: '/consultants', key: 'nav_consultant' }
@@ -452,7 +452,7 @@ export default function App() {
           <Route path="/dashboard" element={<Overview />} /> {/* Redirect or alias */}
           <Route path="/analytics" element={<Overview />} /> {/* Redirect or alias */}
           <Route path="/partners" element={<Partners />} />
-          <Route path="/agent-hub" element={<AgentHub />} />
+          <Route path="/agent-hub" element={<PartnerSearch />} />
           <Route path="/ax-data" element={<AXData />} />
           <Route path="/schedule" element={<SchedulePage />} />
           <Route path="/payments" element={<PaymentsPage />} />
