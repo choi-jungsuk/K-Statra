@@ -44,31 +44,31 @@ export default function ConsultantPage() {
 
   const services = [
     {
-      id: 'regional-consulting',
+      id: 'youtube-video',
+      icon: '🎬',
+      titleKo: '유튜브 홍보 동영상 제작 지원',
+      titleEn: 'YouTube Promo Video Production',
+      subtitle: 'Video Marketing',
+      descKo: '해외 바이어의 시선을 사로잡는 참가업체 및 전시회 공식 홍보 동영상을 AI 영상 기법과 마케팅 팀이 제작 지원합니다.',
+      descEn: 'AI-assisted promotional video production to captivate overseas buyers for exhibitors and exhibitions.'
+    },
+    {
+      id: 'buyer-research',
+      icon: '📊',
+      titleKo: '해외 시장 및 바이어 조사 리포트',
+      titleEn: 'Overseas Market & Buyer Research',
+      subtitle: 'Market Research',
+      descKo: '타겟 국가 및 품목별 진입 가능성과 맞춤형 바이어 리스트를 심층 조사하여 전문 컨설팅 리포트로 제공합니다.',
+      descEn: 'In-depth market research reports on entry feasibility and verified buyer shortlists by target country.'
+    },
+    {
+      id: 'global-consulting',
       icon: '🌍',
-      titleKo: '지역전문가 컨설팅',
-      titleEn: 'Regional Expert Consulting',
-      subtitle: 'Regional Expert',
-      descKo: '글로벌 무역 전문가가 타겟 국가(미국, 유럽, 아시아 등)의 현지 시장 규제와 진입 장벽 분석을 맞춤 지원합니다.',
-      descEn: 'Get custom support from global trade experts analyzing local market regulations and entry barriers for target countries.'
-    },
-    {
-      id: 'trade-document',
-      icon: '📄',
-      titleKo: '무역서류 및 규제 지원',
-      titleEn: 'Trade Documents Helper',
-      subtitle: 'Trade Documents',
-      descKo: 'FTA 원산지 증명서(C/O), 관세 혜택 증빙 및 NDA 등 복잡한 무역 실무 서류 작성을 AI Agent와 전문가가 완벽히 보조합니다.',
-      descEn: 'AI agents and experts assist in preparing complex trade documentation such as FTA Certificate of Origin (C/O), tariff benefits, and NDAs.'
-    },
-    {
-      id: 'custom-matching',
-      icon: '🤝',
-      titleKo: '맞춤형 바이어 매칭 주선',
-      titleEn: 'Custom Buyer Matchmaking',
-      subtitle: 'Matchmaking Aftercare',
-      descKo: '전시회 주최사를 위한 잠재 파트너 발굴 및 1:1 비즈니스 미팅 사후 관리(Aftercare) 컨설팅을 제공합니다.',
-      descEn: 'Dedicated buyer matchmaking and 1:1 business meeting aftercare consulting tailored for exhibition organizers.'
+      titleKo: '지역전문가 1:1 맞춤 컨설팅',
+      titleEn: '1:1 Regional Expert Consulting',
+      subtitle: 'Regional Consulting',
+      descKo: '해외 전시 참가 기업의 성공적인 시장 안착을 위해 수출 실무 및 현지 규제 분석 1:1 맞춤 컨설팅을 제공합니다.',
+      descEn: '1:1 tailored consulting on export regulations and local market entry for exhibition participants.'
     }
   ]
 
@@ -93,17 +93,17 @@ export default function ConsultantPage() {
               </svg>
             </div>
             <span style={{ fontWeight: 800, fontSize: '13px', color: '#FCD34D', letterSpacing: '0.5px' }}>
-              {lang === 'ko' ? '글로벌 비즈니스 컨설턴트 AGENT' : 'GLOBAL BIZ CONSULTANT AGENT'}
+              {lang === 'ko' ? '글로벌마케팅 에이전트' : 'GLOBAL MARKETING AGENT'}
             </span>
           </div>
 
           <h1 style={{ fontSize: '28px', fontWeight: 900, marginBottom: '1rem', color: '#ffffff' }}>
-            {lang === 'ko' ? '글로벌 비즈 컨설턴트의 전문 지원 서비스' : 'Global Biz Consultant Solution Center'}
+            {lang === 'ko' ? '글로벌마케팅 에이전트 전문 지원 서비스' : 'Global Marketing Agent Solution Center'}
           </h1>
           <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, margin: 0 }}>
             {lang === 'ko'
-              ? '전시회 주최사와 수출입 기업의 성공적인 글로벌 무역 여정을 위해 DemoStatra의 현지 무역 전문가 및 인공지능 컨설턴트가 1:1 맞춤 솔루션을 제공합니다.'
-              : 'DemoStatra local trade experts and AI consultants deliver 1:1 tailored solutions for seamless global trade operations.'}
+              ? '전시회 부스 참가업체의 마케팅 역량 강화를 위해 유튜브 홍보 동영상 제작 지원 및 해외 시장/바이어 조사 리포트를 제공합니다.'
+              : 'Enhancing exhibitor marketing capabilities with YouTube promotional videos and custom overseas buyer research reports.'}
           </p>
         </div>
       </section>

@@ -93,8 +93,8 @@ export default function AXData() {
   return (
     <div className="ax-data-container" style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', fontFamily: "'Pretendard', sans-serif" }}>
       <header style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1f2937' }}>AX 데이터 엔지니어</h1>
-        <p style={{ color: '#6b7280' }}>자연어로 요청하면 DB에서 관련 데이터를 즉시 추출하여 제공합니다.</p>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1f2937' }}>부스 참가업체 유치 에이전트</h1>
+        <p style={{ color: '#6b7280' }}>전시회 부스 참가 유치를 위한 잠재 기업 DB 및 마케팅용 검증 이메일을 자연어로 즉시 추출합니다.</p>
       </header>
 
       <div style={{ display: 'grid', gridTemplateColumns: currentData ? '1fr 1fr' : '1fr', gap: '2rem', transition: 'all 0.3s ease' }}>
@@ -106,7 +106,7 @@ export default function AXData() {
             {messages.map((msg, idx) => (
               <div key={idx} style={{ alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '80%' }}>
                 {msg.role === 'agent' && (
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#4F46E5', marginBottom: '0.2rem' }}>AX Data Engineer</div>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#4F46E5', marginBottom: '0.2rem' }}>Exhibitor Recruiting Agent</div>
                 )}
                 <div style={{
                   background: msg.role === 'user' ? '#4F46E5' : '#fff',

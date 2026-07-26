@@ -318,17 +318,17 @@ export default function SchedulePage() {
           <span className="search-agent-pulse"></span>
         </div>
         <span className="page-agent-badge-text">
-          {lang === 'ko' ? '1:1 글로벌 밋업 조율 Agent' : '1:1 Global Meetup Coordinator Agent'}
+          {lang === 'ko' ? '사후관리 에이전트' : 'Aftercare Agent'}
         </span>
       </div>
 
       <h2 style={{ marginBottom: '0.5rem', fontWeight: 800 }}>
-        {lang === 'ko' ? '1:1 비즈니스 밋업' : '1:1 Business Meetups'}
+        {lang === 'ko' ? '무역 성사 및 부스 재참가 사후관리' : 'Trade Deal & Re-exhibition Aftercare'}
       </h2>
       <p style={{ marginBottom: '2rem', color: '#6b7280', fontSize: '14px', maxWidth: '800px', lineHeight: 1.5 }}>
         {lang === 'ko' 
-          ? '장벽 없는 글로벌 바이어 탐색을 위한 온라인 화상 미팅부터, 대형 전시회 오프라인 부스에서의 1:1 현장 계약 조율까지 원스톱으로 매칭합니다.' 
-          : 'Coordinate online video meetings for quick screening, and schedule 1:1 in-person meetings at major exhibition booths.'}
+          ? '1회성 전시회에 그치지 않고 상담 기업들의 실질적인 무역 거래 성사를 지원하며, 차년도 전시회 부스 재참가를 유치하는 지속적인 사후관리(Aftercare)를 수행합니다.' 
+          : 'Continuous aftercare monitoring to support trade deal conversion and re-recruit booth exhibitors for the following year.'}
       </p>
 
       {/* sliding tabs row */}

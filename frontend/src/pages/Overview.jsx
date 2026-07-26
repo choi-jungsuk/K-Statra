@@ -151,7 +151,7 @@ export default function Overview() {
                     
                     <div className="command-center-card" onClick={() => navigate('/ax-data')} style={{ cursor: 'pointer' }}>
                         <div className="command-center-card-header">
-                            <h5>{lang === 'ko' ? '부스유치 & 마케팅 DB Agent' : 'Booth Recruiting Agent'}</h5>
+                            <h5>{lang === 'ko' ? '부스 참가업체 유치 에이전트' : 'Exhibitor Recruiting Agent'}</h5>
                             <span className="command-center-status" style={{ color: '#F59E0B' }}>READY 🟡</span>
                         </div>
                         <p>{lang === 'ko' ? '잠재 참가기업 DB 및 마케팅 이메일 수집 중' : 'Collecting prospective exhibitor DB & emails'}</p>
@@ -159,7 +159,7 @@ export default function Overview() {
 
                     <div className="command-center-card" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
                         <div className="command-center-card-header">
-                            <h5>{lang === 'ko' ? '글로벌 바이어 유치 Agent' : 'Buyer Attraction Agent'}</h5>
+                            <h5>{lang === 'ko' ? '글로벌 바이어 유치 에이전트' : 'Global Buyer Attraction Agent'}</h5>
                             <span className="command-center-status">STANDBY 🟢</span>
                         </div>
                         <p>{lang === 'ko' ? '부스 유치를 위한 맞춤 해외 바이어 탐색 완료' : 'Verified global buyers matched for exhibitors'}</p>
@@ -167,10 +167,10 @@ export default function Overview() {
 
                     <div className="command-center-card" onClick={() => navigate('/schedule')} style={{ cursor: 'pointer' }}>
                         <div className="command-center-card-header">
-                            <h5>{lang === 'ko' ? '무역 성사 사후관리 Agent' : 'Deal Aftercare Agent'}</h5>
+                            <h5>{lang === 'ko' ? '사후관리 에이전트' : 'Aftercare Agent'}</h5>
                             <span className="command-center-status" style={{ color: '#4F46E5' }}>ACTIVE 🔵</span>
                         </div>
-                        <p>{lang === 'ko' ? '1회성을 넘어선 실질 무역거래 성사 사후관리' : 'Continuous aftercare for trade deal conversion'}</p>
+                        <p>{lang === 'ko' ? '무역 성사 지원 및 차년도 부스 재참가 유치 사후관리' : 'Aftercare for trade deals & next-year exhibitor retention'}</p>
                     </div>
 
                     {/* <div className="command-center-card">
@@ -183,7 +183,7 @@ export default function Overview() {
 
                     <div className="command-center-card" onClick={() => navigate('/consultants')} style={{ cursor: 'pointer' }}>
                         <div className="command-center-card-header">
-                            <h5>{lang === 'ko' ? '마케팅 부스터 Agent' : 'Marketing Booster Agent'}</h5>
+                            <h5>{lang === 'ko' ? '글로벌마케팅 에이전트' : 'Global Marketing Agent'}</h5>
                             <span className="command-center-status">READY 🟢</span>
                         </div>
                         <p>{lang === 'ko' ? '유튜브 영상 제작 및 AI 바이어 조사 지원' : 'YouTube marketing & AI buyer research'}</p>
