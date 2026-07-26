@@ -7,6 +7,9 @@ import Modal from '../ui/Modal.jsx'
 import { track } from '../utils/analytics.js'
 import { useNavigate } from 'react-router-dom'
 
+// 좌측 AI 기반 비즈니스 파트너 검색 필터바 표시 여부 (향후 필요 시 true로 변경하여 복원 가능)
+const SHOW_SIDEBAR_FILTER = false
+
 const sidebarPresets = {
   partnership: [
     { value: '', label: 'All partnership types' },
@@ -490,42 +493,44 @@ export default function PartnerSearch() {
   const totalPages = Math.ceil(preview.length / ITEMS_PER_PAGE)
 
   return (
-    <div className="partner-layout">
-      <aside className="search-sidebar" aria-label="Search filters">
-        <div>
-          <h2
-            className="sidebar-title"
-            style={lang === 'ko' ? { fontSize: '1.05rem', lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden' } : undefined}
-            title={t('sidebar_title')}
-          >
-            {t('sidebar_title')}
-          </h2>
-          <p className="muted small">{t('sidebar_description')}</p>
-        </div>
+    <div className="partner-layout" style={SHOW_SIDEBAR_FILTER ? undefined : { gridTemplateColumns: '1fr', gap: 0 }}>
+      {SHOW_SIDEBAR_FILTER && (
+        <aside className="search-sidebar" aria-label="Search filters">
+          <div>
+            <h2
+              className="sidebar-title"
+              style={lang === 'ko' ? { fontSize: '1.05rem', lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden' } : undefined}
+              title={t('sidebar_title')}
+            >
+              {t('sidebar_title')}
+            </h2>
+            <p className="muted small">{t('sidebar_description')}</p>
+          </div>
 
-        <div className="filter-stack">
-          {filterConfig.map((filter) => (
-            <label className="filter-group" key={filter.key}>
-              <span>{filter.label}</span>
-              <select value={filters[filter.key]} onChange={(e) => handleFilterChange(filter.key, e.target.value)}>
-                {filter.options.map((option) => (
-                  <option value={option.value} key={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-          ))}
-        </div>
-        <div className="sidebar-actions">
-          <Button onClick={runSearch} loading={loadingCompanies}>
-            {t('apply_filters')}
-          </Button>
-          <button type="button" className="link-btn" onClick={resetFilters}>
-            {t('reset_filters')}
-          </button>
-        </div>
-      </aside>
+          <div className="filter-stack">
+            {filterConfig.map((filter) => (
+              <label className="filter-group" key={filter.key}>
+                <span>{filter.label}</span>
+                <select value={filters[filter.key]} onChange={(e) => handleFilterChange(filter.key, e.target.value)}>
+                  {filter.options.map((option) => (
+                    <option value={option.value} key={option.label}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ))}
+          </div>
+          <div className="sidebar-actions">
+            <Button onClick={runSearch} loading={loadingCompanies}>
+              {t('apply_filters')}
+            </Button>
+            <button type="button" className="link-btn" onClick={resetFilters}>
+              {t('reset_filters')}
+            </button>
+          </div>
+        </aside>
+      )}
 
       <section className="search-content">
         <section className="card hero" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
