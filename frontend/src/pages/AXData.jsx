@@ -5,7 +5,7 @@ export default function AXData() {
   const [messages, setMessages] = useState([
     {
       role: 'agent',
-      text: '안녕하세요! AX 데이터 엔지니어입니다. KOAA SHOW 몽고DB에 구축된 업체 데이터를 찾아드릴게요. 원하시는 조건을 자유롭게 말씀해 주세요.',
+      text: '안녕하세요! AX 데이터 엔지니어입니다. DB에 구축된 업체 데이터를 찾아드릴게요. 원하시는 조건을 자유롭게 말씀해 주세요.',
     }
   ]);
   const [input, setInput] = useState('');
@@ -94,7 +94,7 @@ export default function AXData() {
     <div className="ax-data-container" style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', fontFamily: "'Pretendard', sans-serif" }}>
       <header style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1f2937' }}>AX 데이터 엔지니어</h1>
-        <p style={{ color: '#6b7280' }}>자연어로 요청하면 몽고DB에서 KOAA SHOW 관련 데이터를 즉시 추출하여 제공합니다.</p>
+        <p style={{ color: '#6b7280' }}>자연어로 요청하면 DB에서 관련 데이터를 즉시 추출하여 제공합니다.</p>
       </header>
 
       <div style={{ display: 'grid', gridTemplateColumns: currentData ? '1fr 1fr' : '1fr', gap: '2rem', transition: 'all 0.3s ease' }}>
