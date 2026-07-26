@@ -93,12 +93,12 @@ export default function ConsultantPage() {
               </svg>
             </div>
             <span style={{ fontWeight: 800, fontSize: '13px', color: '#FCD34D', letterSpacing: '0.5px' }}>
-              {lang === 'ko' ? '글로벌마케팅 에이전트' : 'GLOBAL MARKETING AGENT'}
+              {lang === 'ko' ? '글로벌마케팅 Agent' : 'GLOBAL MARKETING AGENT'}
             </span>
           </div>
 
           <h1 style={{ fontSize: '28px', fontWeight: 900, marginBottom: '1rem', color: '#ffffff' }}>
-            {lang === 'ko' ? '글로벌마케팅 에이전트 전문 지원 서비스' : 'Global Marketing Agent Solution Center'}
+            {lang === 'ko' ? '글로벌마케팅 Agent 전문 지원 서비스' : 'Global Marketing Agent Solution Center'}
           </h1>
           <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, margin: 0 }}>
             {lang === 'ko'

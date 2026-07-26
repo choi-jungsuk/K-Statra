@@ -93,7 +93,7 @@ export default function AXData() {
   return (
     <div className="ax-data-container" style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', fontFamily: "'Pretendard', sans-serif" }}>
       <header style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1f2937' }}>부스 참가업체 유치 에이전트</h1>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1f2937' }}>부스 참가업체 유치 Agent</h1>
         <p style={{ color: '#6b7280' }}>전시회 부스 참가 유치를 위한 잠재 기업 DB 및 마케팅용 검증 이메일을 자연어로 즉시 추출합니다.</p>
       </header>
 

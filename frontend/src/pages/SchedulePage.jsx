@@ -318,7 +318,7 @@ export default function SchedulePage() {
           <span className="search-agent-pulse"></span>
         </div>
         <span className="page-agent-badge-text">
-          {lang === 'ko' ? '사후관리 에이전트' : 'Aftercare Agent'}
+          {lang === 'ko' ? '사후관리 Agent' : 'Aftercare Agent'}
         </span>
       </div>
 

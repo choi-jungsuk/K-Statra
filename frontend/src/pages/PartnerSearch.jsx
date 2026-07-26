@@ -682,7 +682,7 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '부스 참가업체 유치 에이전트' : 'Exhibitor Recruiting Agent'}
+                {lang === 'ko' ? '부스 참가업체 유치 Agent' : 'Exhibitor Recruiting Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
@@ -718,7 +718,7 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '글로벌 바이어 유치 에이전트' : 'Global Buyer Attraction Agent'}
+                {lang === 'ko' ? '글로벌 바이어 유치 Agent' : 'Global Buyer Attraction Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
@@ -745,7 +745,7 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '사후관리 에이전트' : 'Aftercare Agent'}
+                {lang === 'ko' ? '사후관리 Agent' : 'Aftercare Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
@@ -771,7 +771,7 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '글로벌마케팅 에이전트' : 'Global Marketing Agent'}
+                {lang === 'ko' ? '글로벌마케팅 Agent' : 'Global Marketing Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
