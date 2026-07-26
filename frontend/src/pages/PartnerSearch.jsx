@@ -560,7 +560,7 @@ export default function PartnerSearch() {
               }}
               placeholder={
                 t('search_placeholder') ||
-                '예시 : K-뷰티 상품을 베트남으로 수출하고 싶어. 베트남의 뷰티상품 수입업체 또는 디스트리뷰터를 추천해 줘'
+                '예시 : 2026 모빌리티·뷰티·의료 전시회 부스 참가기업 모집을 위한 타겟 제조사 및 마케팅 이메일 리스트를 추출해 줘'
               }
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -580,14 +580,14 @@ export default function PartnerSearch() {
             </button>
           </div>
 
-          {/* Quick Suggested Search Chips for Uzbekistan Demo */}
+          {/* Multi-industry Exhibitor & Buyer Suggested Search Chips */}
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '14px', flexWrap: 'wrap', zIndex: 10, position: 'relative' }}>
             <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', alignSelf: 'center', fontWeight: '500' }}>
               💡 {lang === 'ko' ? '시연 단축어:' : 'Suggested:'}
             </span>
             <button
               onClick={() => {
-                const q = 'Uzbekistan automotive EV parts buyer distributor importer';
+                const q = 'US automotive EV parts manufacturer exhibitor DB and verified marketing emails';
                 setSearch(q);
                 runSearch(q);
               }}
@@ -604,11 +604,11 @@ export default function PartnerSearch() {
                 transition: 'all 0.2s'
               }}
             >
-              🇺🇿 Uzbekistan Auto Parts Buyers
+              🇺🇸 {lang === 'ko' ? '미국 자동차부품 제조사 이메일 발굴' : 'US Auto Parts Exhibitor DB & Emails'}
             </button>
             <button
               onClick={() => {
-                const q = 'Uzbekistan automobile spare parts importer buyer distributor';
+                const q = 'K-Beauty cosmetics manufacturer prospective exhibitor targets and emails';
                 setSearch(q);
                 runSearch(q);
               }}
@@ -625,7 +625,28 @@ export default function PartnerSearch() {
                 transition: 'all 0.2s'
               }}
             >
-              ⚙️ Uzbekistan Spare Parts Importers
+              💄 {lang === 'ko' ? 'K-뷰티 전시회 부스 유치 타겟 명단' : 'K-Beauty Exhibitor Recruiting Targets'}
+            </button>
+            <button
+              onClick={() => {
+                const q = 'Germany medical device bio distributor and importer buyer matching list';
+                setSearch(q);
+                runSearch(q);
+              }}
+              className="demo-chip-btn"
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                border: '1px solid rgba(255, 255, 255, 0.22)',
+                borderRadius: '16px',
+                color: '#ffffff',
+                padding: '5px 12px',
+                fontSize: '11.5px',
+                cursor: 'pointer',
+                fontWeight: '500',
+                transition: 'all 0.2s'
+              }}
+            >
+              🏥 {lang === 'ko' ? '독일 의료기기 바이어 매칭 리스트' : 'Germany Medical Buyer Matching List'}
             </button>
           </div>
         </section>
@@ -644,7 +665,7 @@ export default function PartnerSearch() {
             </span>
           </div>
 
-          {/* 에이전트 1: AX 데이터 수집 */}
+          {/* 에이전트 1: 부스유치 & 마케팅 DB */}
           <div 
             className="board-agent-card" 
             onClick={() => navigate('/ax-data')}
@@ -661,17 +682,17 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? 'AX 데이터 수집 Agent' : 'AX Data Collection Agent'}
+                {lang === 'ko' ? '부스유치 & 마케팅 DB Agent' : 'Booth Recruiting & DB Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
               {lang === 'ko' 
-                ? '전시회 참가기업의 브로셔·웹사이트·디렉토리 정보를 수집해 AX 기업 프로필 기초 데이터를 준비합니다.'
-                : 'Collects exhibitor brochures, websites, and directory data to prepare AX company profiles.'}
+                ? '전시회 부스 참가 유치를 위해 유망 제조사 데이터베이스(DB)와 마케팅용 검증 이메일을 즉시 수집하고 엑셀로 추출합니다.'
+                : 'Collects prospective exhibitor DB and verified marketing emails for exhibition booth recruitment.'}
             </p>
           </div>
 
-          {/* 에이전트 2: 파트너 발굴 */}
+          {/* 에이전트 2: 글로벌 바이어 유치 */}
           <div 
             className="board-agent-card" 
             onClick={() => {
@@ -697,17 +718,17 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '비즈 파트너 발굴 Agent' : 'Partner Discovery Agent'}
+                {lang === 'ko' ? '글로벌 바이어 유치 Agent' : 'Global Buyer Attraction Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
               {lang === 'ko' 
-                ? '사용자의 비즈니스 니즈를 정밀 분석하여 적합한 글로벌 바이어/공급망 파트너를 실시간 탐색합니다.'
-                : 'Analyzes business needs to discover optimal global buyers and supply-chain partners in real time.'}
+                ? '부스 참가기업에게 가장 강력한 유인책이 되는 최적의 해외 진성 바이어를 실시간으로 탐색하고 1:1 매칭합니다.'
+                : 'Real-time discovery and 1:1 matching of verified global buyers as the ultimate incentive for booth exhibitors.'}
             </p>
           </div>
 
-          {/* 에이전트 3: 밋업 조율 */}
+          {/* 에이전트 3: 무역 성사 사후관리 */}
           <div 
             className="board-agent-card" 
             onClick={() => navigate('/schedule')}
@@ -724,17 +745,17 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '1:1 글로벌 밋업 조율 Agent' : 'Meetup Coordinator Agent'}
+                {lang === 'ko' ? '무역 성사 사후관리 Agent' : 'Trade Deal Aftercare Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
               {lang === 'ko' 
-                ? '매칭된 기업들과의 온라인 영상 미팅 스케줄링 및 글로벌 오프라인 전시회 부스 조율을 대행합니다.'
-                : 'Coordinates online video meetings and offline global exhibition booth schedules with matched partners.'}
+                ? '1회성 전시회를 넘어, 상담 기업들이 실질적인 수출입 계약과 무역 성사에 이르도록 지속적인 사후관리(Aftercare)를 수행합니다.'
+                : 'Continuous aftercare monitoring to ensure 1:1 exhibition meetings convert into actual cross-border trade contracts.'}
             </p>
           </div>
 
-          {/* 에이전트 4: 비즈 컨설턴트 */}
+          {/* 에이전트 4: 마케팅 부스터 */}
           <div 
             className="board-agent-card" 
             onClick={() => navigate('/consultants')}
@@ -750,13 +771,13 @@ export default function PartnerSearch() {
                 <span className="search-agent-pulse"></span>
               </div>
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '글로벌 비즈 컨설턴트 Agent' : 'Global Biz Consultant Agent'}
+                {lang === 'ko' ? '마케팅 부스터 Agent' : 'Marketing Booster Agent'}
               </h4>
             </div>
             <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
               {lang === 'ko' 
-                ? '지역전문가 컨설팅, 무역서류 지원, 맞춤형 바이어 매칭 등 1:1 맞춤형 컨설팅을 제공합니다.'
-                : 'Provides 1:1 tailored consulting including regional experts, trade docs, and custom buyer matching.'}
+                ? '부스 참가업체의 마케팅 역량 강화를 위해 유튜브 홍보 영상 제작 지원 및 맞춤 해외 바이어 조사 리포트를 제안합니다.'
+                : 'Enhances exhibitor marketing capabilities with YouTube promo video production and custom overseas buyer research reports.'}
             </p>
           </div>
         </section>
