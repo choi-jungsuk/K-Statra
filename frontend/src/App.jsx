@@ -18,6 +18,7 @@ import AdminStats from './pages/AdminStats.jsx'
 import ContactPage from './pages/ContactPage.jsx'
 import About from './pages/About.jsx'
 import AgentHub from './pages/AgentHub.jsx'
+import AXData from './pages/AXData.jsx'
 import LanguageSwitcher from './ui/LanguageSwitcher.jsx'
 import FeedbackButton from './ui/FeedbackButton.jsx'
 import Button from './ui/Button.jsx'
@@ -31,6 +32,7 @@ const navItems = [
   { to: '/overview', key: 'nav_overview' },
   { to: '/partners', key: 'nav_my_partners' },
   { to: '/agent-hub', key: 'nav_agent_hub' },
+  { to: '/ax-data', key: 'nav_ax_data' },
   { to: '/schedule', key: 'nav_schedule' },
   { to: '/payments', key: 'nav_payments' },
   { to: '/about', key: 'nav_about' },
@@ -451,6 +453,7 @@ export default function App() {
           <Route path="/analytics" element={<Overview />} /> {/* Redirect or alias */}
           <Route path="/partners" element={<Partners />} />
           <Route path="/agent-hub" element={<AgentHub />} />
+          <Route path="/ax-data" element={<AXData />} />
           <Route path="/schedule" element={<SchedulePage />} />
           <Route path="/payments" element={<PaymentsPage />} />
           <Route path="/about" element={<About />} />
