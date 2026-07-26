@@ -19,6 +19,7 @@ import ContactPage from './pages/ContactPage.jsx'
 import About from './pages/About.jsx'
 import AgentHub from './pages/AgentHub.jsx'
 import AXData from './pages/AXData.jsx'
+import ConsultantPage from './pages/ConsultantPage.jsx'
 import LanguageSwitcher from './ui/LanguageSwitcher.jsx'
 import FeedbackButton from './ui/FeedbackButton.jsx'
 import Button from './ui/Button.jsx'
@@ -34,8 +35,7 @@ const navItems = [
   { to: '/agent-hub', key: 'nav_agent_hub' },
   { to: '/ax-data', key: 'nav_ax_data' },
   { to: '/schedule', key: 'nav_schedule' },
-  { to: '/payments', key: 'nav_payments' },
-  { to: '/about', key: 'nav_about' },
+  { to: '/consultants', key: 'nav_consultant' }
 ]
 
 const notificationCount = 3
@@ -456,6 +456,7 @@ export default function App() {
           <Route path="/ax-data" element={<AXData />} />
           <Route path="/schedule" element={<SchedulePage />} />
           <Route path="/payments" element={<PaymentsPage />} />
+          <Route path="/consultants" element={<ConsultantPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/companies" element={<CompanyList />} />
           <Route path="/companies/new" element={<CompanyInputForm />} />

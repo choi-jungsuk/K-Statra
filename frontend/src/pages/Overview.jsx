@@ -149,7 +149,7 @@ export default function Overview() {
 
                 <div className="command-center-grid">
                     
-                    <div className="command-center-card">
+                    <div className="command-center-card" onClick={() => navigate('/ax-data')} style={{ cursor: 'pointer' }}>
                         <div className="command-center-card-header">
                             <h5>{lang === 'ko' ? 'AX 데이터 수집 Agent' : 'AX Data Collector'}</h5>
                             <span className="command-center-status" style={{ color: '#F59E0B' }}>READY 🟡</span>
@@ -157,15 +157,15 @@ export default function Overview() {
                         <p>{lang === 'ko' ? '전시회 참가기업 브로셔·웹사이트·디렉토리 수집 준비 중' : 'Collecting exhibitor brochures, websites, and directories'}</p>
                     </div>
 
-                    <div className="command-center-card">
+                    <div className="command-center-card" onClick={() => navigate('/agent-hub')} style={{ cursor: 'pointer' }}>
                         <div className="command-center-card-header">
-                            <h5>{lang === 'ko' ? '바이어 발굴 Agent' : 'Buyer Discovery'}</h5>
+                            <h5>{lang === 'ko' ? '비즈 파트너 발굴 Agent' : 'Buyer Discovery'}</h5>
                             <span className="command-center-status">STANDBY 🟢</span>
                         </div>
                         <p>{lang === 'ko' ? '26,347개 무역 기업 원장 분석 완료' : '26,347 global companies indexed'}</p>
                     </div>
 
-                    <div className="command-center-card">
+                    <div className="command-center-card" onClick={() => navigate('/schedule')} style={{ cursor: 'pointer' }}>
                         <div className="command-center-card-header">
                             <h5>{lang === 'ko' ? '1:1 밋업 조율 Agent' : 'Meetup Coordinator'}</h5>
                             <span className="command-center-status" style={{ color: '#4F46E5' }}>ACTIVE 🔵</span>
@@ -173,15 +173,15 @@ export default function Overview() {
                         <p>{lang === 'ko' ? 'KOAA SHOW 2026 PoC 매핑 중' : 'KOAA SHOW 2026 PoC Live'}</p>
                     </div>
 
-                    <div className="command-center-card">
+                    {/* <div className="command-center-card">
                         <div className="command-center-card-header">
                             <h5>{lang === 'ko' ? '스마트계약 결제 Agent' : 'XRP Escrow Agent'}</h5>
                             <span className="command-center-status">READY 🟢</span>
                         </div>
                         <p>{lang === 'ko' ? 'XRPL 공식 테스트넷 조회 성공' : 'XRPL Testnet connected'}</p>
-                    </div>
+                    </div> */}
 
-                    <div className="command-center-card">
+                    <div className="command-center-card" onClick={() => navigate('/consultants')} style={{ cursor: 'pointer' }}>
                         <div className="command-center-card-header">
                             <h5>{lang === 'ko' ? '비즈 컨설턴트 Agent' : 'Biz Consultant'}</h5>
                             <span className="command-center-status">READY 🟢</span>
