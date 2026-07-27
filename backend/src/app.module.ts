@@ -12,6 +12,7 @@ import { InsightsModule } from './modules/insights/insights.module';
 import { ConsultantsModule } from './modules/consultants/consultants.module';
 import { AgentModule } from './modules/agent/agent.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ApplicationsModule } from './modules/applications/applications.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AuthModule } from './modules/auth/auth.module';
     ConsultantsModule,
     AgentModule,
     AuthModule,
+    ApplicationsModule,
   ],
 })
 export class AppModule {}

@@ -8,6 +8,8 @@ import { CompaniesModule } from '../companies/companies.module';
 import { BuyersModule } from '../buyers/buyers.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { MatchLog, MatchLogSchema } from '../matches/schemas/match-log.schema';
+import { ExhibitorUploadController } from './exhibitor-upload.controller';
+import { ExhibitorUploadService } from './exhibitor-upload.service';
 
 @Module({
   imports: [
@@ -19,8 +21,8 @@ import { MatchLog, MatchLogSchema } from '../matches/schemas/match-log.schema';
     BuyersModule,
     PaymentsModule,
   ],
-  controllers: [AdminController],
-  providers: [AdminService, AdminTokenGuard],
+  controllers: [AdminController, ExhibitorUploadController],
+  providers: [AdminService, AdminTokenGuard, ExhibitorUploadService],
   exports: [AdminService],
 })
 export class AdminModule {}

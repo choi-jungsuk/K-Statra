@@ -1,11 +1,11 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
-import { PartnersService } from '../partners/partners.service';
+import { PartnersService } from '../../partners/partners.service';
 import axios from 'axios';
 import { Observable, Subject } from 'rxjs';
 import * as readline from 'readline';
-import { getOpenAIChatModel } from '../../config/openai-models';
+import { getOpenAIChatModel } from '../../../config/openai-models';
 
 @Injectable()
 export class AgentService {

@@ -19,6 +19,9 @@ import ContactPage from './pages/ContactPage.jsx'
 import About from './pages/About.jsx'
 import AgentHub from './pages/AgentHub.jsx'
 import AXData from './pages/AXData.jsx'
+import AdminDataUpload from './pages/AdminDataUpload.jsx'
+import ApplicationForm from './pages/ApplicationForm.jsx'
+import AdminApplications from './pages/AdminApplications.jsx'
 import ConsultantPage from './pages/ConsultantPage.jsx'
 import LanguageSwitcher from './ui/LanguageSwitcher.jsx'
 import FeedbackButton from './ui/FeedbackButton.jsx'
@@ -465,9 +468,12 @@ export default function App() {
           <Route path="/matches/detail" element={<ContactPage />} />
           <Route path="/payments/checkout/:id" element={<PaymentCheckout />} />
           <Route path="/payments/:id" element={<PaymentStatus />} />
+          <Route path="/apply/:eventId" element={<ApplicationForm />} />
           <Route path="/admin/payments" element={<AdminPayments />} />
           <Route path="/admin/matches" element={<AdminMatches />} />
           <Route path="/admin/stats" element={<AdminStats />} />
+          <Route path="/admin/data-upload" element={<AdminDataUpload />} />
+          <Route path="/admin/applications" element={<AdminApplications />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
