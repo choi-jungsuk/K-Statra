@@ -72,11 +72,22 @@ export default function AXData() {
     }
 
     try {
-      const response = await fetch(`${BASE_URL}/agent/data-engineer-chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: userMessage }),
-      });
+      let response;
+      try {
+        response = await fetch(`${BASE_URL}/agent/data-engineer-chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: userMessage }),
+        });
+      } catch (localErr) {
+        // 로컬 백엔드가 실행되지 않았을 경우 클라우드 서버(Railway)로 자동 재시도
+        const CLOUD_URL = 'https://backend-production-601f2.up.railway.app';
+        response = await fetch(`${CLOUD_URL}/agent/data-engineer-chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: userMessage }),
+        });
+      }
 
       const result = await response.json();
 
@@ -97,7 +108,7 @@ export default function AXData() {
         }
       }
     } catch (err) {
-      const errText = '서버와 통신할 수 없습니다.';
+      const errText = '서버 통신에 실패했습니다. 백엔드 서버 상태를 확인해 주세요.';
       if (targetCategory === CATEGORY_MARKET) {
         setMarketMessages((prev) => [...prev, { role: 'agent', text: errText }]);
       } else {
@@ -452,6 +463,49 @@ export default function AXData() {
                       }}>
                         {msg.text}
                       </div>
+                      {msg.role === 'agent' && idx === msgs.length - 1 && data && data.length > 0 && (
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          marginTop: '8px',
+                          padding: '8px 12px',
+                          background: '#f8fafc',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: '8px',
+                          flexWrap: 'wrap',
+                        }}>
+                          <span style={{ fontSize: '12px', fontWeight: 700, color: '#475569', marginRight: '4px' }}>
+                            💡 검색 결과({data.length}건) 내보내기:
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleExportExcel(data, prefix)}
+                            style={{
+                              display: 'inline-flex', alignItems: 'center', gap: '4px',
+                              padding: '6px 12px', background: '#10b981', color: '#fff',
+                              border: 'none', borderRadius: '6px', fontSize: '12px',
+                              fontWeight: 700, cursor: 'pointer',
+                              boxShadow: '0 1px 2px rgba(16,185,129,0.3)',
+                            }}
+                          >
+                            📊 엑셀 다운로드
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleExportPDF(data, `${cat.titleKo} - 업체 리스트`)}
+                            style={{
+                              display: 'inline-flex', alignItems: 'center', gap: '4px',
+                              padding: '6px 12px', background: '#ef4444', color: '#fff',
+                              border: 'none', borderRadius: '6px', fontSize: '12px',
+                              fontWeight: 700, cursor: 'pointer',
+                              boxShadow: '0 1px 2px rgba(239,68,68,0.3)',
+                            }}
+                          >
+                            📄 PDF 다운로드
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ))}
                   {loading && (
