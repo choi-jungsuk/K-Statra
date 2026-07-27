@@ -460,24 +460,21 @@ ${JSON.stringify(companiesInfo, null, 2)}
 
     try {
       const systemPrompt = [
-        'You are a MongoDB expert query generator for KOAA SHOW companies collection.',
-        'The collection has documents with these fields:',
-        '- type: domestic or overseas',
-        '- company_name: string',
-        '- email: string',
-        '- website: string',
-        '- country: string',
-        '- region: string',
-        '- industry: string',
-        '- description: string',
-        '- original_data.source_group: string (contains tags, source file names, or special group names like "KAICA", "협동조합", "지사화사업", "생기연", etc.)',
+        'You are a MongoDB expert query generator for K-Statra companies collection.',
+        'The collection documents have these EXACT fields:',
+        '- name: string (Korean company name)',
+        '- nameEn: string (English company name)',
+        '- industry: string (Industry/Category)',
+        '- profileText: string (Company description and overview)',
+        '- tags: array of strings',
+        '- location.country: string',
         '',
-        'CRITICAL RULE: For Korean/English keywords, extract the core root noun or acronym (e.g., use "KAICA|협동조합" for "KAICA(협동조합)", "지사화" instead of "지사화업체", "자동차" instead of "자동차부품") for regex to match all variations.',
+        'CRITICAL RULE: For Korean/English keywords, extract the core root noun or acronym (e.g., use "IT|월드|WIS|2025" for "2025 월드 IT 쇼", "KAICA|협동조합" for "KAICA(협동조합)") for regex to match all variations.',
         'Convert the user natural language query into a valid MongoDB filter object (JSON).',
-        'Example 1: "KAICA(협동조합) 업체 리스트" -> {"$or": [{"original_data.source_group": {"$regex": "KAICA|협동조합", "$options": "i"}}, {"description": {"$regex": "KAICA|협동조합", "$options": "i"}}, {"company_name": {"$regex": "KAICA|협동조합", "$options": "i"}}, {"industry": {"$regex": "KAICA|협동조합", "$options": "i"}}]}',
-        'Example 2: "국내 업체 중 화장품 찾아줘" -> {"type": "domestic", "$or": [{"industry": {"$regex": "화장품", "$options": "i"}}, {"description": {"$regex": "화장품", "$options": "i"}}, {"original_data.source_group": {"$regex": "화장품", "$options": "i"}}, {"company_name": {"$regex": "화장품", "$options": "i"}}]}',
-        'Example 3: "미 디트로이트 현대기아 벤더사의 국내업체" -> {"type": "domestic", "$or": [{"description": {"$regex": "디트로이트|현대|기아|벤더", "$options": "i"}}, {"industry": {"$regex": "디트로이트|현대|기아|벤더", "$options": "i"}}, {"original_data.source_group": {"$regex": "디트로이트|현대|기아|벤더", "$options": "i"}}, {"company_name": {"$regex": "디트로이트|현대|기아|벤더", "$options": "i"}}]}',
-        'Example 4: "지사화업체 명단 추출해줘" -> {"original_data.source_group": {"$regex": "지사화", "$options": "i"}}',
+        'Example 1: "2025 월드 IT 쇼 참가업체 리스트" -> {"$or": [{"name": {"$regex": "IT|월드|WIS|2025", "$options": "i"}}, {"industry": {"$regex": "IT|월드|WIS|2025", "$options": "i"}}, {"profileText": {"$regex": "IT|월드|WIS|2025", "$options": "i"}}, {"tags": {"$regex": "IT|월드|WIS|2025", "$options": "i"}}]}',
+        'Example 2: "KAICA(협동조합) 업체 리스트" -> {"$or": [{"name": {"$regex": "KAICA|협동조합", "$options": "i"}}, {"industry": {"$regex": "KAICA|협동조합", "$options": "i"}}, {"profileText": {"$regex": "KAICA|협동조합", "$options": "i"}}, {"tags": {"$regex": "KAICA|협동조합", "$options": "i"}}]}',
+        'Example 3: "국내 업체 중 화장품 찾아줘" -> {"$or": [{"name": {"$regex": "화장품", "$options": "i"}}, {"industry": {"$regex": "화장품", "$options": "i"}}, {"profileText": {"$regex": "화장품", "$options": "i"}}, {"tags": {"$regex": "화장품", "$options": "i"}}]}',
+        'Example 4: "미 디트로이트 현대기아 벤더사" -> {"$or": [{"name": {"$regex": "디트로이트|현대|기아|벤더", "$options": "i"}}, {"industry": {"$regex": "디트로이트|현대|기아|벤더", "$options": "i"}}, {"profileText": {"$regex": "디트로이트|현대|기아|벤더", "$options": "i"}}, {"tags": {"$regex": "디트로이트|현대|기아|벤더", "$options": "i"}}]}',
         '',
         'ONLY RETURN THE JSON OBJECT. No markdown, no explanations. Make sure it is valid JSON.'
       ].join('\n');
@@ -503,21 +500,38 @@ ${JSON.stringify(companiesInfo, null, 2)}
       try {
         filter = JSON.parse(filterJson);
       } catch (parseErr) {
-        const cleanKeyword = query.replace(/(업체|리스트|엑셀|파일|정리|해줘|찾아줘|추출)/g, '').trim();
+        const cleanKeyword = query.replace(/(업체|참가업체|리스트|엑셀|파일|정리|해줘|찾아줘|추출|출력)/g, '').trim();
         const terms = cleanKeyword.split(/\s+/).filter(Boolean).join('|');
         filter = {
           $or: [
-            { 'original_data.source_group': { $regex: terms || cleanKeyword, $options: 'i' } },
-            { company_name: { $regex: terms || cleanKeyword, $options: 'i' } },
-            { description: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { name: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { nameEn: { $regex: terms || cleanKeyword, $options: 'i' } },
             { industry: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { profileText: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { tags: { $regex: terms || cleanKeyword, $options: 'i' } },
           ],
         };
       }
 
       this.logger.log('Generated filter: ' + JSON.stringify(filter));
       
-      const companies = await this.connection.collection('companies').find(filter).limit(200).toArray();
+      let companies = await this.connection.collection('companies').find(filter).limit(300).toArray();
+
+      // 만약 정규식으로도 0건이면 키워드 단어별 이중 Fallback 검색 시도
+      if (!companies || companies.length === 0) {
+        const cleanKeyword = query.replace(/(업체|참가업체|리스트|엑셀|파일|정리|해줘|찾아줘|추출|출력)/g, '').trim();
+        const terms = cleanKeyword.split(/\s+/).filter(Boolean).join('|');
+        const fallbackFilter = {
+          $or: [
+            { name: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { nameEn: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { industry: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { profileText: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { tags: { $regex: terms || cleanKeyword, $options: 'i' } },
+          ],
+        };
+        companies = await this.connection.collection('companies').find(fallbackFilter).limit(300).toArray();
+      }
 
       const answer = "요청하신 조건에 일치하는 업체 " + companies.length + "건을 찾았습니다. 아래 미리보기 표 및 대화창 하단의 [📊 엑셀 다운로드] 또는 [📄 PDF 다운로드] 버튼을 눌러 바로 내보내실 수 있습니다.";
       
@@ -525,17 +539,18 @@ ${JSON.stringify(companiesInfo, null, 2)}
     } catch (error: any) {
       this.logger.error("Data Engineer Chat Error: " + error.message);
       try {
-        const cleanKeyword = query.replace(/(업체|리스트|엑셀|파일|정리|해줘|찾아줘|추출)/g, '').trim();
+        const cleanKeyword = query.replace(/(업체|참가업체|리스트|엑셀|파일|정리|해줘|찾아줘|추출|출력)/g, '').trim();
         const terms = cleanKeyword.split(/\s+/).filter(Boolean).join('|');
         const filter = {
           $or: [
-            { 'original_data.source_group': { $regex: terms || cleanKeyword, $options: 'i' } },
-            { company_name: { $regex: terms || cleanKeyword, $options: 'i' } },
-            { description: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { name: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { nameEn: { $regex: terms || cleanKeyword, $options: 'i' } },
             { industry: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { profileText: { $regex: terms || cleanKeyword, $options: 'i' } },
+            { tags: { $regex: terms || cleanKeyword, $options: 'i' } },
           ],
         };
-        const companies = await this.connection.collection('companies').find(filter).limit(200).toArray();
+        const companies = await this.connection.collection('companies').find(filter).limit(300).toArray();
         const answer = `요청하신 키워드("${cleanKeyword}") 관련 업체 ${companies.length}건을 찾았습니다. 아래 대화창 하단의 [📊 엑셀 다운로드] 또는 [📄 PDF 다운로드] 버튼을 눌러 바로 저장하실 수 있습니다.`;
         return { message: answer, data: companies };
       } catch (fallbackErr) {

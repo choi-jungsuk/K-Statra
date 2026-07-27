@@ -126,15 +126,16 @@ export default function AXData() {
     if (!fileName) return;
 
     const worksheet = XLSX.utils.json_to_sheet(
-      data.map((c) => ({
-        '업체명 (Company)': c.company_name,
-        '이메일 (Email)': c.email || '',
-        '이메일 유무': c.email ? '있음' : '없음',
-        '국가 (Country)': c.country,
-        '분류 (Type)': c.type === 'domestic' ? '국내' : '해외',
-        '산업군 (Industry)': c.industry,
-        '웹사이트 (Website)': c.website,
-        '소스 그룹': c.original_data?.source_group || '',
+      data.map((c, idx) => ({
+        '번호 (#)': idx + 1,
+        '업체명 (Company)': c.name || c.company_name || '-',
+        '영문명 (English Name)': c.nameEn || '',
+        '산업군 (Industry)': c.industry || '-',
+        '소재지 (Country/Region)': (c.location && (c.location.country || c.location.city)) ? `${c.location.country || ''} ${c.location.city || ''}`.trim() : (c.country || 'South Korea'),
+        '이메일 (Email)': c.email || '없음 (SNS 발굴 가능)',
+        '회사 설명 (Description)': c.profileText || c.description || '',
+        '태그 (Tags)': Array.isArray(c.tags) ? c.tags.join(', ') : (c.tags || ''),
+        '웹사이트 (Website)': c.website || '-',
       }))
     );
     const workbook = XLSX.utils.book_new();
@@ -147,20 +148,20 @@ export default function AXData() {
     if (!data || data.length === 0) return;
     const rows = data.map((c, i) => `
       <tr style="border-bottom:1px solid #e5e7eb">
-        <td style="padding:6px 8px;color:#6b7280;font-size:12px">${i + 1}</td>
-        <td style="padding:6px 8px;font-weight:600;font-size:13px">${c.company_name || '-'}</td>
-        <td style="padding:6px 8px;font-size:12px;color:${c.email ? '#2563eb' : '#ef4444'}">${c.email || '없음'}</td>
-        <td style="padding:6px 8px;font-size:12px">${c.country || '-'}</td>
-        <td style="padding:6px 8px;font-size:12px">${c.industry || '-'}</td>
-        <td style="padding:6px 8px;font-size:12px;color:#6b7280">${c.website || '-'}</td>
+        <td style="padding:8px;color:#6b7280;font-size:12px">${i + 1}</td>
+        <td style="padding:8px;font-weight:700;font-size:13px;color:#1e293b">${c.name || c.company_name || '-'}</td>
+        <td style="padding:8px;font-size:12px;color:#475569">${c.industry || '-'}</td>
+        <td style="padding:8px;font-size:12px;color:#475569">${(c.location && c.location.country) ? c.location.country : (c.country || 'South Korea')}</td>
+        <td style="padding:8px;font-size:12px;color:${c.email ? '#2563eb' : '#64748b'}">${c.email || '없음'}</td>
+        <td style="padding:8px;font-size:11px;color:#64748b;max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.profileText || c.description || '-'}</td>
       </tr>`).join('');
     const html = `
       <html><head><title>${title}</title>
-      <style>body{font-family:'Malgun Gothic',sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th{background:#f1f5f9;padding:8px;text-align:left;font-size:12px;border-bottom:2px solid #e2e8f0}@media print{.no-print{display:none}}</style>
+      <style>body{font-family:'Malgun Gothic',sans-serif;padding:24px}table{width:100%;border-collapse:collapse}th{background:#f8fafc;padding:10px 8px;text-align:left;font-size:12px;border-bottom:2px solid #e2e8f0;color:#475569}@media print{.no-print{display:none}}</style>
       </head><body>
-        <h2 style="font-size:18px;margin-bottom:4px">${title}</h2>
-        <p style="color:#6b7280;font-size:13px;margin-bottom:16px">총 ${data.length}건 · 출력일: ${new Date().toLocaleDateString('ko-KR')}</p>
-        <table><thead><tr><th>#</th><th>업체명</th><th>이메일</th><th>국가</th><th>산업군</th><th>웹사이트</th></tr></thead>
+        <h2 style="font-size:20px;margin-bottom:6px;color:#0f172a">${title}</h2>
+        <p style="color:#64748b;font-size:13px;margin-bottom:18px">총 ${data.length}건 · 출력일: ${new Date().toLocaleDateString('ko-KR')}</p>
+        <table><thead><tr><th>#</th><th>업체명</th><th>산업군</th><th>소재지</th><th>이메일</th><th>회사 설명</th></tr></thead>
         <tbody>${rows}</tbody></table>
       </body></html>`;
     const win = window.open('', '_blank');
@@ -518,6 +519,45 @@ export default function AXData() {
                 </div>
 
                 <div style={{ padding: '1rem', background: '#fff', borderTop: '1px solid #e5e7eb' }}>
+                  {/* 대화창 밑부분 고정 엑셀/PDF 출력 버튼 바 */}
+                  {currData && currData.length > 0 && (
+                    <div style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '10px 14px', marginBottom: '12px',
+                      background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px',
+                      boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                    }}>
+                      <span style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b' }}>
+                        🎉 총 <span style={{ color: cat.accentColor }}>{currData.length}</span>건의 참가업체 리스트 조회 완료
+                      </span>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button
+                          onClick={() => handleExportExcel(currData, prefix)}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '5px',
+                            padding: '6px 14px', borderRadius: '6px',
+                            background: '#10b981', color: '#fff', border: 'none',
+                            fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                            boxShadow: '0 1px 2px rgba(16,185,129,0.2)'
+                          }}
+                        >
+                          📊 엑셀 다운로드
+                        </button>
+                        <button
+                          onClick={() => handleExportPDF(currData, `${cat.titleKo} - 참가업체 리스트`)}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '5px',
+                            padding: '6px 14px', borderRadius: '6px',
+                            background: '#ef4444', color: '#fff', border: 'none',
+                            fontSize: '12px', fontWeight: 700, cursor: 'pointer',
+                            boxShadow: '0 1px 2px rgba(239,68,68,0.2)'
+                          }}
+                        >
+                          📄 PDF 출력
+                        </button>
+                      </div>
+                    </div>
+                  )}
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <textarea
                       value={currInput}
