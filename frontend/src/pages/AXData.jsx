@@ -520,7 +520,7 @@ export default function AXData() {
 
                 <div style={{ padding: '1rem', background: '#fff', borderTop: '1px solid #e5e7eb' }}>
                   {/* 대화창 밑부분 고정 엑셀/PDF 출력 버튼 바 */}
-                  {currData && currData.length > 0 && (
+                  {data && data.length > 0 && (
                     <div style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       padding: '10px 14px', marginBottom: '12px',
@@ -528,11 +528,11 @@ export default function AXData() {
                       boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
                     }}>
                       <span style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b' }}>
-                        🎉 총 <span style={{ color: cat.accentColor }}>{currData.length}</span>건의 참가업체 리스트 조회 완료
+                        🎉 총 <span style={{ color: cat.accentColor }}>{data.length}</span>건의 참가업체 리스트 조회 완료
                       </span>
                       <div style={{ display: 'flex', gap: '8px' }}>
                         <button
-                          onClick={() => handleExportExcel(currData, prefix)}
+                          onClick={() => handleExportExcel(data, prefix)}
                           style={{
                             display: 'flex', alignItems: 'center', gap: '5px',
                             padding: '6px 14px', borderRadius: '6px',
@@ -544,7 +544,7 @@ export default function AXData() {
                           📊 엑셀 다운로드
                         </button>
                         <button
-                          onClick={() => handleExportPDF(currData, `${cat.titleKo} - 참가업체 리스트`)}
+                          onClick={() => handleExportPDF(data, `${cat.titleKo} - 참가업체 리스트`)}
                           style={{
                             display: 'flex', alignItems: 'center', gap: '5px',
                             padding: '6px 14px', borderRadius: '6px',
