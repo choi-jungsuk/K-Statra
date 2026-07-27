@@ -16,3 +16,6 @@ config.yaml
 *.zip
 *.ps1
 *.txt
+__pycache__/
+*.pyc
+venv/

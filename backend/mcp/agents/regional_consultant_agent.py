@@ -31,6 +31,7 @@ BRAVE_API_KEY = os.environ.get("BRAVE_API_KEY", "")
 VENV_PYTHON = os.path.join(os.path.dirname(__file__), '..', 'venv', 'Scripts', 'python.exe')
 BRAVE_SERVER = os.path.join(os.path.dirname(__file__), '..', 'servers', 'brave_search_server.py')
 FETCH_SERVER = os.path.join(os.path.dirname(__file__), '..', 'servers', 'fetch_server.py')
+GTA_SERVER = os.path.join(os.path.dirname(__file__), '..', 'servers', 'gta_server.py')
 
 REGION_MAP = {
     "latin_america": "중남미",
@@ -46,24 +47,30 @@ def emit(data: dict):
 
 SYSTEM_PROMPT = """당신은 DemoStatra B2B 매칭 플랫폼의 지역전문가 컨설턴트 에이전트입니다.
 
-특정 지역 시장의 무역 진입 전략, 규제 환경, 문화적 주의사항, 물류 전략, 바이어 발굴 방법을 전문적으로 안내합니다.
+특정 지역 시장의 무역 진입 전략, 관세율 및 수출입 규제 환경, 문화적 주의사항, 물류 전략, 바이어 발굴 방법을 전문적으로 안내합니다.
 
 **사용 가능한 도구:**
+- `search_tariff_rates`: HS 코드 및 대상 국가의 실시간 관세율(MFN, FTA) 및 적용 규제 조치 조회 (Global Trade Alert 데이터)
+- `analyze_trade_barriers`: 반덤핑, 상계관세, 수출통제, CBAM, IRA, MoCRA 등 비관세 장벽 및 공식 시행일자 인용
+- `get_hs_code_measures`: HS 코드별 글로벌 무역 개입 조치 및 원본 법령 문서 시행 링크 조회
+- `read_regional_data`: DemoStatra 지역 전문 DB에서 해당 지역 기초 데이터 조회
 - `brave_web_search`: 최신 시장 동향, 규제 변경사항, 바이어 정보 검색
 - `brave_news_search`: 최근 무역 뉴스, 정책 변화 검색
 - `fetch_url`: 특정 웹페이지(관세청, 규제기관, 기업 홈페이지) 내용 조회
-- `read_regional_data`: DemoStatra 지역 전문 DB에서 해당 지역 기초 데이터 조회
 
 **답변 구조:**
-1. 🌍 **지역 개요** - 시장 특성 요약
-2. 📋 **규제 및 인증** - 필수 인증, 라벨링, 허가 사항
-3. 🚢 **물류 및 결제** - 추천 물류 루트, 결제 방식
-4. 🤝 **문화 및 비즈니스 관행** - 현지 비즈니스 문화
-5. 🎯 **DemoStatra 매칭 전략** - 최적 바이어 타입, 접근 방법
-6. ⚠️ **주의사항** - 리스크 및 체크리스트
+1. 🌍 **지역 및 무역 환경 개요** - 시장 특성 요약
+2. 💰 **관세율 및 무역 조치 (GTA 공식 데이터)** - MFN/FTA 관세율 및 비관세 장벽 분석
+3. 📋 **규제 및 필수 인증** - 라벨링, 허가 사항, 환경/안전 규제
+4. 🚢 **물류 및 결제** - 추천 물류 루트, 결제 방식
+5. 🤝 **문화 및 비즈니스 관행** - 현지 비즈니스 문화
+6. 🎯 **DemoStatra 매칭 전략** - 최적 바이어 타입, 접근 방법
+7. 📚 **공식 근거 자료 (Citations)** - 법령명, 시행일자, 공식 웹사이트 링크 명시
 
-반드시 도구를 활용하여 실제 데이터에 기반한 답변을 제공하세요.
-먼저 `read_regional_data`로 지역 DB를 조회하고, 이후 `brave_web_search`로 최신 정보를 보완하세요.
+**핵심 행동 수칙:**
+1. 질문이나 요청에 HS 코드(예: 8507.60, 7208 등)나 품목이 포함된 경우, **반드시 먼저 `search_tariff_rates` 또는 `analyze_trade_barriers`를 호출하여 관세 및 규제 데이터를 확인**하세요.
+2. 보고서 하단에는 관세 수치와 함께 **공식 법령/규제 시행 문서 출처(Source, Title, Effective Date, URL)를 명확히 인용(Citation)**하여 사실 검증 가능한 형태로 작성하세요.
+3. 먼저 `read_regional_data`로 지역 DB를 조회하고, 필요 시 `brave_web_search`로 최신 정보를 보완하세요.
 한국어 마크다운 형식으로 답변합니다."""
 
 
@@ -92,6 +99,11 @@ async def run_regional_consultant(
         args=[FETCH_SERVER],
         env={**os.environ}
     )
+    gta_params = StdioServerParameters(
+        command=VENV_PYTHON,
+        args=[GTA_SERVER],
+        env={**os.environ}
+    )
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
@@ -117,13 +129,25 @@ async def run_regional_consultant(
         await fetch_session.initialize()
         emit({"type": "status", "text": "✅ Fetch + 지역DB MCP 연결 완료"})
 
-        # 두 MCP의 도구 목록 통합
+        # GTA Trade Policy MCP 연결
+        gta_read, gta_write = await stack.enter_async_context(
+            stdio_client(gta_params)
+        )
+        gta_session = await stack.enter_async_context(
+            ClientSession(gta_read, gta_write)
+        )
+        await gta_session.initialize()
+        emit({"type": "status", "text": "✅ GTA 관세/무역 정책 MCP 연결 완료"})
+
+        # 3중 MCP의 도구 목록 통합
         brave_tools_result = await brave_session.list_tools()
         fetch_tools_result = await fetch_session.list_tools()
+        gta_tools_result = await gta_session.list_tools()
 
         all_tools = []
         brave_tool_names = set()
         fetch_tool_names = set()
+        gta_tool_names = set()
 
         for tool in brave_tools_result.tools:
             all_tools.append({
@@ -141,9 +165,17 @@ async def run_regional_consultant(
             })
             fetch_tool_names.add(tool.name)
 
+        for tool in gta_tools_result.tools:
+            all_tools.append({
+                "name": tool.name,
+                "description": tool.description,
+                "input_schema": tool.inputSchema
+            })
+            gta_tool_names.add(tool.name)
+
         emit({
             "type": "status",
-            "text": f"📋 통합 도구 목록: {[t['name'] for t in all_tools]}"
+            "text": f"📋 통합 도구 목록({len(all_tools)}개): {[t['name'] for t in all_tools]}"
         })
 
         # 사용자 메시지 구성
@@ -198,6 +230,8 @@ async def run_regional_consultant(
                             result = await brave_session.call_tool(tool_name, tool_input)
                         elif tool_name in fetch_tool_names:
                             result = await fetch_session.call_tool(tool_name, tool_input)
+                        elif tool_name in gta_tool_names:
+                            result = await gta_session.call_tool(tool_name, tool_input)
                         else:
                             result = None
 
@@ -229,6 +263,7 @@ async def test_mode():
     emit({"type": "status", "text": f"BRAVE_API_KEY: {'설정됨' if BRAVE_API_KEY and BRAVE_API_KEY != '발급받은_Brave_API_키를_여기에_입력' else '미설정 (Brave 없이도 Fetch+지역DB 사용 가능)'}"})
     emit({"type": "status", "text": f"Brave Server: {BRAVE_SERVER}"})
     emit({"type": "status", "text": f"Fetch Server: {FETCH_SERVER}"})
+    emit({"type": "status", "text": f"GTA Server: {GTA_SERVER}"})
     emit({"type": "done", "text": "테스트 완료"})
 
 
