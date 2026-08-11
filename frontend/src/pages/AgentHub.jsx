@@ -67,11 +67,11 @@ export default function AgentHub() {
             <h1 id="home-bento-hero-title" className="bento-hero-title" style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.7px', margin: '6px 0 8px' }}>
               {lang === 'ko' ? (
                 <>
-                  전시회 참가업체와 해외바이어 발굴을 서포트하는 <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AI 파트너</span>
+                  전시회 주최사의 업무생산성 향상을 위한 <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AI Transformation(AX) 플랫폼</span>
                 </>
               ) : (
                 <>
-                  AI Partner <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>Supporting Exhibitors & Global Buyers Discovery</span>
+                  <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AI Transformation (AX) Platform</span> for enhancing the productivity of exhibition organizers
                 </>
               )}
             </h1>
