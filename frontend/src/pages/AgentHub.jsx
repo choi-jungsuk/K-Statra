@@ -190,7 +190,7 @@ export default function AgentHub() {
               ? '전시회·시장개척단 조건에 맞는 참가기업 후보 탐색과 정보 정리를 돕습니다.'
               : 'Find prospective exhibitors matching exhibition and market entry requirements.'}
           </p>
-          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
             <div style={{ position: 'absolute', width: '100%', height: '100%', background: 'radial-gradient(ellipse at center, rgba(99, 102, 241, 0.4) 0%, transparent 60%)', filter: 'blur(15px)' }}></div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', transform: 'skewX(-8deg)' }}>
               <span style={{ fontSize: '4rem', fontWeight: 900, background: 'linear-gradient(180deg, #ffffff 0%, #93c5fd 40%, #3b82f6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginRight: '-8px', filter: 'drop-shadow(0 0 12px rgba(59, 130, 246, 0.6))' }}>A</span>
@@ -222,7 +222,7 @@ export default function AgentHub() {
               ? '국가·품목별 시장, 관세, 규제, 지역전문가 정보를 확인합니다.'
               : 'Check market, tariff, regulation, and local expert info by country and product.'}
           </p>
-          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
             <div style={{ position: 'absolute', width: '200%', height: '200%', background: 'repeating-linear-gradient(90deg, transparent, transparent 15px, rgba(99, 102, 241, 0.04) 15px, rgba(99, 102, 241, 0.04) 16px)', transform: 'rotate(-5deg)' }}></div>
             <div style={{ position: 'absolute', bottom: 0, width: '100%', height: '50%', background: 'linear-gradient(180deg, transparent 0%, rgba(59, 130, 246, 0.15) 100%)' }}></div>
             <div style={{ position: 'absolute', bottom: 0, width: '100%', height: '2px', background: 'rgba(147, 197, 253, 0.4)', boxShadow: '0 0 10px #3b82f6' }}></div>
@@ -264,7 +264,7 @@ export default function AgentHub() {
               ? '해외 바이어와 파트너 후보를 탐색하고 매칭 근거를 확인합니다.'
               : 'Search overseas buyers, partner candidates, and view matching insights.'}
           </p>
-          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
             <div style={{ position: 'absolute', width: '200%', height: '200%', background: 'conic-gradient(from 0deg at 50% 50%, rgba(59, 130, 246, 0.1) 0deg, transparent 60deg, transparent 300deg, rgba(59, 130, 246, 0.1) 360deg)', animation: 'spin 10s linear infinite' }}></div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', width: '100%', height: '100%' }}>
                <span style={{ position: 'absolute', fontSize: '7rem', color: 'rgba(147, 197, 253, 0.2)', filter: 'drop-shadow(0 0 12px #3b82f6)', zIndex: 1, fontWeight: 300, transform: 'scaleX(1.8)' }}>∞</span>
@@ -295,7 +295,7 @@ export default function AgentHub() {
               ? '온라인·현장 상담 일정과 승인 상태를 관리합니다.'
               : 'Manage online and onsite meeting schedules and approval statuses.'}
           </p>
-          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
             <div style={{ position: 'absolute', width: '100px', height: '100px', background: 'rgba(59, 130, 246, 0.2)', filter: 'blur(25px)' }}></div>
             <div style={{ width: '84px', height: '96px', background: 'linear-gradient(135deg, rgba(147,197,253,0.9), rgba(59,130,246,0.3))', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                <div style={{ width: '78px', height: '90px', background: '#0f172a', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
@@ -335,7 +335,7 @@ export default function AgentHub() {
               ? '상담 후 RFQ, 샘플, 후속 연락 등의 단계를 체계적으로 관리합니다.'
               : 'Systematically track post-meeting RFQs, samples, and follow-ups.'}
           </p>
-          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
             <div style={{ position: 'absolute', top: '15px', left: '15px', color: '#93c5fd', fontSize: '1.2rem', filter: 'drop-shadow(0 0 5px #93c5fd)' }}>✦</div>
             <div style={{ position: 'absolute', top: '35px', left: '30px', color: '#ffffff', fontSize: '0.8rem', filter: 'drop-shadow(0 0 3px #ffffff)' }}>✦</div>
             <div style={{ position: 'absolute', top: '22px', left: '42px', color: '#93c5fd', fontSize: '1.1rem', fontWeight: 900, textShadow: '0 0 6px #60a5fa' }}>AI</div>
