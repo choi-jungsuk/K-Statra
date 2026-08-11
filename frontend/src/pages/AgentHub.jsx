@@ -89,7 +89,7 @@ export default function AgentHub() {
         <div
           className="orchestrator-unified-card"
           style={{
-            background: 'linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%)',
+            background: 'linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)',
             borderRadius: '14px',
             border: '1px solid rgba(255, 255, 255, 0.5)',
             padding: '10px 16px',
@@ -102,21 +102,21 @@ export default function AgentHub() {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#0369A1', fontWeight: 800, fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ color: '#E0F2FE', fontWeight: 800, fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span>🎼</span>
                 <span>{lang === 'ko' ? '오케스트라 지휘소' : 'Orchestrator Center'}</span>
               </span>
               <span
                 style={{
-                  background: 'rgba(255, 255, 255, 0.5)',
-                  color: '#0369A1',
-                  border: '1px solid rgba(139, 92, 246, 0.4)',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  color: '#FFFFFF',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
                   borderRadius: '999px',
                   padding: '3px 10px',
                   fontSize: '11px',
                   fontWeight: 800,
                   letterSpacing: '0.3px',
-                  boxShadow: '0 0 12px rgba(139, 92, 246, 0.1)',
+                  boxShadow: '0 0 12px rgba(255, 255, 255, 0.1)',
                 }}
               >
                 ⚡ MAS Engine
@@ -131,12 +131,12 @@ export default function AgentHub() {
                 padding: '8px 24px',
                 fontSize: '14px',
                 borderRadius: '12px',
-                background: 'linear-gradient(135deg, #00A4EF 0%, #66C5F5 100%)',
-                color: '#0F172A',
+                background: 'linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)',
+                color: '#FFFFFF',
                 fontWeight: 900,
-                boxShadow: '0 6px 20px rgba(79, 70, 229, 0.2)',
+                boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
                 cursor: 'pointer',
-                border: 'none',
+                border: '1px solid rgba(255,255,255,0.2)',
                 letterSpacing: '-0.3px',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -155,12 +155,12 @@ export default function AgentHub() {
                 <div
                   className="chain-step-chip"
                   onClick={() => handleRunOrchestrator(`${agent.titleKo} 지휘 실행`)}
-                  style={{ cursor: 'pointer', padding: '4px 10px', fontSize: '12px', background: 'rgba(255, 255, 255, 0.6)', borderColor: 'rgba(79, 70, 229, 0.4)', color: '#0F172A', fontWeight: 600 }}
+                  style={{ cursor: 'pointer', padding: '4px 10px', fontSize: '12px', background: 'rgba(255, 255, 255, 0.1)', borderColor: 'rgba(255, 255, 255, 0.2)', color: '#FFFFFF', fontWeight: 600 }}
                 >
                   <span>{agent.step}. {lang === 'ko' ? agent.titleKo : agent.titleEn}</span>
                 </div>
                 {i < businessAgents.length - 1 && (
-                  <span className="chain-arrow" style={{ fontSize: '13px', color: '#0369A1', fontWeight: 800, margin: '0 2px' }} aria-hidden="true">⇄</span>
+                  <span className="chain-arrow" style={{ fontSize: '13px', color: '#BAE6FD', fontWeight: 800, margin: '0 2px' }} aria-hidden="true">⇄</span>
                 )}
               </React.Fragment>
             ))}
