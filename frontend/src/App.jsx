@@ -451,7 +451,8 @@ export default function App() {
 
       <main id="main-content" className="container">
         <Routes>
-          <Route path="/" element={<PartnerSearch />} />
+          <Route path="/" element={<AgentHub />} />
+          <Route path="/partner-search" element={<PartnerSearch />} />
           <Route path="/overview" element={<Overview />} />
           <Route path="/dashboard" element={<Overview />} /> {/* Redirect or alias */}
           <Route path="/analytics" element={<Overview />} /> {/* Redirect or alias */}

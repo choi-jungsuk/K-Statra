@@ -28,7 +28,7 @@ export default function AgentHub() {
       title: t('agent_buyer'),
       desc: t('agent_buyer_desc'),
       icon: '🤝',
-      path: '/',
+      path: '/partner-search',
       color: 'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)'
     },
     {

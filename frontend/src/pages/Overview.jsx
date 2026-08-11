@@ -157,7 +157,7 @@ export default function Overview() {
                         <p>{lang === 'ko' ? '잠재 참가기업 DB 및 마케팅 이메일 수집 중' : 'Collecting prospective exhibitor DB & emails'}</p>
                     </div>
 
-                    <div className="command-center-card" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+                    <div className="command-center-card" onClick={() => navigate('/partner-search')} style={{ cursor: 'pointer' }}>
                         <div className="command-center-card-header">
                             <h5>{lang === 'ko' ? '글로벌 바이어 유치 Agent' : 'Global Buyer Attraction Agent'}</h5>
                             <span className="command-center-status">STANDBY 🟢</span>
