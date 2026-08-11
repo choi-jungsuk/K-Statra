@@ -312,19 +312,7 @@ export default function App() {
             </Link>
           </div>
           <div className="header-right-col">
-            <nav className="nav" aria-label="Primary">
-              {navItems.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.to === '/'}
-                  className={({ isActive }) => (isActive ? 'active' : undefined)}
-                  onClick={() => track('nav_click', { target: item.to })}
-                >
-                  {t(item.key)}
-                </NavLink>
-              ))}
-            </nav>
+
             <div className="controls-row">
               <div className="control-group" aria-label="Language selector">
                 <span className="control-icon" aria-hidden="true">
