@@ -191,8 +191,13 @@ export default function AgentHub() {
               ? '전시회·시장개척단 조건에 맞는 참가기업 후보 탐색과 정보 정리를 돕습니다.'
               : 'Find prospective exhibitors matching exhibition and market entry requirements.'}
           </p>
-          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: '3rem' }}>🏢</span>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+            <div style={{ position: 'absolute', width: '100%', height: '100%', background: 'radial-gradient(ellipse at center, rgba(99, 102, 241, 0.4) 0%, transparent 60%)', filter: 'blur(15px)' }}></div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', transform: 'skewX(-8deg)' }}>
+              <span style={{ fontSize: '4rem', fontWeight: 900, background: 'linear-gradient(180deg, #ffffff 0%, #93c5fd 40%, #3b82f6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginRight: '-8px', filter: 'drop-shadow(0 0 12px rgba(59, 130, 246, 0.6))' }}>A</span>
+              <span style={{ fontSize: '1.6rem', fontWeight: 900, color: '#ffffff', textShadow: '0 0 8px rgba(255,255,255,0.8), 0 0 16px rgba(147, 197, 253, 0.6)', zIndex: 1, transform: 'skewX(8deg)', letterSpacing: '1.5px', margin: '0 4px', background: 'linear-gradient(180deg, #ffffff 0%, #e0e7ff 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>2026</span>
+              <span style={{ fontSize: '4rem', fontWeight: 900, background: 'linear-gradient(180deg, #ffffff 0%, #93c5fd 40%, #3b82f6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginLeft: '-8px', filter: 'drop-shadow(0 0 12px rgba(59, 130, 246, 0.6))' }}>X</span>
+            </div>
           </div>
           <div className="bento-card-action">
             <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
