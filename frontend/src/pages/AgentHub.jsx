@@ -157,7 +157,6 @@ export default function AgentHub() {
                   onClick={() => handleRunOrchestrator(`${agent.titleKo} 지휘 실행`)}
                   style={{ cursor: 'pointer', padding: '4px 10px', fontSize: '12px', background: 'rgba(255, 255, 255, 0.08)', borderColor: 'rgba(79, 70, 229, 0.4)' }}
                 >
-                  <span>{agent.icon}</span>
                   <span>{agent.step}. {lang === 'ko' ? agent.titleKo : agent.titleEn}</span>
                 </div>
                 {i < businessAgents.length - 1 && (
