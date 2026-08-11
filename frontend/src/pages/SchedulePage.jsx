@@ -377,7 +377,9 @@ export default function SchedulePage() {
               </h3>
               <div className="exhibitions-banner-row" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {[
-                  { name: 'Global Tech Exhibition 2026', date: '2026.10.21 - 10.23', color: '#BE123C', desc: '글로벌 테크 산업전 - 솔루션 파트너 상담' }
+                  { name: 'CES 2026', date: '2026.01.06 - 01.09', color: '#0284c7', desc: '세계 최대 IT·가전 전시회 - 글로벌 파트너 상담' },
+                  { name: 'K-뷰티 엑스포 2026', date: '2026.10.15 - 10.17', color: '#ec4899', desc: '대한민국 뷰티 박람회 - 글로벌 바이어 매칭' },
+                  { name: '세계 보안 엑스포 2026', date: '2026.03.18 - 03.20', color: '#16a34a', desc: '아시아 최대 통합보안 전시회 - 솔루션 파트너 상담' }
                 ].map((ex, idx) => {
                   const isSelected = selectedExhibition === ex.name;
                   return (
