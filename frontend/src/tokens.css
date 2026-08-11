@@ -7,12 +7,12 @@
   --fg: #0F172A;
   --fg-secondary: #475569;
   
-  /* Premium Indigo/Blue Gradients */
-  --accent: #4F46E5;
-  --accent-dark: #3730A3;
-  --accent-light: #818CF8;
-  --accent-gradient: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
-  --accent-gradient-hover: linear-gradient(135deg, #4338CA 0%, #2563EB 100%);
+  /* AIN Global Deep Blue Palette */
+  --accent: #0057B8;
+  --accent-dark: #003A8C;
+  --accent-light: #4DA6FF;
+  --accent-gradient: linear-gradient(135deg, #003A8C 0%, #0057B8 60%, #0082D4 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #002D70 0%, #0047A0 60%, #0070C0 100%);
   
   --muted: #94A3B8;
   --danger: #EF4444;
@@ -32,8 +32,8 @@
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   --shadow-card-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-  --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.4);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 58, 140, 0.07);
+  --shadow-glow: 0 0 20px rgba(0, 87, 184, 0.4);
   
   /* Glassmorphism Backdrop Filter */
   --glass-blur: blur(12px);
