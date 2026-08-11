@@ -265,8 +265,12 @@ export default function AgentHub() {
               ? '해외 바이어와 파트너 후보를 탐색하고 매칭 근거를 확인합니다.'
               : 'Search overseas buyers, partner candidates, and view matching insights.'}
           </p>
-          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: '3rem' }}>🤝</span>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+            <div style={{ position: 'absolute', width: '200%', height: '200%', background: 'conic-gradient(from 0deg at 50% 50%, rgba(59, 130, 246, 0.1) 0deg, transparent 60deg, transparent 300deg, rgba(59, 130, 246, 0.1) 360deg)', animation: 'spin 10s linear infinite' }}></div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', width: '100%', height: '100%' }}>
+               <span style={{ position: 'absolute', fontSize: '7rem', color: 'rgba(147, 197, 253, 0.2)', filter: 'drop-shadow(0 0 12px #3b82f6)', zIndex: 1, fontWeight: 300, transform: 'scaleX(1.8)' }}>∞</span>
+               <span style={{ fontSize: '3.8rem', fontWeight: 900, background: 'linear-gradient(180deg, #ffffff 0%, #93c5fd 50%, #3b82f6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', filter: 'drop-shadow(0 0 12px rgba(59, 130, 246, 0.9))', zIndex: 2, letterSpacing: '-2px' }}>AI</span>
+            </div>
           </div>
           <div className="bento-card-action">
             <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
@@ -292,8 +296,21 @@ export default function AgentHub() {
               ? '온라인·현장 상담 일정과 승인 상태를 관리합니다.'
               : 'Manage online and onsite meeting schedules and approval statuses.'}
           </p>
-          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: '3rem' }}>📅</span>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+            <div style={{ position: 'absolute', width: '100px', height: '100px', background: 'rgba(59, 130, 246, 0.2)', filter: 'blur(25px)' }}></div>
+            <div style={{ width: '84px', height: '96px', background: 'linear-gradient(135deg, rgba(147,197,253,0.9), rgba(59,130,246,0.3))', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+               <div style={{ width: '78px', height: '90px', background: '#0f172a', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                  <div style={{ position: 'absolute', top: '16px', left: '16px', width: '14px', height: '22px', background: 'linear-gradient(180deg, #ffffff 0%, #93c5fd 100%)', clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)', transform: 'rotate(-25deg)', zIndex: 1 }}></div>
+                  <div style={{ position: 'absolute', top: '16px', right: '16px', width: '14px', height: '22px', background: 'linear-gradient(180deg, #ffffff 0%, #93c5fd 100%)', clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)', transform: 'rotate(25deg)', zIndex: 1 }}></div>
+                  <div style={{ width: '52px', height: '42px', background: 'linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%)', borderRadius: '25px 25px 20px 20px', position: 'relative', boxShadow: 'inset 0 -4px 8px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.5)', zIndex: 2 }}>
+                     <div style={{ position: 'absolute', top: '8px', left: '4px', width: '44px', height: '26px', background: '#020617', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '0 4px' }}>
+                         <div style={{ width: '12px', height: '14px', background: '#60a5fa', borderRadius: '5px', boxShadow: '0 0 10px #60a5fa' }}></div>
+                         <div style={{ width: '12px', height: '14px', background: '#60a5fa', borderRadius: '5px', boxShadow: '0 0 10px #60a5fa' }}></div>
+                     </div>
+                  </div>
+                  <div style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', width: '6px', height: '14px', background: '#93c5fd', borderRadius: '3px', zIndex: 1 }}></div>
+               </div>
+            </div>
           </div>
           <div className="bento-card-action">
             <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
@@ -319,8 +336,32 @@ export default function AgentHub() {
               ? '상담 후 RFQ, 샘플, 후속 연락 등의 단계를 체계적으로 관리합니다.'
               : 'Systematically track post-meeting RFQs, samples, and follow-ups.'}
           </p>
-          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: '3rem' }}>📋</span>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+            <div style={{ position: 'absolute', top: '15px', left: '15px', color: '#93c5fd', fontSize: '1.2rem', filter: 'drop-shadow(0 0 5px #93c5fd)' }}>✦</div>
+            <div style={{ position: 'absolute', top: '35px', left: '30px', color: '#ffffff', fontSize: '0.8rem', filter: 'drop-shadow(0 0 3px #ffffff)' }}>✦</div>
+            <div style={{ position: 'absolute', top: '22px', left: '42px', color: '#93c5fd', fontSize: '1.1rem', fontWeight: 900, textShadow: '0 0 6px #60a5fa' }}>AI</div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', height: '100%', paddingBottom: '15px', position: 'relative' }}>
+               <div style={{ width: '65px', height: '75px', background: 'radial-gradient(circle at 30% 30%, #ffffff 0%, #cbd5e1 100%)', borderRadius: '35px 35px 20px 20px', position: 'relative', boxShadow: 'inset -5px -5px 12px rgba(0,0,0,0.15)', zIndex: 1 }}>
+                  <div style={{ position: 'absolute', top: '-8px', left: '8px', width: '18px', height: '18px', background: '#ffffff', borderRadius: '50%', boxShadow: 'inset -2px -2px 4px rgba(0,0,0,0.1)' }}></div>
+                  <div style={{ position: 'absolute', top: '-8px', right: '8px', width: '18px', height: '18px', background: '#ffffff', borderRadius: '50%', boxShadow: 'inset -2px -2px 4px rgba(0,0,0,0.1)' }}></div>
+                  <div style={{ position: 'absolute', top: '15px', left: '-2px', width: '69px', height: '16px', background: 'linear-gradient(90deg, #1d4ed8, #3b82f6, #1d4ed8)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.3)', borderRadius: '2px' }}>
+                     <div style={{ background: '#ffffff', color: '#1d4ed8', fontSize: '9px', fontWeight: 900, padding: '1px 5px', borderRadius: '3px' }}>AI</div>
+                  </div>
+                  <div style={{ position: 'absolute', top: '35px', left: '16px', width: '6px', height: '2px', background: '#1e293b', transform: 'rotate(15deg)' }}></div>
+                  <div style={{ position: 'absolute', top: '35px', right: '16px', width: '6px', height: '2px', background: '#1e293b', transform: 'rotate(-15deg)' }}></div>
+                  <div style={{ position: 'absolute', top: '40px', left: '20px', width: '4px', height: '5px', background: '#0f172a', borderRadius: '50%' }}></div>
+                  <div style={{ position: 'absolute', top: '40px', right: '20px', width: '4px', height: '5px', background: '#0f172a', borderRadius: '50%' }}></div>
+                  <div style={{ position: 'absolute', top: '43px', left: '26px', width: '13px', height: '9px', background: 'linear-gradient(180deg, #334155, #0f172a)', borderRadius: '6px', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+                      <div style={{ position: 'absolute', top: '1px', left: '3px', width: '5px', height: '2px', background: 'rgba(255,255,255,0.5)', borderRadius: '1px' }}></div>
+                  </div>
+                  <div style={{ position: 'absolute', bottom: '15px', left: '-5px', width: '22px', height: '26px', background: '#ffffff', borderRadius: '50%', boxShadow: 'inset -2px -2px 6px rgba(0,0,0,0.1)', zIndex: 3 }}></div>
+                  <div style={{ position: 'absolute', bottom: '15px', right: '-5px', width: '22px', height: '26px', background: '#ffffff', borderRadius: '50%', boxShadow: 'inset 2px -2px 6px rgba(0,0,0,0.1)', zIndex: 3 }}></div>
+               </div>
+               <div style={{ width: '80px', height: '45px', background: 'linear-gradient(180deg, #94a3b8 0%, #64748b 100%)', borderRadius: '6px 6px 0 0', position: 'absolute', bottom: '12px', zIndex: 2, transform: 'perspective(150px) rotateX(15deg)', boxShadow: '0 -3px 10px rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: '10px', height: '10px', background: 'rgba(255,255,255,0.7)', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,255,255,0.5)' }}></div>
+               </div>
+               <div style={{ width: '90px', height: '6px', background: 'linear-gradient(90deg, #475569, #334155)', borderRadius: '3px', position: 'absolute', bottom: '6px', zIndex: 4, boxShadow: '0 6px 10px rgba(0,0,0,0.6)' }}></div>
+            </div>
           </div>
           <div className="bento-card-action">
             <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
