@@ -24,9 +24,9 @@ const RECRUITMENT_MODES = {
     agentIntroKo: 'demostatra 부스 참가기업 후보 발굴을 지원합니다. 원하는 업종, 품목, 지역, 수출시장 조건을 입력해 주세요.',
     agentIntroEn: 'I help identify prospective exhibitors for demostatra. Please enter industry, product, region or export market conditions.',
     quickPromptsKo: [
-      '국내 자동차부품 새시.조향.제동.현기 업체를 찾아줘',
-      '북미수출을 희망하는 업체를 찾아줘',
-      'demostatra 참가 권유 업체를 업종별로 추천해 줘',
+      '국내 K-뷰티 업체를 찾아줘',
+      '국내 의료기기 업체를 찾아줘',
+      '국내 보안장비 업체를 찾아줘',
     ],
     quickPromptsEn: [
       'Find Korean automotive electronics manufacturers',
