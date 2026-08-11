@@ -1,214 +1,314 @@
-import React from 'react';
-import { useI18n } from '../i18n/I18nProvider.jsx';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useI18n } from '../i18n/I18nProvider.jsx';
+import '../ui/OverviewBento.css';
+
+const businessAgents = [
+  {
+    id: 'exhibitor',
+    step: '1',
+    icon: '🏢',
+    titleKo: '참가기업 발굴 에이전트',
+    titleEn: 'Exhibitor Discovery Agent',
+    link: '/ax-data',
+  },
+  {
+    id: 'market',
+    step: '2',
+    icon: '🌍',
+    titleKo: '글로벌 시장정보 에이전트',
+    titleEn: 'Global Market Info Agent',
+    link: '/consultants',
+  },
+  {
+    id: 'buyer',
+    step: '3',
+    icon: '🤝',
+    titleKo: '바이어 발굴·B2B 매칭 에이전트',
+    titleEn: 'Buyer Discovery & B2B Match Agent',
+    link: '/',
+  },
+  {
+    id: 'schedule',
+    step: '4',
+    icon: '📅',
+    titleKo: '상담일정 관리 에이전트',
+    titleEn: 'Schedule Management Agent',
+    link: '/schedule',
+  },
+  {
+    id: 'aftercare',
+    step: '5',
+    icon: '📋',
+    titleKo: '사후관리 에이전트',
+    titleEn: 'Aftercare Agent',
+    link: '/aftercare',
+  }
+];
 
 export default function AgentHub() {
   const { t, lang } = useI18n();
   const navigate = useNavigate();
 
-  const agents = [
-    {
-      id: 'exhibitor',
-      title: t('agent_exhibitor'),
-      desc: t('agent_exhibitor_desc'),
-      icon: '🏢',
-      path: '/ax-data',
-      color: 'linear-gradient(135deg, #06B6D4 0%, #8B5CF6 100%)'
-    },
-    {
-      id: 'market',
-      title: t('agent_market'),
-      desc: t('agent_market_desc'),
-      icon: '🌍',
-      path: '/consultants',
-      color: 'linear-gradient(135deg, #6366F1 0%, #EC4899 100%)'
-    },
-    {
-      id: 'buyer',
-      title: t('agent_buyer'),
-      desc: t('agent_buyer_desc'),
-      icon: '🤝',
-      path: '/partner-search',
-      color: 'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)'
-    },
-    {
-      id: 'schedule',
-      title: t('agent_schedule'),
-      desc: t('agent_schedule_desc'),
-      icon: '📅',
-      path: '/schedule',
-      color: 'linear-gradient(135deg, #10B981 0%, #06B6D4 100%)'
-    },
-    {
-      id: 'aftercare',
-      title: t('agent_aftercare'),
-      desc: t('agent_aftercare_desc'),
-      icon: '📋',
-      path: '/aftercare',
-      color: 'linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%)'
-    }
-  ];
+  // Mock function for UI effect only
+  const handleRunOrchestrator = (customQuery) => {
+    alert(lang === 'ko' ? '데모 시스템: 에이전트 오케스트라 시뮬레이션입니다.' : 'Demo System: Agent Orchestrator Simulation');
+  };
 
   return (
-    <div className="agent-hub-container">
-      <div className="agent-hub-header">
-        <div className="agent-hub-badge">
-          <span className="badge-pulse"></span>
-          {lang === 'ko' ? '5대 업무 에이전트 허브' : '5-Core Agent Hub'}
+    <div className="ain-home-bento">
+      {/* ── 1단: 메인 브랜드 타이틀 헤더 ── */}
+      <section className="home-bento-hero" aria-labelledby="home-bento-hero-title" style={{ padding: '26px 32px' }}>
+        <div className="bento-hero-top" style={{ margin: 0, gap: '8px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', width: '100%' }}>
+            <span className="bento-hero-eyebrow" style={{ fontSize: '12.5px', padding: '4px 14px', margin: '0 0 12px 0', background: 'rgba(79, 70, 229, 0.15)', color: '#818CF8', borderColor: 'rgba(79, 70, 229, 0.35)' }}>
+              ⚡ DEMO STATRA · AI BUSINESS SUPPORT PLATFORM
+            </span>
+            <h1 id="home-bento-hero-title" className="bento-hero-title" style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.7px', margin: '6px 0 8px' }}>
+              {lang === 'ko' ? (
+                <>
+                  전시회 참가업체와 해외바이어 발굴을 서포트하는 <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AI 파트너</span>
+                </>
+              ) : (
+                <>
+                  AI Partner <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>Supporting Exhibitors & Global Buyers Discovery</span>
+                </>
+              )}
+            </h1>
+            <p className="bento-hero-subtitle" style={{ fontSize: '15px', color: '#CBD5E1', margin: 0, lineHeight: 1.45 }}>
+              {lang === 'ko'
+                ? '국내 참가업체와 해외 바이어 후보를 발굴하고, B2B 매칭의 만족도를 높이는 AI 인텔리전스'
+                : 'AI intelligence that discovers domestic exhibitors and global buyer candidates, elevating B2B matching satisfaction.'}
+            </p>
+          </div>
         </div>
-        <h1>{lang === 'ko' ? '전시 운영 지원 에이전트' : 'Exhibition Operations Agents'}</h1>
-        <p className="subtitle">
-          {lang === 'ko' 
-            ? '참가기업 발굴부터 상담 후속관리까지, 전시 운영을 돕는 5개 AI 에이전트를 한 곳에서 만나보세요.'
-            : 'Access 5 AI agents streamlining everything from exhibitor discovery to aftercare operations.'}
-        </p>
-      </div>
+      </section>
 
-      <div className="agents-grid">
-        {agents.map(agent => (
-          <button
-            key={agent.id}
-            type="button"
-            className="agent-card"
-            aria-label={agent.title}
-            onClick={() => navigate(agent.path)}
-            style={{ cursor: 'pointer', textAlign: 'left', width: '100%' }}
-          >
-            <div className="agent-card-header">
-              <div className="agent-avatar" style={{ background: agent.color }}>
-                {agent.icon}
-              </div>
-              <div>
-                <h3>{agent.title}</h3>
-              </div>
-            </div>
-            <p className="agent-desc">{agent.desc}</p>
-            <div style={{ marginTop: 'auto', textAlign: 'right' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--accent)' }}>
-                {lang === 'ko' ? '이동하기 →' : 'Launch →'}
+      {/* ── 2단: 오케스트라 에이전트 실행 흐름도 단일 통합 박스 ── */}
+      <section className="orchestrator-unified-tier" style={{ marginTop: '5px' }}>
+        <div
+          className="orchestrator-unified-card"
+          style={{
+            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 41, 59, 0.95) 100%)',
+            borderRadius: '14px',
+            border: '1px solid rgba(79, 70, 229, 0.35)',
+            padding: '10px 16px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '6px',
+            boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ color: '#818CF8', fontWeight: 800, fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>🎼</span>
+                <span>{lang === 'ko' ? '오케스트라 지휘소' : 'Orchestrator Center'}</span>
+              </span>
+              <span
+                style={{
+                  background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.18) 0%, rgba(139, 92, 246, 0.18) 100%)',
+                  color: '#A78BFA',
+                  border: '1px solid rgba(139, 92, 246, 0.4)',
+                  borderRadius: '999px',
+                  padding: '3px 10px',
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  letterSpacing: '0.3px',
+                  boxShadow: '0 0 12px rgba(139, 92, 246, 0.25)',
+                }}
+              >
+                ⚡ MAS Engine
               </span>
             </div>
-          </button>
-        ))}
-      </div>
 
-      <style>{`
-        .agent-hub-container {
-          padding: 3rem 1.5rem;
-          max-width: 1200px;
-          margin: 0 auto;
-          color: var(--fg);
-          font-family: 'Outfit', 'Inter', sans-serif;
-        }
+            <button
+              type="button"
+              className="orchestrator-main-launch-btn"
+              onClick={() => handleRunOrchestrator()}
+              style={{
+                padding: '8px 24px',
+                fontSize: '14px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #4F46E5 0%, #6366F1 100%)',
+                color: '#FFFFFF',
+                fontWeight: 900,
+                boxShadow: '0 6px 20px rgba(79, 70, 229, 0.45)',
+                cursor: 'pointer',
+                border: 'none',
+                letterSpacing: '-0.3px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.25s ease',
+              }}
+            >
+              <span>▶</span>
+              <span>{lang === 'ko' ? '오케스트라 에이전트 실행' : 'Run MAS Orchestrator'}</span>
+            </button>
+          </div>
 
-        .agent-hub-header {
-          text-align: center;
-          margin-bottom: 4rem;
-        }
+          <div className="chain-steps-row" style={{ marginTop: '2px', gap: '6px' }}>
+            {businessAgents.map((agent, i) => (
+              <React.Fragment key={agent.id}>
+                <div
+                  className="chain-step-chip"
+                  onClick={() => handleRunOrchestrator(`${agent.titleKo} 지휘 실행`)}
+                  style={{ cursor: 'pointer', padding: '4px 10px', fontSize: '12px', background: 'rgba(255, 255, 255, 0.08)', borderColor: 'rgba(79, 70, 229, 0.4)' }}
+                >
+                  <span>{agent.icon}</span>
+                  <span>{agent.step}. {lang === 'ko' ? agent.titleKo : agent.titleEn}</span>
+                </div>
+                {i < businessAgents.length - 1 && (
+                  <span className="chain-arrow" style={{ fontSize: '13px', color: '#818CF8', fontWeight: 800, margin: '0 2px' }} aria-hidden="true">⇄</span>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        .agent-hub-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          background: rgba(79, 70, 229, 0.08);
-          color: var(--accent);
-          padding: 0.5rem 1.25rem;
-          border-radius: var(--radius-full);
-          font-size: 0.85rem;
-          font-weight: 700;
-          border: 1px solid rgba(79, 70, 229, 0.15);
-          margin-bottom: 1.5rem;
-        }
+      {/* ── 3단: 하단 5개 전문 에이전트 Bento Grid 대시보드 ── */}
+      {/* bento-tone-indigo 클래스 하나로 모두 통일합니다. */}
+      <section className="home-bento-grid" aria-label="Operational Bento Dashboard" style={{ marginTop: '5px' }}>
+        
+        {/* Card 1 */}
+        <article
+          className="bento-card bento-tone-indigo"
+          onClick={() => navigate('/ax-data')}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="bento-card-header">
+            <span className="bento-step-pill pill-indigo">1. {lang === 'ko' ? '참가기업 발굴' : 'Exhibitor Agent'}</span>
+          </div>
+          <h3 className="bento-card-title">
+            {lang === 'ko' ? '참가기업 발굴 에이전트' : 'Exhibitor Discovery Agent'}
+          </h3>
+          <p className="bento-card-copy">
+            {lang === 'ko'
+              ? '전시회·시장개척단 조건에 맞는 참가기업 후보 탐색과 정보 정리를 돕습니다.'
+              : 'Find prospective exhibitors matching exhibition and market entry requirements.'}
+          </p>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '3rem' }}>🏢</span>
+          </div>
+          <div className="bento-card-action">
+            <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
+            <span className="bento-arrow" aria-hidden="true" style={{ color: '#4F46E5' }}>→</span>
+          </div>
+        </article>
 
-        .badge-pulse {
-          width: 8px;
-          height: 8px;
-          background-color: var(--accent);
-          border-radius: 50%;
-          animation: pulse 2s infinite;
-        }
+        {/* Card 2 */}
+        <article
+          className="bento-card bento-tone-indigo"
+          onClick={() => navigate('/consultants')}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="bento-card-header">
+            <span className="bento-step-pill pill-indigo">2. {lang === 'ko' ? '시장정보' : 'Market Info'}</span>
+          </div>
+          <h3 className="bento-card-title">
+            {lang === 'ko' ? '글로벌 시장정보 에이전트' : 'Global Market Info Agent'}
+          </h3>
+          <p className="bento-card-copy">
+            {lang === 'ko'
+              ? '국가·품목별 시장, 관세, 규제, 지역전문가 정보를 확인합니다.'
+              : 'Check market, tariff, regulation, and local expert info by country and product.'}
+          </p>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '3rem' }}>🌍</span>
+          </div>
+          <div className="bento-card-action">
+            <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
+            <span className="bento-arrow" aria-hidden="true" style={{ color: '#4F46E5' }}>→</span>
+          </div>
+        </article>
 
-        .agent-hub-header h1 {
-          font-size: 3rem;
-          font-weight: 800;
-          background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          margin-bottom: 1rem;
-          letter-spacing: -0.03em;
-        }
+        {/* Card 3 */}
+        <article
+          className="bento-card bento-tone-indigo"
+          onClick={() => navigate('/')}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="bento-card-header">
+            <span className="bento-step-pill pill-indigo">3. {lang === 'ko' ? '바이어 발굴' : 'Buyer Match'}</span>
+          </div>
+          <h3 className="bento-card-title">
+            {lang === 'ko' ? '바이어 발굴·B2B 매칭 에이전트' : 'Buyer Discovery & B2B Match'}
+          </h3>
+          <p className="bento-card-copy">
+            {lang === 'ko'
+              ? '해외 바이어와 파트너 후보를 탐색하고 매칭 근거를 확인합니다.'
+              : 'Search overseas buyers, partner candidates, and view matching insights.'}
+          </p>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '3rem' }}>🤝</span>
+          </div>
+          <div className="bento-card-action">
+            <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
+            <span className="bento-arrow" aria-hidden="true" style={{ color: '#4F46E5' }}>→</span>
+          </div>
+        </article>
 
-        .agent-hub-header .subtitle {
-          color: var(--fg-secondary);
-          font-size: 1.15rem;
-          max-width: 800px;
-          margin: 0 auto;
-          line-height: 1.6;
-        }
+        {/* Card 4 */}
+        <article
+          className="bento-card bento-tone-indigo"
+          onClick={() => navigate('/schedule')}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="bento-card-header">
+            <span className="bento-step-pill pill-indigo">4. {lang === 'ko' ? '일정관리' : 'Schedule'}</span>
+          </div>
+          <h3 className="bento-card-title">
+            {lang === 'ko' ? '상담일정 관리 에이전트' : 'Schedule Management Agent'}
+          </h3>
+          <p className="bento-card-copy">
+            {lang === 'ko'
+              ? '온라인·현장 상담 일정과 승인 상태를 관리합니다.'
+              : 'Manage online and onsite meeting schedules and approval statuses.'}
+          </p>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '3rem' }}>📅</span>
+          </div>
+          <div className="bento-card-action">
+            <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
+            <span className="bento-arrow" aria-hidden="true" style={{ color: '#4F46E5' }}>→</span>
+          </div>
+        </article>
 
-        .agents-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 2rem;
-        }
+        {/* Card 5 */}
+        <article
+          className="bento-card bento-tone-indigo"
+          onClick={() => navigate('/aftercare')}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="bento-card-header">
+            <span className="bento-step-pill pill-indigo">5. {lang === 'ko' ? '사후관리' : 'Aftercare'}</span>
+          </div>
+          <h3 className="bento-card-title">
+            {lang === 'ko' ? '사후관리 에이전트' : 'Aftercare Agent'}
+          </h3>
+          <p className="bento-card-copy">
+            {lang === 'ko'
+              ? '상담 후 RFQ, 샘플, 후속 연락 등의 단계를 체계적으로 관리합니다.'
+              : 'Systematically track post-meeting RFQs, samples, and follow-ups.'}
+          </p>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '3rem' }}>📋</span>
+          </div>
+          <div className="bento-card-action">
+            <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
+            <span className="bento-arrow" aria-hidden="true" style={{ color: '#4F46E5' }}>→</span>
+          </div>
+        </article>
 
-        .agent-card {
-          background: var(--card-glass, #ffffff);
-          border: 1px solid var(--border, #e2e8f0);
-          border-radius: var(--radius-lg, 16px);
-          padding: 2rem;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          display: flex;
-          flex-direction: column;
-        }
-
-        .agent-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-          border-color: rgba(79, 70, 229, 0.4);
-        }
-
-        .agent-card-header {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          margin-bottom: 1.5rem;
-        }
-
-        .agent-avatar {
-          width: 54px;
-          height: 54px;
-          border-radius: 14px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-size: 1.5rem;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .agent-card-header h3 {
-          font-size: 1.2rem;
-          font-weight: 800;
-          margin: 0;
-          color: var(--fg, #1e293b);
-          line-height: 1.3;
-        }
-
-        .agent-desc {
-          font-size: 0.95rem;
-          color: var(--fg-secondary, #64748b);
-          line-height: 1.6;
-          margin-bottom: 2rem;
-        }
-
-        @keyframes pulse {
-          0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
-          70% { box-shadow: 0 0 0 6px rgba(79, 70, 229, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
-        }
-      `}</style>
+      </section>
     </div>
   );
 }
