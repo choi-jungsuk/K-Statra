@@ -182,7 +182,7 @@ function RecruitmentWorkspace({ mode, config, lang, onBack }) {
   const [showEmailComposer, setShowEmailComposer] = useState(false);
   const [emailSubject, setEmailSubject] = useState('(광고) demostatra 2026 참가 안내 및 글로벌 B2B 매칭 서비스');
   const [emailBody, setEmailBody] = useState(
-    '안녕하세요, {{company_name}} 담당자님.\n\n사단법인 아인글로벌입니다.\ndemostatra 2026 자동차 및 산업 부품 글로벌 전시회 참가를 안내해 드립니다.\n\n첨부된 브로슈어를 확인해 주시고, B2B 바이어 매칭 지원을 희망하시는 경우 회신 부탁드립니다.\n\n감사합니다.'
+    '안녕하세요, {{company_name}} 담당자님.\n\n주식회사 그란오소AI 입니다.\ndemostatra 2026 자동차 및 산업 부품 글로벌 전시회 참가를 안내해 드립니다.\n\n첨부된 브로슈어를 확인해 주시고, B2B 바이어 매칭 지원을 희망하시는 경우 회신 부탁드립니다.\n\n감사합니다.'
   );
   const [attachments, setAttachments] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -1067,7 +1067,7 @@ function RecruitmentWorkspace({ mode, config, lang, onBack }) {
                     <input
                       type="text"
                       readOnly
-                      value="AIN Global <contact@ainglobal.org>"
+                      value="GRANOSOAI <contact@granosoai.com>"
                       style={{ width: '100%', padding: '8px 12px', fontSize: '13px', border: '1px solid #cbd5e1', borderRadius: '6px', background: '#f1f5f9', color: '#64748b' }}
                     />
                   </div>
@@ -1078,7 +1078,7 @@ function RecruitmentWorkspace({ mode, config, lang, onBack }) {
                     <input
                       type="text"
                       readOnly
-                      value="contact@ainglobal.org"
+                      value="contact@granosoai.com"
                       style={{ width: '100%', padding: '8px 12px', fontSize: '13px', border: '1px solid #cbd5e1', borderRadius: '6px', background: '#f1f5f9', color: '#64748b' }}
                     />
                   </div>
