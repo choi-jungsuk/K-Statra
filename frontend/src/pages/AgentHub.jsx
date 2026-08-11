@@ -67,18 +67,18 @@ export default function AgentHub() {
             <h1 id="home-bento-hero-title" className="bento-hero-title" style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.7px', margin: '6px 0 8px' }}>
               {lang === 'ko' ? (
                 <>
-                  전시회 주최사의 업무생산성 향상을 위한 <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AI Transformation(AX) 플랫폼</span>
+                  전시회 주최사의 업무생산성 향상을 위한 <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AX 플랫폼</span>
                 </>
               ) : (
                 <>
-                  <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AI Transformation (AX) Platform</span> for enhancing the productivity of exhibition organizers
+                  <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AX Platform</span> for enhancing the productivity of exhibition organizers
                 </>
               )}
             </h1>
             <p className="bento-hero-subtitle" style={{ fontSize: '15px', color: '#CBD5E1', margin: 0, lineHeight: 1.45 }}>
               {lang === 'ko'
-                ? '국내 참가업체와 해외 바이어 후보를 발굴하고, B2B 매칭의 만족도를 높이는 AI 인텔리전스'
-                : 'AI intelligence that discovers domestic exhibitors and global buyer candidates, elevating B2B matching satisfaction.'}
+                ? '전시회 참가업체와 해외바이어 발굴, B2B 미팅, 사후관리까지 원스톱으로 관리하는 AI 인텔리전스'
+                : 'AI intelligence that comprehensively manages exhibitor & global buyer discovery, B2B meetings, and aftercare.'}
             </p>
           </div>
         </div>
