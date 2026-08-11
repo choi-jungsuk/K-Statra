@@ -24,7 +24,7 @@ export default function SchedulePage() {
   const [selectedExhibitor, setSelectedExhibitor] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
   const [schedulerMap, setSchedulerMap] = useState({});
-  const [selectedExhibition, setSelectedExhibition] = useState('KOAA SHOW 2026');
+  const [selectedExhibition, setSelectedExhibition] = useState('Global Tech Exhibition 2026');
 
   // Form states (Online only)
   const [onlineForm, setOnlineForm] = useState({ 
@@ -187,12 +187,12 @@ export default function SchedulePage() {
         const payload = {
           companyName: selectedExhibitor.name,
           date: day,
-          timeSlot: `KOAA SHOW 2026 - 부스 #${selectedExhibitor.boothNumber}`,
+          timeSlot: `Exhibition - 부스 #${selectedExhibitor.boothNumber}`,
           reqType: 'OFFLINE',
           status: 'PENDING', // PENDING status represents buyer requesting & exhibitor needing to approve
           boothNumber: selectedExhibitor.boothNumber,
           meetingLink: '',
-          agenda: `[KOAA SHOW 2026] B2B 현장 미팅 신청 - ${selectedExhibitor.item} 공급 및 바이어 수입 조율 상담`
+          agenda: `[현장 미팅 신청] - ${selectedExhibitor.item} 공급 및 바이어 수입 조율 상담`
         };
 
         try {
@@ -318,17 +318,17 @@ export default function SchedulePage() {
           <span className="search-agent-pulse"></span>
         </div>
         <span className="page-agent-badge-text">
-          {lang === 'ko' ? '사후관리 Agent' : 'Aftercare Agent'}
+          {lang === 'ko' ? '상담일정 관리 에이전트' : 'Schedule Management Agent'}
         </span>
       </div>
 
       <h2 style={{ marginBottom: '0.5rem', fontWeight: 800 }}>
-        {lang === 'ko' ? '무역 성사 및 부스 재참가 사후관리' : 'Trade Deal & Re-exhibition Aftercare'}
+        {lang === 'ko' ? '비즈니스 매칭 상담일정 관리' : 'Business Match Schedule Management'}
       </h2>
       <p style={{ marginBottom: '2rem', color: '#6b7280', fontSize: '14px', maxWidth: '800px', lineHeight: 1.5 }}>
-        {lang === 'ko' 
-          ? '1회성 전시회에 그치지 않고 상담 기업들의 실질적인 무역 거래 성사를 지원하며, 차년도 전시회 부스 재참가를 유치하는 지속적인 사후관리(Aftercare)를 수행합니다.' 
-          : 'Continuous aftercare monitoring to support trade deal conversion and re-recruit booth exhibitors for the following year.'}
+        {lang === 'ko'
+          ? '온라인 화상 미팅과 오프라인 전시회 현장 부스 방문 일정을 체계적으로 관리하고 조율합니다.'
+          : 'Systematically manage and coordinate online video meetings and offline exhibition booth visits.'}
       </p>
 
       {/* sliding tabs row */}
@@ -349,7 +349,7 @@ export default function SchedulePage() {
             }}
             type="button"
           >
-            <span>🎪</span> {lang === 'ko' ? 'KOAA SHOW 현장미팅 신청' : 'KOAA SHOW Onsite Meeting Request'}
+            <span>🎪</span> {lang === 'ko' ? '전시회 현장미팅 신청' : 'Exhibition Onsite Meeting Request'}
           </button>
         </div>
       </div>
@@ -377,7 +377,7 @@ export default function SchedulePage() {
               </h3>
               <div className="exhibitions-banner-row" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {[
-                  { name: 'KOAA SHOW 2026', date: '2026.10.21 - 10.23', color: '#BE123C', desc: '국제 모빌리티 산업전 - 모빌리티 솔루션 파트너 상담 (킨텍스 KINTEX 제1전시장)' }
+                  { name: 'Global Tech Exhibition 2026', date: '2026.10.21 - 10.23', color: '#BE123C', desc: '글로벌 테크 산업전 - 솔루션 파트너 상담' }
                 ].map((ex, idx) => {
                   const isSelected = selectedExhibition === ex.name;
                   return (
@@ -488,7 +488,7 @@ export default function SchedulePage() {
                     {c.reqType === 'OFFLINE' && c.boothNumber && (
                       <Button 
                         variant="secondary" 
-                        onClick={() => alert(`해당 업체의 부스 번호는 [${c.boothNumber}] 입니다.\n전시회: KOAA SHOW 2026\n\n상대방의 수락 대기(PENDING) 승인이 완료되면 상담표가 최종 락업됩니다.`)}
+                        onClick={() => alert(`해당 업체의 부스 번호는 [${c.boothNumber}] 입니다.\n\n상대방의 수락 대기(PENDING) 승인이 완료되면 상담표가 최종 락업됩니다.`)}
                         style={{ borderRadius: '999px', fontSize: '11px', padding: '5px 14px' }}
                       >
                         🎪 {lang === 'ko' ? '부스 정보 및 맵 안내' : 'Exhibitor Map Info'}
@@ -567,7 +567,7 @@ export default function SchedulePage() {
             <div className="offline-scheduler-wrapper glass" style={{ padding: '1.75rem', borderRadius: '20px', border: '1px solid rgba(226, 232, 240, 0.8)', background: '#fff', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                 <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0 }}>
-                  🎪 {lang === 'ko' ? 'KOAA SHOW 현장미팅 신청' : 'KOAA SHOW Onsite Meeting Request'}
+                  🎪 {lang === 'ko' ? '전시회 현장미팅 신청' : 'Exhibition Onsite Meeting Request'}
                 </h3>
                 <span style={{ fontSize: '11px', background: 'rgba(190, 18, 60, 0.1)', color: '#BE123C', padding: '2px 8px', borderRadius: '999px', fontWeight: 800 }}>
                   {selectedExhibition}

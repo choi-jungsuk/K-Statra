@@ -13,6 +13,8 @@ import { ConsultantsModule } from './modules/consultants/consultants.module';
 import { AgentModule } from './modules/agent/agent.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ApplicationsModule } from './modules/applications/applications.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -39,5 +41,7 @@ import { ApplicationsModule } from './modules/applications/applications.module';
     AuthModule,
     ApplicationsModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
