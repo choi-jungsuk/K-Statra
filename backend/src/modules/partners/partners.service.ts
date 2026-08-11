@@ -775,6 +775,25 @@ export class PartnersService implements OnApplicationBootstrap {
               if (titleAndContent.includes(kw)) score -= 0.35;
             });
 
+            if (isAutomotive) {
+              const automotivePatterns = [
+                /\bautomotive\b/,
+                /\bauto(?:mobile)?\s+parts?\b/,
+                /\bvehicles?\b/,
+                /\bcars?\s+(?:parts?|accessories)\b/,
+                /\btrucks?\b/,
+                /\bengines?\b/,
+                /\bmotors?\b/,
+                /\btires?\b/,
+                /\bbatter(?:y|ies)\b/,
+                /\bspare\s+parts?\b/,
+                /\bmechanical\b/,
+              ];
+              if (!automotivePatterns.some((pattern) => pattern.test(titleAndContent))) {
+                score -= 0.6;
+              }
+            }
+
             if (detectedIntent === 'buyer') {
               const buyerPenalties = ['supplier', 'seller', 'manufacturer', 'factory', 'exporter', 'producer', 'industrial', 'plant'];
               const buyerBoosts = ['importer', 'distributor', 'buyer', 'procurement', 'purchasing', 'trading'];

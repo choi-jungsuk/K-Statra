@@ -197,6 +197,24 @@ describe('PartnersService', () => {
       // 자동차 컨텍스트 없는 결과는 감점으로 기준치(0.65) 미달되어 필터링됨
       expect(result.data).toHaveLength(0);
     });
+
+    it('career/party 같은 부분 문자열을 자동차 관련어로 오인하지 않음', async () => {
+      jest.spyOn(service as any, 'searchWeb').mockResolvedValue({
+        results: [
+          {
+            title: 'Career Party Network',
+            content: 'career opportunities and party planning tips',
+            url: 'http://example.com',
+            score: 0.9,
+          },
+        ],
+        answer: '',
+      });
+
+      const result = await service.search({ q: '미국 자동차부품 수입업체' });
+
+      expect(result.data).toHaveLength(0);
+    });
   });
 
   // ── 인텐트 감지 ───────────────────────────────────────────────────────────────
