@@ -41,6 +41,45 @@ export default function HermesChatWidget() {
     }
   }, [lang]);
 
+  // MAS Orchestrator Simulation Listener
+  useEffect(() => {
+    const handleSimulation = (e) => {
+      setIsOpen(true);
+      
+      const addMsg = (role, name, content, delay) => {
+        setTimeout(() => {
+          setMessages(prev => [...prev, {
+            id: `sim-${Date.now()}-${Math.random()}`,
+            role: role,
+            content: `**[${name}]**\n${content}`,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }]);
+        }, delay);
+      };
+
+      if (lang === 'ko') {
+        addMsg('user', 'User', '전체 오케스트라 에이전트 파이프라인 가동해줘.', 0);
+        addMsg('assistant', 'MAS Orchestrator', '네, 전시회 준비를 위한 5단계 전문 에이전트 파이프라인을 가동합니다.\n\n1. 참가기업 발굴 에이전트 호출 중...', 1000);
+        addMsg('assistant', '1. 참가기업 발굴 Agent', 'K-뷰티 및 의료기기 관련 타겟 기업 120개사 리스트업 완료. (DB 적재 완료)', 2500);
+        addMsg('assistant', '2. 글로벌 시장정보 Agent', '해당 품목의 북미/유럽 시장 규제 및 관세 정보 추출 완료. 타겟 마켓 리포트 생성.', 4000);
+        addMsg('assistant', '3. 바이어 발굴 Agent', '발굴된 참가기업의 품목을 기반으로 매칭 가능한 글로벌 바이어 50개사 추천 리스트 생성 완료.', 5500);
+        addMsg('assistant', '4. 상담일정 관리 Agent', '추천 바이어 50개사와 참가기업 간의 가상 B2B 미팅 스케줄 초안 20건 생성 및 승인 대기 상태로 등록 완료.', 7000);
+        addMsg('assistant', 'MAS Orchestrator', '🎉 모든 에이전트의 초기 작업이 완료되었습니다. 각 에이전트 메뉴에서 상세 결과와 데이터를 확인하시고 승인/조율 작업을 진행해 주세요.', 8500);
+      } else {
+        addMsg('user', 'User', 'Start the full orchestrator agent pipeline.', 0);
+        addMsg('assistant', 'MAS Orchestrator', 'Yes, starting the 5-stage expert agent pipeline for exhibition preparation.\n\n1. Calling Exhibitor Agent...', 1000);
+        addMsg('assistant', '1. Exhibitor Agent', 'Target companies list (120) related to K-Beauty & Medical Devices generated and stored in DB.', 2500);
+        addMsg('assistant', '2. Market Info Agent', 'Extracted North American/European market regulations and tariffs. Market report generated.', 4000);
+        addMsg('assistant', '3. Buyer Match Agent', 'Generated a recommended list of 50 global buyers matchable with the exhibitors.', 5500);
+        addMsg('assistant', '4. Schedule Agent', 'Created 20 draft B2B virtual meeting schedules between the recommended buyers and exhibitors. Pending approval.', 7000);
+        addMsg('assistant', 'MAS Orchestrator', '🎉 All agents have completed their initial tasks. Please check the detailed results in each agent menu to proceed with approvals.', 8500);
+      }
+    };
+
+    window.addEventListener('trigger-orchestrator', handleSimulation);
+    return () => window.removeEventListener('trigger-orchestrator', handleSimulation);
+  }, [lang]);
+
   // 2. 메시지가 추가되거나 변경될 때 자동 스크롤
   useEffect(() => {
     if (messagesEndRef.current) {

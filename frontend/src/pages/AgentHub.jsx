@@ -52,7 +52,7 @@ export default function AgentHub() {
 
   // Mock function for UI effect only
   const handleRunOrchestrator = (customQuery) => {
-    alert(lang === 'ko' ? '데모 시스템: 에이전트 오케스트라 시뮬레이션입니다.' : 'Demo System: Agent Orchestrator Simulation');
+    window.dispatchEvent(new CustomEvent('trigger-orchestrator', { detail: { query: customQuery } }));
   };
 
   return (
