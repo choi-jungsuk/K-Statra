@@ -18,4 +18,5 @@ config.yaml
 *.txt
 __pycache__/
 *.pyc
+*.tsbuildinfo
 venv/
