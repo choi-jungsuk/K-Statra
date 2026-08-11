@@ -1,1291 +1,302 @@
-import { useEffect, useMemo, useState } from 'react'
-import { api } from '../api.js'
-import Button from '../ui/Button.jsx'
-import { useI18n } from '../i18n/I18nProvider.jsx'
-import CompanyResultCard from '../ui/CompanyResultCard.jsx'
-import Modal from '../ui/Modal.jsx'
-import { track } from '../utils/analytics.js'
-import { useNavigate } from 'react-router-dom'
-
-// 좌측 AI 기반 비즈니스 파트너 검색 필터바 표시 여부 (향후 필요 시 true로 변경하여 복원 가능)
-const SHOW_SIDEBAR_FILTER = false
-
-const sidebarPresets = {
-  partnership: [
-    { value: '', label: 'All partnership types' },
-    { value: 'Buyer', label: 'Buyer / Distributor' },
-    { value: 'Supplier', label: 'Supplier / Vendor' },
-    { value: 'Manufacturer', label: 'Manufacturer' },
-    { value: 'Technology', label: 'Technology Partner' },
-  ],
-  industry: [
-    { value: '', label: 'All industries' },
-    { value: 'Automotive / EV Parts', label: 'Automotive / EV Parts (PoC)' },
-    { value: 'IT / AI / SaaS', label: 'IT / AI / SaaS' },
-    { value: 'Healthcare / Bio / Medical', label: 'Healthcare / Bio / Medical' },
-    { value: 'Green Energy / Climate Tech / Smart City', label: 'Green Energy / Climate Tech / Smart City' },
-    { value: 'Mobility / Automation / Manufacturing', label: 'Mobility / Automation / Manufacturing' },
-    { value: 'Beauty / Consumer Goods / Food', label: 'Beauty / Consumer Goods / Food' },
-    { value: 'Content / Culture / Edutech', label: 'Content / Culture / Edutech' },
-    { value: 'Fintech / Smart Finance', label: 'Fintech / Smart Finance' },
-    { value: 'Other', label: 'Other' },
-  ],
-  country: [
-    { value: '', label: 'All countries' },
-    { value: 'United States', label: 'United States' },
-    { value: 'China', label: 'China' },
-    { value: 'South Korea', label: 'South Korea' },
-    { value: 'Japan', label: 'Japan' },
-    { value: 'Germany', label: 'Germany' },
-    { value: 'Singapore', label: 'Singapore' },
-    { value: 'Vietnam', label: 'Vietnam' },
-    { value: 'Uzbekistan', label: 'Uzbekistan' },
-    { value: 'Kazakhstan', label: 'Kazakhstan' },
-    { value: 'Oman', label: 'Oman' },
-    { value: 'UAE', label: 'UAE' },
-    { value: 'Poland', label: 'Poland' },
-    { value: 'Hungary', label: 'Hungary' },
-    { value: 'Czech Republic', label: 'Czech Republic' },
-    { value: 'Brazil', label: 'Brazil' },
-    { value: 'Chile', label: 'Chile' },
-    { value: 'Panama', label: 'Panama' },
-    { value: 'Kenya', label: 'Kenya' },
-    { value: 'Nigeria', label: 'Nigeria' },
-    { value: 'Egypt', label: 'Egypt' },
-    { value: 'Morocco', label: 'Morocco' },
-    { value: 'Mexico', label: 'Mexico' },
-    { value: 'Canada', label: 'Canada' },
-    { value: 'France', label: 'France' },
-    { value: 'Spain', label: 'Spain' },
-    { value: 'South Africa', label: 'South Africa' },
-    { value: 'Other', label: 'Other' },
-  ],
-  size: [
-    { value: '', label: 'Any size' },
-    { value: '1-10', label: '1-10' },
-    { value: '11-50', label: '11-50' },
-    { value: '51-200', label: '51-200' },
-    { value: '200+', label: '200+' },
-  ],
-}
-
-const consultantServices = {
-  'matching-assistant': 'Matching assistant',
-  'regional-consulting': 'Regional expert consulting',
-  'origin-support': 'Certificate of origin support',
-  aftercare: 'Deal aftercare',
-}
-
-const consultantOptions = [
-  { value: 'regional-consulting', label: '지역전문가 컨설팅 (Regional Expert)' },
-  { value: 'trade-document', label: '무역서류 지원 (Trade Documents)' },
-]
-
-const PROD_API = 'https://backend-production-601f2.up.railway.app';
-const API_BASE = import.meta?.env?.VITE_API_BASE || (import.meta.env.PROD ? PROD_API : 'http://localhost:4000');
-
-const SEARCH_PROVIDER = 'antigravity'
-const ANTIGRAVITY_BASE = API_BASE
-const ANTIGRAVITY_KEY = import.meta.env.VITE_ANTIGRAVITY_KEY || ''
-
-function inferCountry(company = {}) {
-  const nameVal = company.nameEn || company.name || '';
-  const text = `${nameVal} ${company.profileText || ''} ${company.country || ''} ${company.location?.country || ''}`.toLowerCase();
-  if (text.includes('uzbekistan')) return 'Uzbekistan';
-  return company.country || company.location?.country || '';
-}
-
-function formatCompanyLocation(company = {}) {
-  const parts = []
-  const loc = company.location
-
-  if (company.city) parts.push(company.city)
-  if (company.state) parts.push(company.state)
-  
-  const countryVal = inferCountry(company);
-  if (countryVal) parts.push(countryVal)
-
-  if (loc && typeof loc === 'object') {
-    if (loc.city && !parts.includes(loc.city)) parts.push(loc.city)
-    if (loc.state && !parts.includes(loc.state)) parts.push(loc.state)
-    const locCountry = inferCountry({ country: loc.country, location: loc });
-    if (locCountry && !parts.includes(locCountry)) parts.push(locCountry)
-    if (typeof loc.label === 'string') parts.push(loc.label)
-  } else if (typeof loc === 'string') {
-    parts.push(loc)
-  }
-
-  return parts.filter(Boolean).join(', ')
-}
-
-function extractWebsite(company = {}) {
-  return (
-    company.website ||
-    company.url ||
-    company.sourceUrl ||
-    company.source_url ||
-    company.link ||
-    company.href ||
-    company.site ||
-    company.domain ||
-    company.metadata?.url ||
-    ''
-  )
-}
-
-function getAccuracyScore(company = {}) {
-  const candidates = [
-    company.matchAccuracy,
-    company.accuracyScore,
-    company.confidence,
-    company.confidenceScore,
-    company.score,
-    company.matchScore,
-    company.matchingScore,
-    company.overallScore,
-  ]
-  const firstDefined = candidates.find((value) => value !== undefined && value !== null)
-  const raw = Number(firstDefined)
-  if (!Number.isFinite(raw)) return 82
-  if (raw > 1) return Math.max(0, Math.min(100, Math.round(raw)))
-  return Math.max(0, Math.min(100, Math.round(raw * 100)))
-}
-
-function buildMatchAnalysis(company = {}, t) {
-  const sourceList = company.matchAnalysis || company.analysis || []
-  if (Array.isArray(sourceList) && sourceList.length > 0) {
-    return sourceList.map((item, index) => ({
-      label: item.label || `${t('detail_analysis_generic')} ${index + 1}`,
-      score:
-        typeof item.score === 'number'
-          ? item.score > 1
-            ? Math.min(100, Math.max(0, Math.round(item.score)))
-            : Math.min(100, Math.max(0, Math.round(item.score * 100)))
-          : null,
-      description: item.description || '',
-    }))
-  }
-  const reasons = company.matchReasons || company.reasons || []
-  if (Array.isArray(reasons) && reasons.length > 0) {
-    return reasons.map((reason, index) => ({
-      label: `${t('detail_analysis_generic')} ${index + 1}`,
-      score: null,
-      description: reason,
-    }))
-  }
-  return []
-}
-
-function getMatchRecommendation(company = {}) {
-  return company.matchRecommendation || company.aiRecommendation || company.recommendation || ''
-}
-
-function normalizeAntigravityCompany(item = {}) {
-  const loc = item.location || {}
-  const tags = item.tags || item.capabilities || item.offerings || []
-  const reasons = item.analysis || item.reasons || item.matchAnalysis || []
-  const rec = item.recommendation || item.summary || item.matchRecommendation || ''
-  return {
-    _id: item._id || item.id || item.companyId || item.externalId,
-    name: item.name || item.companyName || '',
-    industry: item.industry || item.vertical || '',
-    country: item.country || loc.country || '',
-    city: item.city || loc.city || '',
-    state: item.state || loc.state || '',
-    location: loc,
-    tags,
-    offerings: item.offerings,
-    matchAccuracy:
-      item.matchAccuracy || item.accuracyScore || item.score || item.matchScore || item.confidenceScore,
-    matchAnalysis: Array.isArray(reasons) ? reasons : [],
-    matchRecommendation: rec,
-    website: item.website || item.url || item.site || '',
-    sizeBucket: item.size || item.employeeCountRange || item.companySize,
-    images: item.images || [],
-    ai_reasoning: item.ai_reasoning || '',
-    dart: item.dart, // Pass DART data through
-  }
-}
-
-async function searchCodex(payload) {
-  const res = await api.listCompanies(payload)
-  return { provider: 'codex', data: res?.data || [] }
-}
-
-async function searchAntigravity(payload) {
-  if (!ANTIGRAVITY_BASE) throw new Error('Antigravity base URL not configured')
-  const base = ANTIGRAVITY_BASE.replace(/\/$/, '')
-
-  // Pass q parameter correctly
-  const qs = new URLSearchParams({ limit: '50', ...payload })
-  if (payload.q) qs.set('q', payload.q);
-  const headers = {};
-  if (ANTIGRAVITY_KEY) headers['Authorization'] = `Bearer ${ANTIGRAVITY_KEY}`;
-  headers['Bypass-Tunnel-Reminder'] = 'true';
-
-  const response = await fetch(`${base}/partners/search?${qs.toString()}`, {
-    headers,
-  })
-  if (!response.ok) {
-    const message = response.statusText || 'Antigravity search failed'
-    throw new Error(message)
-  }
-  const json = await response.json()
-  console.log('[PartnerSearch] searchAntigravity raw json:', json);
-  const raw = Array.isArray(json?.data) ? json.data : Array.isArray(json?.results) ? json.results : []
-  const mapped = raw.map(normalizeAntigravityCompany).filter((c) => c._id && c.name)
-  console.log('[PartnerSearch] mapped data:', mapped);
-  return { provider: 'antigravity', data: mapped, aiResponse: json.aiResponse }
-}
-
-function mergeHybrid(codexResult = [], agResult = []) {
-  const combined = []
-  const seen = new Set()
-  const pushUnique = (item) => {
-    const key = item?._id || item?.name
-    if (!key || seen.has(key)) return
-    seen.add(key)
-    combined.push(item)
-  }
-  agResult.forEach(pushUnique)
-  codexResult.forEach(pushUnique)
-  return combined
-}
-
-async function searchPartners(payload) {
-  if (SEARCH_PROVIDER === 'antigravity') {
-    return searchAntigravity(payload)
-  }
-  if (SEARCH_PROVIDER === 'hybrid') {
-    try {
-      const ag = await searchAntigravity(payload)
-      const cx = await searchCodex(payload)
-      return { provider: 'hybrid', data: mergeHybrid(cx.data, ag.data) }
-    } catch (err) {
-      const cx = await searchCodex(payload)
-      return { provider: 'codex', data: cx.data, fallback: 'antigravity' }
-    }
-  }
-  return searchCodex(payload)
-}
-
-function getCountryFlag(country) {
-  if (!country) return '🌐'
-  const c = country.toLowerCase()
-  if (c.includes('vietnam') || c.includes('베트남')) return '🇻🇳'
-  if (c.includes('chile') || c.includes('칠레')) return '🇨🇱'
-  if (c.includes('panama') || c.includes('파나마')) return '🇵🇦'
-  if (c.includes('poland') || c.includes('폴란드')) return '🇵🇱'
-  if (c.includes('uae') || c.includes('아랍')) return '🇦🇪'
-  if (c.includes('usa') || c.includes('미국') || c.includes('states')) return '🇺🇸'
-  if (c.includes('germany') || c.includes('독일')) return '🇩🇪'
-  if (c.includes('france') || c.includes('프랑스')) return '🇫🇷'
-  if (c.includes('spain') || c.includes('스페인')) return '🇪🇸'
-  if (c.includes('indonesia') || c.includes('인니')) return '🇮🇩'
-  if (c.includes('thailand') || c.includes('태국')) return '🇹🇭'
-  if (c.includes('korea') || c.includes('한국')) return '🇰🇷'
-  if (c.includes('china') || c.includes('중국')) return '🇨🇳'
-  if (c.includes('japan') || c.includes('일본')) return '🇯🇵'
-  if (c.includes('brazil') || c.includes('브라질')) return '🇧🇷'
-  if (c.includes('mexico') || c.includes('멕시코')) return '🇲🇽'
-  if (c.includes('canada') || c.includes('캐나다')) return '🇨🇦'
-  if (c.includes('oman') || c.includes('오만')) return '🇴🇲'
-  if (c.includes('uzbekistan') || c.includes('우즈벡')) return '🇺🇿'
-  if (c.includes('kazakhstan') || c.includes('카자흐')) return '🇰🇿'
-  if (c.includes('kenya') || c.includes('케냐')) return '🇰🇪'
-  if (c.includes('nigeria') || c.includes('나이지리아')) return '🇳🇬'
-  if (c.includes('egypt') || c.includes('이집트')) return '🇪🇬'
-  if (c.includes('morocco') || c.includes('모로코')) return '🇲🇦'
-  if (c.includes('hungary') || c.includes('헝가리')) return '🇭🇺'
-  if (c.includes('czech') || c.includes('체코')) return '🇨🇿'
-  return '🌐'
-}
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { api } from '../api.js';
+import BuyerWorkflowTabs from '../ui/buyer-attraction/BuyerWorkflowTabs.jsx';
+import ExhibitorBatchPanel from '../ui/buyer-attraction/ExhibitorBatchPanel.jsx';
+import BuyerCandidateTable from '../ui/buyer-attraction/BuyerCandidateTable.jsx';
+import TravelSupportPanel from '../ui/buyer-attraction/TravelSupportPanel.jsx';
+import DualMatchPanel from '../ui/buyer-attraction/DualMatchPanel.jsx';
+import ConsultationSchedulePanel from '../ui/buyer-attraction/ConsultationSchedulePanel.jsx';
 
 export default function PartnerSearch() {
-  const navigate = useNavigate()
-  const [search, setSearch] = useState('')
-  const [preview, setPreview] = useState([])
-  const [loadingCompanies, setLoadingCompanies] = useState(false)
-  const [companyError, setCompanyError] = useState('')
-  const [searchProviderUsed, setSearchProviderUsed] = useState('')
-  const [aiResponse, setAiResponse] = useState('')
-  const [page, setPage] = useState(1)
-  const ITEMS_PER_PAGE = 5
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-  const [filters, setFilters] = useState({ industry: '', country: '', size: '', partnership: '' })
-  const [selectedCompany, setSelectedCompany] = useState(null)
-  const [feedback, setFeedback] = useState({ rating: 0, comments: '' })
-  const [feedbackStatus, setFeedbackStatus] = useState({ submitting: false, submitted: false, error: '' })
-  const [consultModal, setConsultModal] = useState(false)
-  const [consultForm, setConsultForm] = useState({ name: '', email: '', details: '', serviceType: 'regional-consulting' })
-  const [consultStatus, setConsultStatus] = useState({ submitting: false, success: false, error: '' })
-  const [selectedService, setSelectedService] = useState(consultantOptions[0].value)
+  const currentStep = searchParams.get('step') || 'exhibitors';
 
-  const { t, lang } = useI18n()
-  const hasRealResults = preview.length > 0
-  const handleCompanyDetails = (company) => {
-    setSelectedCompany(company)
-    setFeedback({ rating: 0, comments: '' })
-    setFeedbackStatus({ submitting: false, submitted: false, error: '' })
-    track('partner_detail_opened', { companyId: company?._id, name: company?.name })
-  }
+  const [campaign, setCampaign] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [candidates, setCandidates] = useState([]);
+  const [invitations, setInvitations] = useState([]);
+  const [matches, setMatches] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [statusMsg, setStatusMsg] = useState('');
 
-  const closeCompanyDetails = () => {
-    setSelectedCompany(null)
-    setFeedback({ rating: 0, comments: '' })
-    setFeedbackStatus({ submitting: false, submitted: false, error: '' })
-  }
-  const openConsultModal = (serviceType = 'matching-assistant') => {
-    setConsultForm((prev) => ({ ...prev, serviceType }))
-    setConsultStatus({ submitting: false, success: false, error: '' })
-    setConsultModal(true)
-  }
-  const detailWebsite = selectedCompany ? extractWebsite(selectedCompany) : ''
-  const detailLocation = selectedCompany ? formatCompanyLocation(selectedCompany) : ''
-  const detailTags = selectedCompany ? selectedCompany.tags || selectedCompany.offerings || [] : []
-  const overallConfidence = selectedCompany ? getAccuracyScore(selectedCompany) : null
-  const analysisEntries = selectedCompany ? buildMatchAnalysis(selectedCompany, t) : []
-  const recommendationText = selectedCompany ? getMatchRecommendation(selectedCompany) : ''
-  const recommendationDisplay =
-    selectedCompany && (recommendationText || t('detail_recommendation_placeholder'))
-  const highlightCards = useMemo(() => {
-    if (!selectedCompany) return []
-    const fallback = t('detail_not_provided')
-    const partnershipValue = (selectedCompany.tags || []).slice(0, 3).join(', ')
-    const countryValue = selectedCompany.country || selectedCompany.location?.country || ''
-    return [
-      { id: 'industry', label: t('filter_industry'), value: selectedCompany.industry || fallback },
-      { id: 'partnership', label: t('filter_partnership_type'), value: partnershipValue || fallback },
-      { id: 'country', label: t('filter_country'), value: countryValue || fallback },
-    ]
-  }, [selectedCompany, t])
-  const onSubmitFeedback = async (event) => {
-    event.preventDefault()
-    if (!selectedCompany || !feedback.rating) return
-    setFeedbackStatus({ submitting: true, submitted: false, error: '' })
+  // Load campaign details on mount
+  const loadCampaignData = async () => {
+    setLoading(true);
     try {
-      await api.submitMatchFeedback(selectedCompany._id, {
-        rating: feedback.rating,
-        comments: feedback.comments.trim(),
-        locale: lang,
-        source: 'partner-search',
-      })
-      track('feedback_submitted', {
-        companyId: selectedCompany?._id,
-        rating: feedback.rating,
-        hasComments: Boolean(feedback.comments?.trim()),
-      })
-      setFeedbackStatus({ submitting: false, submitted: true, error: '' })
-    } catch (err) {
-      setFeedbackStatus({
-        submitting: false,
-        submitted: false,
-        error: err?.message || 'Failed to submit feedback',
-      })
-    }
-  }
+      const list = await api.listBuyerAttractionCampaigns();
+      if (list && list.length > 0) {
+        const camp = list[0];
+        setCampaign(camp);
 
-  async function loadPreview({ term = '', filters: filterValues = {} } = {}) {
-    setLoadingCompanies(true)
-    setCompanyError('')
-    try {
-      const sanitizedFilters = Object.fromEntries(
-        Object.entries(filterValues || {}).filter(([, value]) => Boolean(value))
-      )
-      // Fetch more to handle client-side pagination for now, or implement server pagination later
-      const payload = { q: term.trim(), limit: 50, ...sanitizedFilters }
-      const { data, provider, fallback, aiResponse: aiMsg } = await searchPartners(payload)
-      console.log('[PartnerSearch] searchPartners result:', { dataLength: data?.length, provider, fallback });
-      setPreview(data || [])
-      setAiResponse(aiMsg || '')
-      setSearchProviderUsed(provider || SEARCH_PROVIDER)
-      track('search_results_loaded', {
-        provider: provider || SEARCH_PROVIDER,
-        fallbackProvider: fallback,
-        term: term.trim(),
-        filters: sanitizedFilters,
-        result_count: Array.isArray(data) ? data.length : 0,
-      })
+        // Preload child data if exists
+        const [cands, invs, mtchs, appts] = await Promise.all([
+          api.listBuyerCandidates(camp._id).catch(() => []),
+          api.listBuyerInvitations(camp._id).catch(() => []),
+          api.listMatches(camp._id).catch(() => []),
+          api.listAppointments(camp._id).catch(() => []),
+        ]);
+        setCandidates(cands || []);
+        setInvitations(invs || []);
+        setMatches(mtchs || []);
+        setAppointments(appts || []);
+      }
     } catch (err) {
-      setCompanyError(err.message || 'Failed to load companies')
-      setPreview([])
-      setPage(1)
+      console.error('Failed to load campaign data:', err);
     } finally {
-      setLoadingCompanies(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    // loadPreview() - Disabled auto-load to prevent 114s hang on initial access
-  }, [])
+    loadCampaignData();
+  }, []);
 
-  const filterConfig = useMemo(
-    () => [
-      { key: 'partnership', label: t('filter_partnership_type'), options: sidebarPresets.partnership },
-      { key: 'industry', label: t('filter_industry'), options: sidebarPresets.industry },
-      { key: 'country', label: t('filter_country'), options: sidebarPresets.country },
-      { key: 'size', label: t('filter_company_size'), options: sidebarPresets.size },
-    ],
-    [t]
-  )
+  const handleSelectStep = (stepId) => {
+    setSearchParams({ step: stepId });
+  };
 
-  const activeFilters = useMemo(
-    () => Object.fromEntries(Object.entries(filters).filter(([, value]) => Boolean(value))),
-    [filters]
-  )
-
-  function handleFilterChange(key, value) {
-    setFilters((prev) => ({ ...prev, [key]: value }))
-  }
-
-  function resetFilters() {
-    setFilters({ industry: '', country: '', size: '', partnership: '' })
-  }
-
-  function runSearch(customTerm) {
-    const termToSearch = typeof customTerm === 'string' ? customTerm : search;
-    loadPreview({ term: termToSearch, filters })
-    track('search_submitted', {
-      term: termToSearch.trim(),
-      filters: activeFilters,
-      provider: searchProviderUsed || SEARCH_PROVIDER,
-    })
-  }
-
-  async function handleConsultSubmit(event) {
-    event.preventDefault()
-    if (!consultForm.name.trim() || !consultForm.email.trim()) {
-      setConsultStatus((prev) => ({ ...prev, error: 'Please enter your name and email.' }))
-      return
-    }
-    setConsultStatus({ submitting: true, success: false, error: '' })
-    const payload = {
-      name: consultForm.name.trim(),
-      email: consultForm.email.trim(),
-      details: consultForm.details.trim(),
-      serviceType: consultForm.serviceType || 'matching-assistant',
-      locale: lang,
-      source: 'partner-search',
-      searchTerm: search.trim(),
-      filters: activeFilters,
-    }
+  // Stage 1 Handlers
+  const handleImportExhibitors = async (exhibitors) => {
+    if (!campaign?._id) return;
+    setLoading(true);
     try {
-      await api.createConsultantRequest(payload)
-      track('consultant_help_submit', {
-        serviceType: payload.serviceType,
-        hasDetails: Boolean(payload.details),
-      })
-      setConsultStatus({ submitting: false, success: true, error: '' })
-    } catch (error) {
-      const detailMessage =
-        Array.isArray(error?.details) && error.details.length > 0
-          ? error.details.map((detail) => detail.message).join(', ')
-          : ''
-      setConsultStatus({
-        submitting: false,
-        success: false,
-        error: detailMessage || error.message || 'Could not submit the request. Please try again.',
-      })
+      const updated = await api.importExhibitors(campaign._id, { exhibitors });
+      setCampaign(updated);
+      setStatusMsg('✅ 참가업체 배치가 성공적으로 저장되었습니다.');
+    } catch (err) {
+      setStatusMsg('❌ 참가업체 저장 오류: ' + err.message);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  const displayCompanies = preview.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
-  const totalPages = Math.ceil(preview.length / ITEMS_PER_PAGE)
+  const handleImportFromDb = async () => {
+    if (!campaign?._id) return;
+    setLoading(true);
+    try {
+      const updated = await api.importExhibitorsFromDb(campaign._id);
+      setCampaign(updated);
+      setStatusMsg('✅ DB에서 자동차/전시회 관련 참가업체를 성공적으로 불러왔습니다.');
+    } catch (err) {
+      setStatusMsg('❌ DB 불러오기 오류: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Stage 2 Handlers
+  const handleSearchBuyers = async () => {
+    if (!campaign?._id) return;
+    setLoading(true);
+    try {
+      const cands = await api.searchBuyerCandidates(campaign._id);
+      setCandidates(cands || []);
+      setStatusMsg('✅ 참가업체 품목 맞춤 해외 바이어 후보를 발굴했습니다.');
+    } catch (err) {
+      setStatusMsg('❌ 바이어 검색 오류: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReviewCandidate = async (candidateId, status, reviewNote) => {
+    try {
+      await api.reviewCandidate(candidateId, status, reviewNote);
+      if (campaign?._id) {
+        const [cands, invs] = await Promise.all([
+          api.listBuyerCandidates(campaign._id),
+          api.listBuyerInvitations(campaign._id),
+        ]);
+        setCandidates(cands || []);
+        setInvitations(invs || []);
+      }
+    } catch (err) {
+      alert('검토 상태 변경 오류: ' + err.message);
+    }
+  };
+
+  // Stage 3 Handler
+  const handleUpdateInvitation = async (invitationId, updateDto) => {
+    try {
+      await api.updateBuyerInvitation(invitationId, updateDto);
+      if (campaign?._id) {
+        const invs = await api.listBuyerInvitations(campaign._id);
+        setInvitations(invs || []);
+      }
+      setStatusMsg('✅ 호텔투숙료 100% 지원 심사 및 초청 상태가 업데이트되었습니다.');
+    } catch (err) {
+      alert('초청 정보 수정 오류: ' + err.message);
+    }
+  };
+
+  // Stage 4 Handler
+  const handleGenerateMatches = async () => {
+    if (!campaign?._id) return;
+    setLoading(true);
+    try {
+      const mtchs = await api.generateMatches(campaign._id);
+      setMatches(mtchs || []);
+      setStatusMsg('✅ 참가업체(부스) + 국내 비참가업체(글로벌 상담장) 이중 매칭이 생성되었습니다.');
+    } catch (err) {
+      setStatusMsg('❌ 이중 매칭 생성 오류: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="partner-layout" style={SHOW_SIDEBAR_FILTER ? undefined : { gridTemplateColumns: '1fr', gap: 0 }}>
-      {SHOW_SIDEBAR_FILTER && (
-        <aside className="search-sidebar" aria-label="Search filters">
+    <div style={{ maxWidth: 1240, margin: '24px auto', padding: '0 20px 80px 20px', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      {/* Top Professional Header (Pivoted to 전시회 Buyer Attraction Agent) */}
+      <div style={{ marginBottom: '24px', background: 'linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%)', color: '#FFFFFF', padding: '28px 32px', borderRadius: '18px', boxShadow: '0 10px 25px -5px rgba(15,23,42,0.3)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <h2
-              className="sidebar-title"
-              style={lang === 'ko' ? { fontSize: '1.05rem', lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden' } : undefined}
-              title={t('sidebar_title')}
-            >
-              {t('sidebar_title')}
-            </h2>
-            <p className="muted small">{t('sidebar_description')}</p>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(99,102,241,0.2)', color: '#A5B4FC', border: '1px solid rgba(165,180,252,0.3)', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 800 }}>
+              <span>🏎️ 전시회</span>
+              <span>•</span>
+              <span>글로벌 바이어 유치 Agent</span>
+            </div>
+            <h1 style={{ fontSize: '28px', fontWeight: 800, margin: '12px 0 6px 0', letterSpacing: '-0.5px' }}>
+              전시회 글로벌 바이어 유치 Agent
+            </h1>
+            <p style={{ fontSize: '14px', color: '#CBD5E1', margin: 0, maxWidth: '800px', lineHeight: 1.5 }}>
+              전시회 부스 참가기업과 해외 바이어 초청을 연계하고, 호텔투숙료 100% 지원 심사와 초청 바이어의 구매수요에 맞는 참가업체·비참가업체 이중 매칭을 수행합니다.
+            </p>
           </div>
 
-          <div className="filter-stack">
-            {filterConfig.map((filter) => (
-              <label className="filter-group" key={filter.key}>
-                <span>{filter.label}</span>
-                <select value={filters[filter.key]} onChange={(e) => handleFilterChange(filter.key, e.target.value)}>
-                  {filter.options.map((option) => (
-                    <option value={option.value} key={option.label}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            ))}
-          </div>
-          <div className="sidebar-actions">
-            <Button onClick={runSearch} loading={loadingCompanies}>
-              {t('apply_filters')}
-            </Button>
-            <button type="button" className="link-btn" onClick={resetFilters}>
-              {t('reset_filters')}
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              type="button"
+              onClick={() => navigate('/ax-data?mode=trade-mission')}
+              style={{ background: 'rgba(255,255,255,0.1)', color: '#FFFFFF', border: '1px solid rgba(255,255,255,0.2)', padding: '8px 14px', borderRadius: '8px', fontSize: '12.5px', fontWeight: 700, cursor: 'pointer' }}
+            >
+              🌏 해외시장개척단 바로가기
             </button>
           </div>
-        </aside>
+        </div>
+
+        {/* Real Metrics Banner */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', marginTop: '24px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+          <div>
+            <div style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 600 }}>부스 참가업체</div>
+            <div style={{ fontSize: '20px', fontWeight: 800, color: '#F8FAFC', marginTop: '2px' }}>
+              {campaign?.exhibitorSnapshot?.length || 0}개사
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 600 }}>바이어 후보</div>
+            <div style={{ fontSize: '20px', fontWeight: 800, color: '#38BDF8', marginTop: '2px' }}>
+              {candidates.length}건
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 600 }}>초청 검토/발송</div>
+            <div style={{ fontSize: '20px', fontWeight: 800, color: '#818CF8', marginTop: '2px' }}>
+              {invitations.length}건
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 600 }}>호텔투숙료 100% 지원검토</div>
+            <div style={{ fontSize: '20px', fontWeight: 800, color: '#FBBF24', marginTop: '2px' }}>
+              {invitations.filter((i) => i.travelSupportStatus !== 'not_requested').length}건
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 600 }}>이중 매칭 건수</div>
+            <div style={{ fontSize: '20px', fontWeight: 800, color: '#34D399', marginTop: '2px' }}>
+              {matches.length}건
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 600 }}>확정 상담 일정</div>
+            <div style={{ fontSize: '20px', fontWeight: 800, color: '#F472B6', marginTop: '2px' }}>
+              {appointments.length}건
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 5-Step Workflow Tabs */}
+      <div style={{ marginBottom: '24px' }}>
+        <BuyerWorkflowTabs activeStep={currentStep} onSelectStep={handleSelectStep} />
+      </div>
+
+      {/* Status Alert Banner */}
+      {statusMsg && (
+        <div style={{ marginBottom: '20px', padding: '12px 18px', background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '10px', color: '#1E40AF', fontSize: '13.5px', fontWeight: 700 }}>
+          {statusMsg}
+        </div>
       )}
 
-      <section className="search-content">
-        <section className="card hero" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
-          <h1 style={lang === 'ko' ? { fontSize: '1.6rem', lineHeight: 1.3, marginBottom: '1rem', wordBreak: 'keep-all' } : { fontSize: '2rem', marginBottom: '1rem' }}>
-            {t('dashboard_title')}
-          </h1>
-          <p style={lang === 'ko' ? { fontSize: '0.9rem', lineHeight: 1.4, marginBottom: '2rem', color: '#FFFFFF', wordBreak: 'keep-all' } : { fontSize: '0.9rem', marginBottom: '2rem', color: '#FFFFFF' }}>
-            {t('dashboard_subtitle')}
-          </p>
-          <div className="search-bar-container" style={{ display: 'flex', alignItems: 'center' }}>
-            <div className="search-agent-pill" style={{ background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)' }}>
-              <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ display: 'block' }}>
-                  <path d="M4 4h16v16H4z" />
-                  <path d="M8 8h8" />
-                  <path d="M8 12h8" />
-                  <path d="M8 16h5" />
-                </svg>
-                <span className="search-agent-pulse"></span>
-              </div>
-              <span className="search-agent-text" style={{ color: '#B45309' }}>
-                {lang === 'ko' ? '부스 참가업체 유치 Agent' : 'Exhibitor Recruiting Agent'}
-              </span>
-            </div>
-            <textarea
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value)
-                e.target.style.height = 'auto'
-                e.target.style.height = `${e.target.scrollHeight}px`
-              }}
-              placeholder={
-                t('search_placeholder') ||
-                '예시 : 2026 모빌리티·뷰티·의료 전시회 부스 참가기업 모집을 위한 타겟 제조사 및 마케팅 이메일 리스트를 추출해 줘'
-              }
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault()
-                  runSearch()
-                }
-              }}
-              className="search-textarea"
-              onFocus={(e) => (e.target.style.borderColor = '#2563eb')}
-              onBlur={(e) => (e.target.style.borderColor = '#e5e7eb')}
-            />
-            <button
-              onClick={runSearch}
-              className="search-submit-btn"
-            >
-              {t('search_button')}
-            </button>
-          </div>
+      {/* Step Contents */}
+      {currentStep === 'exhibitors' && (
+        <ExhibitorBatchPanel
+          campaign={campaign}
+          onImportExhibitors={handleImportExhibitors}
+          onImportFromDb={handleImportFromDb}
+          loading={loading}
+        />
+      )}
 
-          {/* Multi-industry Exhibitor & Buyer Suggested Search Chips */}
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '14px', flexWrap: 'wrap', zIndex: 10, position: 'relative' }}>
-            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', alignSelf: 'center', fontWeight: '500' }}>
-              💡 {lang === 'ko' ? '시연 단축어:' : 'Suggested:'}
-            </span>
-            <button
-              onClick={() => {
-                const q = 'US automotive EV parts manufacturer exhibitor DB and verified marketing emails';
-                setSearch(q);
-                runSearch(q);
-              }}
-              className="demo-chip-btn"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                border: '1px solid rgba(255, 255, 255, 0.22)',
-                borderRadius: '16px',
-                color: '#ffffff',
-                padding: '5px 12px',
-                fontSize: '11.5px',
-                cursor: 'pointer',
-                fontWeight: '500',
-                transition: 'all 0.2s'
-              }}
-            >
-              🇺🇸 {lang === 'ko' ? '미국 자동차부품 제조사 이메일 발굴' : 'US Auto Parts Exhibitor DB & Emails'}
-            </button>
-            <button
-              onClick={() => {
-                const q = 'K-Beauty cosmetics manufacturer prospective exhibitor targets and emails';
-                setSearch(q);
-                runSearch(q);
-              }}
-              className="demo-chip-btn"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                border: '1px solid rgba(255, 255, 255, 0.22)',
-                borderRadius: '16px',
-                color: '#ffffff',
-                padding: '5px 12px',
-                fontSize: '11.5px',
-                cursor: 'pointer',
-                fontWeight: '500',
-                transition: 'all 0.2s'
-              }}
-            >
-              💄 {lang === 'ko' ? 'K-뷰티 전시회 부스 유치 타겟 명단' : 'K-Beauty Exhibitor Recruiting Targets'}
-            </button>
-            <button
-              onClick={() => {
-                const q = 'Germany medical device bio distributor and importer buyer matching list';
-                setSearch(q);
-                runSearch(q);
-              }}
-              className="demo-chip-btn"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                border: '1px solid rgba(255, 255, 255, 0.22)',
-                borderRadius: '16px',
-                color: '#ffffff',
-                padding: '5px 12px',
-                fontSize: '11.5px',
-                cursor: 'pointer',
-                fontWeight: '500',
-                transition: 'all 0.2s'
-              }}
-            >
-              🏥 {lang === 'ko' ? '독일 의료기기 바이어 매칭 리스트' : 'Germany Medical Buyer Matching List'}
-            </button>
-          </div>
-        </section>
-
-        <section className="card agent-status-board glass" style={{ padding: '1.5rem', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '1.5rem', marginTop: '1.5rem', marginBottom: '0.5rem' }}>
-          <div className="board-header" style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(226, 232, 240, 0.6)', paddingBottom: '0.75rem', marginBottom: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '18px' }}>🤖</span>
-              <strong style={{ fontSize: '15px', color: 'var(--fg)', fontWeight: 800 }}>
-                {lang === 'ko' ? 'DemoStatra 실시간 AI Agent 작동 현황' : 'DemoStatra Real-time AI Agent Status'}
-              </strong>
-            </div>
-            <span style={{ fontSize: '11px', color: 'var(--success)', fontWeight: 800, background: 'rgba(16, 185, 129, 0.1)', padding: '2px 8px', borderRadius: '999px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span className="search-agent-pulse" style={{ position: 'static', display: 'inline-block', width: '6px', height: '6px' }}></span>
-              SYSTEM ONLINE
-            </span>
-          </div>
-
-          {/* 에이전트 1: 부스유치 & 마케팅 DB */}
-          <div 
-            className="board-agent-card" 
-            onClick={() => navigate('/ax-data')}
-            style={{ cursor: 'pointer' }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-              <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', width: '32px', height: '32px' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ display: 'block' }}>
-                  <path d="M4 4h16v16H4z" />
-                  <path d="M8 8h8" />
-                  <path d="M8 12h8" />
-                  <path d="M8 16h5" />
-                </svg>
-                <span className="search-agent-pulse"></span>
-              </div>
-              <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '부스 참가업체 유치 Agent' : 'Exhibitor Recruiting Agent'}
-              </h4>
-            </div>
-            <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
-              {lang === 'ko' 
-                ? '전시회 부스 참가 유치를 위해 유망 제조사 데이터베이스(DB)와 마케팅용 검증 이메일을 즉시 수집하고 엑셀로 추출합니다.'
-                : 'Collects prospective exhibitor DB and verified marketing emails for exhibition booth recruitment.'}
-            </p>
-          </div>
-
-          {/* 에이전트 2: 글로벌 바이어 유치 */}
-          <div 
-            className="board-agent-card" 
-            onClick={() => {
-              const textarea = document.querySelector('.search-textarea');
-              if (textarea) {
-                textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                textarea.focus();
-              } else {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }
-            }}
-            style={{ cursor: 'pointer' }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-              <div className="search-agent-avatar" style={{ background: 'var(--accent-gradient)', width: '32px', height: '32px' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ display: 'block' }}>
-                  <rect width="16" height="12" x="4" y="8" rx="2" />
-                  <path d="M12 8V4H8" />
-                  <path d="M9 13h.01" />
-                  <path d="M15 13h.01" />
-                  <path d="M10 17h4" />
-                </svg>
-                <span className="search-agent-pulse"></span>
-              </div>
-              <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '글로벌 바이어 유치 Agent' : 'Global Buyer Attraction Agent'}
-              </h4>
-            </div>
-            <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
-              {lang === 'ko' 
-                ? '부스 참가기업에게 가장 강력한 유인책이 되는 최적의 해외 진성 바이어를 실시간으로 탐색하고 1:1 매칭합니다.'
-                : 'Real-time discovery and 1:1 matching of verified global buyers as the ultimate incentive for booth exhibitors.'}
-            </p>
-          </div>
-
-          {/* 에이전트 3: 무역 성사 사후관리 */}
-          <div 
-            className="board-agent-card" 
-            onClick={() => navigate('/schedule')}
-            style={{ cursor: 'pointer' }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-              <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #4F46E5 100%)', width: '32px', height: '32px' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ display: 'block' }}>
-                  <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-                  <line x1="16" y1="2" x2="16" y2="6" />
-                  <line x1="8" y1="2" x2="8" y2="6" />
-                  <line x1="3" y1="10" x2="21" y2="10" />
-                </svg>
-                <span className="search-agent-pulse"></span>
-              </div>
-              <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '사후관리 Agent' : 'Aftercare Agent'}
-              </h4>
-            </div>
-            <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
-              {lang === 'ko' 
-                ? '상담 기업들의 무역 성사 지원 및 차년도 전시회 부스 재참가 유치를 위한 지속적인 사후관리(Aftercare)를 수행합니다.'
-                : 'Continuous aftercare to support trade deal conversion and re-recruit booth exhibitors for the next year.'}
-            </p>
-          </div>
-
-          {/* 에이전트 4: 마케팅 부스터 */}
-          <div 
-            className="board-agent-card" 
-            onClick={() => navigate('/consultants')}
-            style={{ cursor: 'pointer' }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-              <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', width: '32px', height: '32px' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ display: 'block' }}>
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 16v-4" />
-                  <path d="M12 8h.01" />
-                </svg>
-                <span className="search-agent-pulse"></span>
-              </div>
-              <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 800, color: 'var(--fg)' }}>
-                {lang === 'ko' ? '글로벌마케팅 Agent' : 'Global Marketing Agent'}
-              </h4>
-            </div>
-            <p className="muted" style={{ margin: 0, fontSize: '11px', lineHeight: 1.4 }}>
-              {lang === 'ko' 
-                ? '부스 참가업체의 마케팅 역량 강화를 위해 유튜브 홍보 영상 제작 지원 및 맞춤 해외 바이어 조사 리포트를 제안합니다.'
-                : 'Enhances exhibitor marketing capabilities with YouTube promo video production and custom overseas buyer research reports.'}
-            </p>
-          </div>
-        </section>
-
-        <section className="card results-panel">
-          <div className="results-header">
+      {currentStep === 'buyers' && (
+        <div style={{ background: '#FFFFFF', padding: '24px', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <div>
-              <p className="muted small">{t('search_results_title')}</p>
-              <div className="results-count" aria-live="polite">
-                <span className="results-count-number">{displayCompanies.length}</span>
-                <span className="results-count-label">{t('search_results_label')}</span>
-              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', margin: 0 }}>
+                🌐 해외 바이어 후보 발굴 및 검토
+              </h3>
+              <p style={{ fontSize: '13px', color: '#64748B', margin: '4px 0 0 0' }}>
+                전시회 참가업체 품목 기반으로 해외 바이어 후보를 발굴하고 검토 상태를 부여합니다.
+              </p>
             </div>
-          </div>
-          {companyError && (
-            <div className="error mt-2" role="alert">
-              {companyError}
-            </div>
-          )}
-          {!companyError && !loadingCompanies && displayCompanies.length === 0 && (
-            <div className="muted mt-3" role="status">
-              {t('quick_lookup_empty')}
-            </div>
-          )}
-          {aiResponse && (
-            <div style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', padding: '1.5rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', color: '#166534', fontWeight: 'bold' }}>
-                <span>✨</span> AI Insight
-              </div>
-              <div style={{ color: '#166534', lineHeight: '1.6' }}>
-                {aiResponse}
-              </div>
-            </div>
-          )}
-
-          <div className="results-grid">
-            {displayCompanies.map((company) => (
-              <div 
-                key={company._id} 
-                className="result-card"
-                onClick={() => setSelectedCompany(company)}
-                style={{ cursor: 'pointer' }}
-              >
-                <div className="result-hero" style={{ 
-                  height: '52px', 
-                  background: 'var(--accent-gradient)', 
-                  color: 'white', 
-                  display: 'flex', 
-                  flexDirection: 'row', 
-                  alignItems: 'center', 
-                  justifyContent: 'space-between', 
-                  padding: '0 20px',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: '800', letterSpacing: '0.05em', opacity: 0.95 }}>
-                    <span style={{ fontSize: '17px' }}>{getCountryFlag(company.country)}</span>
-                    <span>{company.country?.toUpperCase() || 'GLOBAL'}</span>
-                  </div>
-                  <div style={{ fontSize: '11px', fontWeight: '700', opacity: 0.85, letterSpacing: '0.05em', textTransform: 'uppercase' }}>{company.industry?.substring(0, 20) || 'PARTNER'}</div>
-                </div>
-                <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flex: 1, gap: '12px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
-                    <h3 style={{ margin: 0, fontSize: '18px', color: 'var(--fg)', lineHeight: 1.3, fontWeight: 700 }}>{company.name}</h3>
-                    {company.dart && company.dart.corpCode && (
-                      <span className="badge" style={{ background: '#e8f5e9', color: '#2e7d32', borderColor: '#c8e6c9', fontWeight: 600 }}>DART</span>
-                    )}
-                  </div>
-                  <div style={{ fontSize: '14px', color: 'var(--fg-secondary)', lineHeight: 1.5, minHeight: '42px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
-                    {company.profileText || company.description || formatCompanyLocation(company) || t('no_info')}
-                  </div>
-                  <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ fontSize: '14px', color: 'var(--accent)', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ fontSize: '10px', color: 'var(--muted)', fontWeight: 600 }}>MATCH</span> {getAccuracyScore(company)}%
-                    </div>
-                    <span style={{ fontSize: '13px', color: 'var(--fg-secondary)', fontWeight: 600 }}>{t('view_details') || 'VIEW'} &rarr;</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+            <button
+              type="button"
+              onClick={handleSearchBuyers}
+              disabled={loading}
+              style={{ padding: '10px 20px', background: '#312E81', color: '#FFFFFF', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '13px', cursor: 'pointer' }}
+            >
+              🔍 바이어 후보 발굴 실행
+            </button>
           </div>
 
-          {preview.length > ITEMS_PER_PAGE && (
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
-              <button
-                onClick={() => setPage(p => Math.max(1, p - 1))}
-                disabled={page === 1}
-                style={{ padding: '0.5rem 1rem', border: '1px solid #e5e7eb', borderRadius: '6px', background: page === 1 ? '#f3f4f6' : 'white', color: page === 1 ? '#9ca3af' : '#374151', cursor: page === 1 ? 'not-allowed' : 'pointer' }}
-              >
-                ← Previous
-              </button>
-              <span style={{ display: 'flex', alignItems: 'center' }}>
-                Page {page} of {totalPages}
-              </span>
-              <button
-                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                style={{ padding: '0.5rem 1rem', border: '1px solid #e5e7eb', borderRadius: '6px', background: page === totalPages ? '#f3f4f6' : 'white', color: page === totalPages ? '#9ca3af' : '#374151', cursor: page === totalPages ? 'not-allowed' : 'pointer' }}
-              >
-                Next →
-              </button>
+          {candidates.length === 0 ? (
+            <div style={{ padding: '40px 20px', textAlign: 'center', background: '#F8FAFC', borderRadius: '12px', color: '#64748B', fontSize: '14px' }}>
+              상단 [🔍 바이어 후보 발굴 실행] 버튼을 눌러 참가업체 제품에 일치하는 해외 바이어 후보를 탐색하세요.
             </div>
-          )}
-        </section>
-
-
-
-
-
-
-
-        <Modal
-          open={!!selectedCompany}
-          onClose={closeCompanyDetails}
-          title={selectedCompany?.name || t('company_placeholder_name')}
-          footer={
-            <Button variant="secondary" onClick={closeCompanyDetails}>
-              {t('close')}
-            </Button>
-          }
-        >
-          {selectedCompany && (
-            <div className="company-detail">
-              <div className="muted small" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                <span>{selectedCompany.industry || t('detail_industry_placeholder')}</span>
-
-                {/* DART Badge */}
-                {selectedCompany.dart && selectedCompany.dart.corpCode && (
-                  <span style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    padding: '0.2rem 0.5rem',
-                    backgroundColor: '#f0fdf4', // green-50
-                    color: '#15803d', // green-700
-                    border: '1px solid #bbf7d0', // green-200
-                    borderRadius: '4px',
-                    fontSize: '0.75rem',
-                    fontWeight: '600',
-                    gap: '0.25rem'
-                  }} title={t('dart_verified_desc') || 'Listed in Korean DART System'}>
-                    <span>✓</span> {t('dart_listed') || 'DART 공시기업'}
-                  </span>
-                )}
-
-                {/* AI Badge */}
-                {(selectedCompany.ai_reasoning || (selectedCompany.matchRecommendation && !selectedCompany.matchRecommendation.includes('No specific'))) && (
-                  <span style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    padding: '0.2rem 0.5rem',
-                    backgroundColor: '#eef2ff', // indigo-50
-                    color: '#4338ca', // indigo-700
-                    border: '1px solid #c7d2fe', // indigo-200
-                    borderRadius: '4px',
-                    fontSize: '0.75rem',
-                    fontWeight: '600',
-                    gap: '0.25rem'
-                  }}>
-                    <span>✨</span> {t('ai_pick') || 'AI Pick'}
-                  </span>
-                )}
-              </div>
-              {/* 후보 요약 (Candidate Summary) */}
-              {selectedCompany.profileText && (
-                <section className="detail-section" style={{ backgroundColor: '#fffbeb', padding: '1rem', borderRadius: '8px', border: '1px solid #fef3c7', marginBottom: '1.2rem' }}>
-                  <h4 style={{ color: '#b45309', margin: 0, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    📋 {lang === 'ko' ? '후보 요약 (Candidate Summary)' : 'Candidate Summary'}
-                  </h4>
-                  <p style={{ fontSize: '0.92rem', color: '#78350f', lineHeight: 1.5, margin: 0, whiteSpace: 'pre-line' }}>
-                    {selectedCompany.profileText}
-                  </p>
-                  <div style={{ fontSize: '0.75rem', color: '#b45309', marginTop: '8px', fontStyle: 'italic', fontWeight: '500' }}>
-                    * {lang === 'ko' ? '실시간 웹 기반 후보입니다. 최종 매칭 전 AX 프로필 보강과 검증이 필요합니다.' : 'Real-time web candidate. Verification and AX profile enrichment required before final matching.'}
-                  </div>
-                </section>
-              )}
-
-              <section className="detail-section">
-                <h4>{t('detail_company_info')}</h4>
-                <div className="detail-line">
-                  <strong>{t('detail_location')}</strong>
-                  <span>{detailLocation || t('detail_not_provided')}</span>
-                </div>
-                {selectedCompany.sizeBucket && (
-                  <div className="detail-line">
-                    <strong>{t('filter_company_size')}</strong>
-                    <span>{selectedCompany.sizeBucket}</span>
-                  </div>
-                )}
-                <div className="detail-line">
-                  <strong>{t('detail_website') || 'Website / Source'}</strong>
-                  {detailWebsite ? (
-                    <a className="result-link" href={detailWebsite} target="_blank" rel="noreferrer" style={{ fontWeight: 'bold' }}>
-                      {detailWebsite}
-                    </a>
-                  ) : (
-                    <span style={{ color: '#ef4444', fontStyle: 'italic', fontSize: '0.85rem' }}>
-                      {lang === 'ko' ? '출처 URL: 검색 제공자 응답에 포함되지 않음. 별도 확인 필요.' : 'Source URL: Not provided by search provider. Verification required.'}
-                    </span>
-                  )}
-                </div>
-                <div className="detail-line" style={{ marginTop: '4px' }}>
-                  <strong>{lang === 'ko' ? '후보 상태' : 'Candidate Status'}</strong>
-                  <span style={{ color: '#b45309', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    ⚠️ {lang === 'ko' ? '실시간 웹 기반 후보 / 검증 필요' : 'Web-based candidate / Verification required'}
-                  </span>
-                </div>
-              </section>
-
-              {highlightCards.length > 0 && (
-                <section className="detail-section">
-                  <h4>{t('detail_recommendation')}</h4>
-                  <p className="muted small" style={{ marginBottom: '0.5rem' }}>
-                    {lang === 'ko'
-                      ? 'AI가 중요하게 본 상위 속성입니다.'
-                      : 'Top attributes surfaced by the AI scoring model.'}
-                  </p>
-                  <div className="highlight-grid">
-                    {highlightCards.map((item) => (
-                      <div key={item.id} className="highlight-card">
-                        <div className="muted small">{item.label}</div>
-                        <strong>{item.value}</strong>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {detailTags.length > 0 && (
-                <section className="detail-section">
-                  <h4>{t('detail_products_services')}</h4>
-                  <div className="detail-tags">
-                    {detailTags.map((tag) => (
-                      <span key={tag} className="result-tag">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </section>
-              )}
-              {/* --- New Sections Start --- */}
-              {selectedCompany.dart && (
-                <section className="detail-section">
-                  <h4>{t('detail_financials') || '재무 정보 (Financials)'}</h4>
-                  <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
-                      <thead>
-                        <tr style={{ borderBottom: '2px solid #e5e7eb', textAlign: 'left' }}>
-                          <th style={{ padding: '0.5rem' }}>Category</th>
-                          <th style={{ padding: '0.5rem', textAlign: 'right' }}>Consolidated (연결)</th>
-                          <th style={{ padding: '0.5rem', textAlign: 'right' }}>Separate (별도)</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr style={{ borderBottom: '1px solid #f3f4f6' }}>
-                          <td style={{ padding: '0.5rem' }}>Revenue (매출액)</td>
-                          <td style={{ padding: '0.5rem', textAlign: 'right' }}>{selectedCompany.dart.revenueConsolidated?.toLocaleString() || '-'}</td>
-                          <td style={{ padding: '0.5rem', textAlign: 'right' }}>{selectedCompany.dart.revenueSeparate?.toLocaleString() || '-'}</td>
-                        </tr>
-                        <tr style={{ borderBottom: '1px solid #f3f4f6' }}>
-                          <td style={{ padding: '0.5rem' }}>Op. Profit (영업이익)</td>
-                          <td style={{ padding: '0.5rem', textAlign: 'right', color: selectedCompany.dart.operatingProfitConsolidated > 0 ? '#059669' : '#dc2626' }}>
-                            {selectedCompany.dart.operatingProfitConsolidated?.toLocaleString() || '-'}
-                          </td>
-                          <td style={{ padding: '0.5rem', textAlign: 'right', color: selectedCompany.dart.operatingProfitSeparate > 0 ? '#059669' : '#dc2626' }}>
-                            {selectedCompany.dart.operatingProfitSeparate?.toLocaleString() || '-'}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style={{ padding: '0.5rem' }}>Net Income (당기순이익)</td>
-                          <td style={{ padding: '0.5rem', textAlign: 'right', fontWeight: 600 }}>{selectedCompany.dart.netIncomeConsolidated?.toLocaleString() || '-'}</td>
-                          <td style={{ padding: '0.5rem', textAlign: 'right', fontWeight: 600 }}>{selectedCompany.dart.netIncomeSeparate?.toLocaleString() || '-'}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem', textAlign: 'right' }}>
-                    Source: {selectedCompany.dart.source} ({selectedCompany.dart.fiscalYear})
-                  </div>
-                </section>
-              )}
-
-              {selectedCompany.activities && selectedCompany.activities.length > 0 && (
-                <section className="detail-section">
-                  <h4>{t('detail_activities') || '주요 활동 (Activities)'}</h4>
-                  <ul style={{ paddingLeft: '1.2rem', margin: 0 }}>
-                    {selectedCompany.activities.map((act, idx) => (
-                      <li key={idx} style={{ marginBottom: '0.25rem', fontSize: '0.9rem' }}>
-                        <strong>[{act.type.toUpperCase()}]</strong> {act.description}
-                        {act.date && <span style={{ color: '#6b7280', marginLeft: '0.5rem' }}>({new Date(act.date).toLocaleDateString()})</span>}
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              )}
-
-              {selectedCompany.products && selectedCompany.products.length > 0 && (
-                <section className="detail-section">
-                  <h4>{t('detail_products') || '제품 정보 (Products)'}</h4>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '0.5rem' }}>
-                    {selectedCompany.products.map((prod, idx) => (
-                      <div key={idx} style={{ border: '1px solid #e5e7eb', borderRadius: '6px', padding: '0.5rem' }}>
-                        {prod.imageUrl && <img src={prod.imageUrl} alt={prod.name} style={{ width: '100%', height: '80px', objectFit: 'cover', borderRadius: '4px', marginBottom: '0.25rem' }} />}
-                        <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>{prod.name}</div>
-                        {prod.description && <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>{prod.description}</div>}
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-              {/* --- New Sections End --- */}
-
-              {analysisEntries.length > 0 && (
-                <section className="detail-section matching-analysis">
-                  <h4>{t('detail_matching_analysis')}</h4>
-                  {overallConfidence !== null && (
-                    <div className="analysis-row overall">
-                      <div className="row space">
-                        <strong>{t('detail_overall_score')}</strong>
-                        <span>{overallConfidence}%</span>
-                      </div>
-                      <div className="analysis-meter" aria-hidden="true">
-                        <span className="analysis-meter-fill" style={{ width: `${overallConfidence}%` }} />
-                      </div>
-                    </div>
-                  )}
-                  <ul
-                    className="detail-list"
-                    style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', padding: 0, listStyle: 'none' }}
-                  >
-                    {analysisEntries.map((entry, index) => (
-                      <li
-                        key={index}
-                        className="analysis-item"
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          gap: '1rem',
-                          padding: '0.85rem 1rem',
-                          borderRadius: '12px',
-                          border: '1px solid #e5e7eb',
-                          background: '#fff',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <div style={{ flex: 1 }}>
-                          <strong style={{ display: 'block', marginBottom: entry.description ? '0.25rem' : 0 }}>
-                            {entry.label}
-                          </strong>
-                          {entry.description && <p className="muted small">{entry.description}</p>}
-                        </div>
-                        {entry.score !== null && (
-                          <span
-                            className="analysis-score-pill"
-                            style={{
-                              minWidth: 58,
-                              textAlign: 'center',
-                              fontWeight: 600,
-                              color: '#1d4ed8',
-                              background: '#e0e7ff',
-                              borderRadius: '999px',
-                              padding: '0.35rem 0.75rem',
-                            }}
-                          >
-                            {entry.score}%
-                          </span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              )}
-
-              {recommendationDisplay && (
-                <section className="recommendation-card">
-                  <h4>{t('detail_recommendation')}</h4>
-                  <p>{recommendationDisplay}</p>
-                </section>
-              )}
-
-              {selectedCompany && (
-                <section className="detail-section">
-                  <h4>{t('detail_feedback_title')}</h4>
-                  <div className="rating-row" style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-                    {[1, 2, 3, 4, 5].map((score) => (
-                      <button
-                        key={score}
-                        type="button"
-                        className="rating-star"
-                        onClick={() => {
-                          setFeedback((prev) => ({ ...prev, rating: score }))
-                          setFeedbackStatus((prev) => ({ ...prev, submitted: false, error: '' }))
-                        }}
-                        aria-label={`${score} ${t('detail_feedback_rating_star')}`}
-                        style={{
-                          fontSize: '1.4rem',
-                          border: 'none',
-                          background: 'transparent',
-                          cursor: 'pointer',
-                          color: score <= feedback.rating ? '#fbbf24' : '#d1d5db',
-                        }}
-                      >
-                        <span aria-hidden="true">{'\u2605'}</span>
-                      </button>
-                    ))}
-                  </div>
-                  <textarea
-                    className="feedback-textarea"
-                    placeholder={t('detail_feedback_placeholder')}
-                    value={feedback.comments}
-                    onChange={(event) => {
-                      setFeedback((prev) => ({ ...prev, comments: event.target.value }))
-                      setFeedbackStatus((prev) => ({ ...prev, submitted: false, error: '' }))
-                    }}
-                    rows={3}
-                    disabled={feedbackStatus.submitting}
-                  />
-                  {feedbackStatus.error && (
-                    <div className="error" role="alert" style={{ marginTop: '0.5rem' }}>
-                      {feedbackStatus.error}
-                    </div>
-                  )}
-                  <div className="row space" style={{ marginTop: '8px' }}>
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      onClick={onSubmitFeedback}
-                      disabled={!feedback.rating}
-                      loading={feedbackStatus.submitting}
-                    >
-                      {t('detail_feedback_submit')}
-                    </Button>
-                    {feedbackStatus.submitted && (
-                      <span className="muted small">{t('detail_feedback_prompt')}</span>
-                    )}
-                  </div>
-                </section>
-              )}
-            </div>
-          )}
-        </Modal>
-      </section>
-
-      <Modal
-        open={consultModal}
-        onClose={() => {
-          setConsultModal(false)
-          setConsultStatus({ submitting: false, success: false, error: '' })
-        }}
-        title={
-          consultantOptions.find((opt) => opt.value === consultForm.serviceType)?.label ||
-          t('assistant_modal_title')
-        }
-        footer={
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setConsultModal(false)
-              setConsultStatus({ submitting: false, success: false, error: '' })
-            }}
-          >
-            {t('assistant_modal_close')}
-          </Button>
-        }
-      >
-        <form className="consultant-form" onSubmit={handleConsultSubmit}>
-          <label className="filter-group">
-            <span>{t('assistant_modal_name')}</span>
-            <input
-              value={consultForm.name}
-              onChange={(event) => setConsultForm((prev) => ({ ...prev, name: event.target.value }))}
-              placeholder={t('assistant_modal_name')}
-              disabled={consultStatus.submitting}
+          ) : (
+            <BuyerCandidateTable
+              candidates={candidates}
+              onReviewCandidate={handleReviewCandidate}
+              loading={loading}
             />
-          </label>
-          <label className="filter-group">
-            <span>{t('assistant_modal_email')}</span>
-            <input
-              type="email"
-              value={consultForm.email}
-              onChange={(event) => setConsultForm((prev) => ({ ...prev, email: event.target.value }))}
-              placeholder={t('assistant_modal_email')}
-              disabled={consultStatus.submitting}
-            />
-          </label>
-          <label className="filter-group">
-            <span>{t('assistant_modal_details')}</span>
-            <textarea
-              value={consultForm.details}
-              placeholder={t('assistant_modal_details_placeholder')}
-              onChange={(event) => setConsultForm((prev) => ({ ...prev, details: event.target.value }))}
-              disabled={consultStatus.submitting}
-            />
-          </label>
-          {consultStatus.error && (
-            <div className="error" role="alert">
-              {consultStatus.error}
-            </div>
           )}
-          {consultStatus.success && <p className="success small">{t('assistant_modal_success')}</p>}
-          <Button type="submit" loading={consultStatus.submitting}>
-            {t('assistant_modal_submit')}
-          </Button>
-        </form>
-      </Modal>
+        </div>
+      )}
+
+      {currentStep === 'invitations' && (
+        <TravelSupportPanel
+          invitations={invitations}
+          onUpdateInvitation={handleUpdateInvitation}
+          loading={loading}
+        />
+      )}
+
+      {currentStep === 'matching' && (
+        <DualMatchPanel
+          matches={matches}
+          onGenerateMatches={handleGenerateMatches}
+          loading={loading}
+        />
+      )}
+
+      {currentStep === 'schedule' && (
+        <ConsultationSchedulePanel
+          appointments={appointments}
+          loading={loading}
+        />
+      )}
     </div>
-  )
+  );
 }

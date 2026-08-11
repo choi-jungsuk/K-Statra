@@ -249,7 +249,7 @@ export default function AgentHub() {
         {/* Card 3 */}
         <article
           className="bento-card bento-tone-indigo"
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/partner-search')}
           role="button"
           tabIndex={0}
         >
