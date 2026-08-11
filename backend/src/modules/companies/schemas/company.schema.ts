@@ -93,7 +93,7 @@ class DartInfo {
   @Prop() lastUpdated: Date;
 }
 
-@Schema()
+@Schema({ timestamps: true, collection: 'companies' })
 export class Company {
   @Prop({ required: true }) name: string;
   @Prop() industry: string;

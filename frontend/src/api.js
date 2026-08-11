@@ -1,6 +1,7 @@
 // Hardcoded fallback for production to ensure connectivity
 const PROD_API = 'https://backend-production-601f2.up.railway.app';
 const BASE = import.meta?.env?.VITE_API_BASE || (import.meta.env.PROD ? PROD_API : 'http://localhost:4000');
+export const API_BASE_URL = BASE;
 
 async function http(path, { method = 'GET', headers = {}, body } = {}) {
   const res = await fetch(`${BASE}${path}`, {
