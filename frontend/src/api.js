@@ -106,6 +106,8 @@ export const api = {
   login: (data) => http('/auth/login', { method: 'POST', body: data }),
   logout: () => http('/auth/logout', { method: 'POST' }),
   getMe: () => http('/auth/me'),
+  listTradeMissionEvents: () => http('/admin/trade-mission-events'),
+  createTradeMissionEvent: (data) => http('/admin/trade-mission-events', { method: 'POST', body: data }),
 }
 
 export function newIdemKey() {

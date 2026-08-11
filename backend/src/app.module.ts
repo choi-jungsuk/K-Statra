@@ -13,6 +13,7 @@ import { ConsultantsModule } from './modules/consultants/consultants.module';
 import { AgentModule } from './modules/agent/agent.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ApplicationsModule } from './modules/applications/applications.module';
+import { TradeMissionApplicationsModule } from './modules/trade-mission-applications/trade-mission-applications.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -40,6 +41,7 @@ import { AppService } from './app.service';
     AgentModule,
     AuthModule,
     ApplicationsModule,
+    TradeMissionApplicationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

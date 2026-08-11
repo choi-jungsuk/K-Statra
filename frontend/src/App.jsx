@@ -24,6 +24,7 @@ import AdminDataUpload from './pages/AdminDataUpload.jsx'
 import ApplicationForm from './pages/ApplicationForm.jsx'
 import AdminApplications from './pages/AdminApplications.jsx'
 import ConsultantPage from './pages/ConsultantPage.jsx'
+import TradeMissionEventManager from './pages/TradeMissionEventManager.jsx'
 import LanguageSwitcher from './ui/LanguageSwitcher.jsx'
 import FeedbackButton from './ui/FeedbackButton.jsx'
 import Button from './ui/Button.jsx'
@@ -439,6 +440,7 @@ export default function App() {
 
       <main id="main-content" className="container">
         <Routes>
+          <Route path="/admin/trade-mission-events" element={<TradeMissionEventManager />} />
           <Route path="/" element={<AgentHub />} />
           <Route path="/partner-search" element={<PartnerSearch />} />
           <Route path="/overview" element={<Overview />} />
