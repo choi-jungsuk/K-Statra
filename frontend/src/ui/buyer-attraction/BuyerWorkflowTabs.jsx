@@ -26,8 +26,8 @@ export default function BuyerWorkflowTabs({ activeStep = 'exhibitors', onSelectS
                 borderRadius: '8px',
                 fontSize: '13px',
                 fontWeight: isActive ? 800 : 600,
-                border: isActive ? '1px solid #6366F1' : '1px solid #E2E8F0',
-                background: isActive ? '#6366F1' : '#FFFFFF',
+                border: isActive ? '1px solid #66C5F5' : '1px solid #E2E8F0',
+                background: isActive ? '#66C5F5' : '#FFFFFF',
                 color: isActive ? '#FFFFFF' : '#475569',
                 cursor: 'pointer',
                 boxShadow: isActive ? '0 2px 4px rgba(99,102,241,0.2)' : 'none',
@@ -53,7 +53,7 @@ export default function BuyerWorkflowTabs({ activeStep = 'exhibitors', onSelectS
           fontWeight: 800,
           border: '1px solid #C7D2FE',
           background: '#EEF2FF',
-          color: '#4F46E5',
+          color: '#00A4EF',
           textDecoration: 'none',
         }}
       >

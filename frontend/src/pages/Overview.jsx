@@ -127,7 +127,7 @@ export default function Overview() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
                         <div className="page-agent-header" style={{ marginBottom: '6px' }}>
-                            <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%)', width: '26px', height: '26px' }}>
+                            <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #00A4EF 0%, #3B82F6 100%)', width: '26px', height: '26px' }}>
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
                                     <path d="M12 2a10 10 0 0 0-10 10v7a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-7a10 10 0 0 0-10-10Z" />
                                     <circle cx="12" cy="13" r="3" />
@@ -168,7 +168,7 @@ export default function Overview() {
                     <div className="command-center-card" onClick={() => navigate('/schedule')} style={{ cursor: 'pointer' }}>
                         <div className="command-center-card-header">
                             <h5>{lang === 'ko' ? '사후관리 Agent' : 'Aftercare Agent'}</h5>
-                            <span className="command-center-status" style={{ color: '#4F46E5' }}>ACTIVE 🔵</span>
+                            <span className="command-center-status" style={{ color: '#00A4EF' }}>ACTIVE 🔵</span>
                         </div>
                         <p>{lang === 'ko' ? '무역 성사 지원 및 차년도 부스 재참가 유치 사후관리' : 'Aftercare for trade deals & next-year exhibitor retention'}</p>
                     </div>

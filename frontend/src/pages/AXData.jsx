@@ -783,21 +783,21 @@ function RecruitmentWorkspace({ mode, config, lang, onBack }) {
               </span>
               <button
                 type="button"
-                style={{ background: '#4F46E5', color: '#FFF', border: 'none', padding: '6px 14px', borderRadius: '6px', fontWeight: 700, fontSize: '12.5px', cursor: 'pointer' }}
+                style={{ background: '#00A4EF', color: '#FFF', border: 'none', padding: '6px 14px', borderRadius: '6px', fontWeight: 700, fontSize: '12.5px', cursor: 'pointer' }}
               >
                 🔍 1. 후보기업 발굴
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/admin/trade-mission-events')}
-                style={{ background: '#FFF', color: '#4F46E5', border: '1px solid #C7D2FE', padding: '6px 14px', borderRadius: '6px', fontWeight: 700, fontSize: '12.5px', cursor: 'pointer' }}
+                style={{ background: '#FFF', color: '#00A4EF', border: '1px solid #C7D2FE', padding: '6px 14px', borderRadius: '6px', fontWeight: 700, fontSize: '12.5px', cursor: 'pointer' }}
               >
                 🔗 2. 온라인 참가신청서 만들기
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/admin/trade-mission-applications')}
-                style={{ background: '#FFF', color: '#4F46E5', border: '1px solid #C7D2FE', padding: '6px 14px', borderRadius: '6px', fontWeight: 700, fontSize: '12.5px', cursor: 'pointer' }}
+                style={{ background: '#FFF', color: '#00A4EF', border: '1px solid #C7D2FE', padding: '6px 14px', borderRadius: '6px', fontWeight: 700, fontSize: '12.5px', cursor: 'pointer' }}
               >
                 📋 3. 신청서 접수현황 (관리자)
               </button>

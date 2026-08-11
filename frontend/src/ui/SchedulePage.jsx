@@ -347,7 +347,7 @@ export default function SchedulePage() {
 
       {/* Hermes coordinator agent badge */}
       <div className="page-agent-header">
-        <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #4F46E5 100%)' }}>
+        <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #99DDF8 0%, #00A4EF 100%)' }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
             <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
             <line x1="16" y1="2" x2="16" y2="6" />
@@ -417,7 +417,7 @@ export default function SchedulePage() {
               <div className="exhibitions-banner-row" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {[
                   { name: 'KOAA SHOW 2026', date: '2026.10.21 - 10.23', color: '#BE123C', desc: '국제 모빌리티 산업전 - 모빌리티 솔루션 파트너 상담 (킨텍스 KINTEX 제1전시장)' },
-                  { name: 'HANNOVER MESSE 2026', date: '2026.04.13 - 04.17', color: '#4F46E5', desc: '세계 최대 산업기술 박람회 - 스마트 제조 솔루션 매칭 (독일 하노버)' },
+                  { name: 'HANNOVER MESSE 2026', date: '2026.04.13 - 04.17', color: '#00A4EF', desc: '세계 최대 산업기술 박람회 - 스마트 제조 솔루션 매칭 (독일 하노버)' },
                   { name: 'Canton Fair 2026', date: '2026.10.15 - 10.19', color: '#10B981', desc: '중국 최대 수출입 상품 교역회 - 종합 B2B 부품 조율 (중국 광저우)' },
                   { name: 'Automotive World 2026', date: '2026.01.21 - 01.23', color: '#F59E0B', desc: '미래 자동차 모빌리티 전문 전시회 - EV 및 자율주행 부품 조율 (일본 도쿄)' },
                   { name: 'Vietnam Expo 2026', date: '2026.04.08 - 04.11', color: '#8B5CF6', desc: '베트남 최대 종합 B2B 박람회 - 동남아 신흥 시장 유통망 구축 (베트남 하노이)' }

@@ -193,7 +193,7 @@ export default function PartnerSearch() {
           </div>
           <div>
             <div style={{ fontSize: '11.5px', color: '#94A3B8', fontWeight: 600 }}>초청 검토/발송</div>
-            <div style={{ fontSize: '20px', fontWeight: 800, color: '#818CF8', marginTop: '2px' }}>
+            <div style={{ fontSize: '20px', fontWeight: 800, color: '#99DDF8', marginTop: '2px' }}>
               {invitations.length}건
             </div>
           </div>

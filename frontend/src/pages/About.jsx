@@ -34,7 +34,7 @@ const technologies = [
       <svg className="tech-svg" viewBox="0 0 200 200" aria-hidden="true">
         <defs>
           <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#4F46E5" />
+            <stop offset="0%" stopColor="#00A4EF" />
             <stop offset="100%" stopColor="#3B82F6" />
           </linearGradient>
         </defs>
@@ -51,12 +51,12 @@ const technologies = [
         </g>
 
         {/* Bidirectional flow links */}
-        <path d="M 82 90 Q 100 70 118 90" fill="none" stroke="#4F46E5" strokeWidth="2.5" strokeDasharray="4 4" className="pulse-line" />
+        <path d="M 82 90 Q 100 70 118 90" fill="none" stroke="#00A4EF" strokeWidth="2.5" strokeDasharray="4 4" className="pulse-line" />
         <path d="M 118 110 Q 100 130 82 110" fill="none" stroke="#10B981" strokeWidth="2.5" strokeDasharray="4 4" className="pulse-line-rev" />
 
         {/* Match Circle */}
-        <circle cx="100" cy="100" r="18" fill="#fff" stroke="#4F46E5" strokeWidth="2" className="match-center" />
-        <text x="100" y="103" textAnchor="middle" fill="#4F46E5" fontSize="10" fontWeight="bold">98%</text>
+        <circle cx="100" cy="100" r="18" fill="#fff" stroke="#00A4EF" strokeWidth="2" className="match-center" />
+        <text x="100" y="103" textAnchor="middle" fill="#00A4EF" fontSize="10" fontWeight="bold">98%</text>
       </svg>
     )
   },
@@ -113,10 +113,10 @@ const technologies = [
 
         {/* Shortest Matching Path */}
         <line x1="100" y1="100" x2="140" y2="60" stroke="#10B981" strokeWidth="3" className="highlight-link" />
-        <line x1="100" y1="100" x2="60" y2="60" stroke="#4F46E5" strokeWidth="3" className="highlight-link" />
+        <line x1="100" y1="100" x2="60" y2="60" stroke="#00A4EF" strokeWidth="3" className="highlight-link" />
 
         {/* Nodes */}
-        <circle cx="100" cy="100" r="14" fill="#4F46E5" className="graph-node-center" />
+        <circle cx="100" cy="100" r="14" fill="#00A4EF" className="graph-node-center" />
         <circle cx="60" cy="60" r="9" fill="#3B82F6" className="graph-node-pulse" />
         <circle cx="140" cy="60" r="9" fill="#10B981" className="graph-node-pulse" />
         <circle cx="145" cy="135" r="9" fill="#F59E0B" />
@@ -139,12 +139,12 @@ const technologies = [
         </defs>
         {/* Block 1 */}
         <g className="ledger-block-1">
-          <rect x="25" y="75" width="42" height="42" rx="8" fill="url(#grad4)" stroke="#4F46E5" strokeWidth="2" />
+          <rect x="25" y="75" width="42" height="42" rx="8" fill="url(#grad4)" stroke="#00A4EF" strokeWidth="2" />
           <text x="46" y="100" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="bold">XRPL</text>
         </g>
 
         {/* Transfer flow */}
-        <path d="M 67 96 L 133 96" fill="none" stroke="#4F46E5" strokeWidth="2.5" strokeDasharray="4 4" className="flow-dash" />
+        <path d="M 67 96 L 133 96" fill="none" stroke="#00A4EF" strokeWidth="2.5" strokeDasharray="4 4" className="flow-dash" />
 
         {/* Block 2 */}
         <g className="ledger-block-2">

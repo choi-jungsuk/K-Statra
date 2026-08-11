@@ -153,7 +153,7 @@ export default function AftercarePage() {
               style={{
                 padding: '10px 18px',
                 background: '#EEF2FF',
-                color: '#4F46E5',
+                color: '#00A4EF',
                 borderRadius: '10px',
                 fontWeight: 800,
                 fontSize: '13px',

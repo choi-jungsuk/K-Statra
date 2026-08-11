@@ -100,12 +100,12 @@ export default function BuyerCandidateTable({ candidates, onReviewCandidate, onS
                   <td style={{ padding: '12px 14px', color: '#1E293B' }}>
                     {cand.procurementInterests ? cand.procurementInterests.join(', ') : '—'}
                   </td>
-                  <td style={{ padding: '12px 14px', color: '#4F46E5', fontWeight: 700 }}>
+                  <td style={{ padding: '12px 14px', color: '#00A4EF', fontWeight: 700 }}>
                     {cand.matchedExhibitorNames && cand.matchedExhibitorNames.length > 0 ? cand.matchedExhibitorNames.join(', ') : '—'}
                   </td>
                   <td style={{ padding: '12px 14px', fontSize: '12px', color: '#64748B' }}>
                     {cand.sourceEvidence && cand.sourceEvidence[0]?.sourceName ? (
-                      <a href={cand.sourceEvidence[0].url || '#'} target="_blank" rel="noreferrer" style={{ color: '#4F46E5', textDecoration: 'underline' }}>
+                      <a href={cand.sourceEvidence[0].url || '#'} target="_blank" rel="noreferrer" style={{ color: '#00A4EF', textDecoration: 'underline' }}>
                         🔗 {cand.sourceEvidence[0].sourceName}
                       </a>
                     ) : (
@@ -137,7 +137,7 @@ export default function BuyerCandidateTable({ candidates, onReviewCandidate, onS
                         <button
                           type="button"
                           onClick={() => onSelectCandidate(cand)}
-                          style={{ padding: '4px 10px', background: '#EEF2FF', color: '#4F46E5', border: '1px solid #C7D2FE', borderRadius: '6px', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}
+                          style={{ padding: '4px 10px', background: '#EEF2FF', color: '#00A4EF', border: '1px solid #C7D2FE', borderRadius: '6px', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}
                         >
                           상세보기
                         </button>

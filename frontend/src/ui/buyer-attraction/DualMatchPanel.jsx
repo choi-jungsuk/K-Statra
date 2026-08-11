@@ -22,7 +22,7 @@ export default function DualMatchPanel({ matches, onGenerateMatches, loading }) 
             type="button"
             onClick={onGenerateMatches}
             disabled={loading}
-            style={{ padding: '10px 20px', background: '#4F46E5', color: '#FFFFFF', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '13px', cursor: 'pointer' }}
+            style={{ padding: '10px 20px', background: '#00A4EF', color: '#FFFFFF', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '13px', cursor: 'pointer' }}
           >
             🔄 이중 매칭 생성 및 갱신
           </button>
@@ -35,7 +35,7 @@ export default function DualMatchPanel({ matches, onGenerateMatches, loading }) 
           <span style={{ fontSize: '15px', fontWeight: 800, color: '#3730A3' }}>
             🏢 Pool A: 전시회 부스 참가업체 매칭 ({poolAExhibitorMatches.length}건)
           </span>
-          <span style={{ fontSize: '12px', color: '#4F46E5', background: '#FFFFFF', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
+          <span style={{ fontSize: '12px', color: '#00A4EF', background: '#FFFFFF', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
             상담장소: 참가업체 전시장 부스
           </span>
         </div>
@@ -57,7 +57,7 @@ export default function DualMatchPanel({ matches, onGenerateMatches, loading }) 
                   <td style={{ padding: '10px 14px', fontWeight: 800, color: '#0F172A' }}>{m.buyerName} ({m.buyerCountry})</td>
                   <td style={{ padding: '10px 14px', fontWeight: 700, color: '#1E293B' }}>{m.companyName}</td>
                   <td style={{ padding: '10px 14px' }}>
-                    <span style={{ background: '#EEF2FF', color: '#4F46E5', padding: '3px 8px', borderRadius: '4px', fontWeight: 700, fontSize: '12px' }}>
+                    <span style={{ background: '#EEF2FF', color: '#00A4EF', padding: '3px 8px', borderRadius: '4px', fontWeight: 700, fontSize: '12px' }}>
                       📍 {m.boothNumber || 'Hall 1-A101'}
                     </span>
                   </td>

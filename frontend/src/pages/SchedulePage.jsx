@@ -308,7 +308,7 @@ export default function SchedulePage() {
 
       {/* Hermes coordinator agent badge */}
       <div className="page-agent-header">
-        <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #4F46E5 100%)' }}>
+        <div className="search-agent-avatar" style={{ background: 'linear-gradient(135deg, #99DDF8 0%, #00A4EF 100%)' }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}>
             <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
             <line x1="16" y1="2" x2="16" y2="6" />

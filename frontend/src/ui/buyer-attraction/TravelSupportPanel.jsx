@@ -53,7 +53,7 @@ export default function TravelSupportPanel({ invitations, onUpdateInvitation, lo
                     <td style={{ padding: '12px 14px' }}>{inv.country}</td>
                     <td style={{ padding: '12px 14px', color: '#64748B' }}>{inv.recipientEmail || 'contact@buyer-demo.com'}</td>
                     <td style={{ padding: '12px 14px' }}>
-                      <span style={{ background: '#EEF2FF', color: '#4F46E5', padding: '3px 8px', borderRadius: '6px', fontWeight: 800, fontSize: '12px' }}>
+                      <span style={{ background: '#EEF2FF', color: '#00A4EF', padding: '3px 8px', borderRadius: '6px', fontWeight: 800, fontSize: '12px' }}>
                         {inv.invitationStatus === 'approved_to_invite' ? '초청 승인' : inv.invitationStatus}
                       </span>
                     </td>
@@ -63,7 +63,7 @@ export default function TravelSupportPanel({ invitations, onUpdateInvitation, lo
                       </span>
                     </td>
                     <td style={{ padding: '12px 14px', fontWeight: 700 }}>${inv.eligibleAirfare || 2000} USD</td>
-                    <td style={{ padding: '12px 14px', fontWeight: 700, color: '#4F46E5' }}>100%</td>
+                    <td style={{ padding: '12px 14px', fontWeight: 700, color: '#00A4EF' }}>100%</td>
                     <td style={{ padding: '12px 14px', fontWeight: 800, color: '#166534' }}>${supportAmount} USD</td>
                     <td style={{ padding: '12px 14px' }}>
                       {inv.travelSupportStatus !== 'approved' ? (

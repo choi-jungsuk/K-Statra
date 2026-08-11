@@ -7,12 +7,12 @@
   --fg: #0F172A;
   --fg-secondary: #475569;
   
-  /* AIN Global Deep Blue Palette */
-  --accent: #0057B8;
-  --accent-dark: #003A8C;
-  --accent-light: #4DA6FF;
-  --accent-gradient: linear-gradient(135deg, #003A8C 0%, #0057B8 60%, #0082D4 100%);
-  --accent-gradient-hover: linear-gradient(135deg, #002D70 0%, #0047A0 60%, #0070C0 100%);
+  /* Windows Sky Blue Palette */
+  --accent: #00A4EF;
+  --accent-dark: #0078D7;
+  --accent-light: #66C5F5;
+  --accent-gradient: linear-gradient(135deg, #0078D7 0%, #00A4EF 60%, #35B4F3 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #005A9E 0%, #0078D7 60%, #00A4EF 100%);
   
   --muted: #94A3B8;
   --danger: #EF4444;

@@ -217,7 +217,7 @@ export default function ConsultantPage() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem', borderBottom: '1px solid #E2E8F0', paddingBottom: '1.25rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-              <span style={{ background: '#EEF2FF', color: '#4F46E5', fontSize: '11px', fontWeight: 800, padding: '3px 10px', borderRadius: '12px', textTransform: 'uppercase' }}>
+              <span style={{ background: '#EEF2FF', color: '#00A4EF', fontSize: '11px', fontWeight: 800, padding: '3px 10px', borderRadius: '12px', textTransform: 'uppercase' }}>
                 GTA MCP Live Engine
               </span>
               <span style={{ background: '#FEF3C7', color: '#D97706', fontSize: '11px', fontWeight: 800, padding: '3px 10px', borderRadius: '12px' }}>
@@ -245,9 +245,9 @@ export default function ConsultantPage() {
                 type="button"
                 onClick={() => applyPreset(preset)}
                 style={{
-                  background: aiHsCode === preset.code ? '#4F46E5' : '#FFFFFF',
+                  background: aiHsCode === preset.code ? '#00A4EF' : '#FFFFFF',
                   color: aiHsCode === preset.code ? '#FFFFFF' : '#334155',
-                  border: aiHsCode === preset.code ? '1px solid #4F46E5' : '1px solid #CBD5E1',
+                  border: aiHsCode === preset.code ? '1px solid #00A4EF' : '1px solid #CBD5E1',
                   padding: '6px 14px',
                   borderRadius: '20px',
                   fontSize: '13px',
@@ -273,7 +273,7 @@ export default function ConsultantPage() {
               <input
                 type="text"
                 className="input"
-                style={{ fontWeight: 700, color: '#4F46E5' }}
+                style={{ fontWeight: 700, color: '#00A4EF' }}
                 value={aiHsCode}
                 onChange={(e) => setAiHsCode(e.target.value)}
                 placeholder="예: 8507.60"
@@ -320,7 +320,7 @@ export default function ConsultantPage() {
                   padding: '0 24px',
                   fontWeight: 800,
                   fontSize: '14px',
-                  background: aiRunning ? '#64748B' : 'linear-gradient(135deg, #4F46E5 0%, #4338CA 100%)',
+                  background: aiRunning ? '#64748B' : 'linear-gradient(135deg, #00A4EF 0%, #4338CA 100%)',
                   boxShadow: '0 4px 12px rgba(79, 70, 229, 0.25)',
                   whiteSpace: 'nowrap'
                 }}
@@ -367,7 +367,7 @@ export default function ConsultantPage() {
           <div style={{ marginTop: '2rem', padding: '2rem', background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: '16px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', borderBottom: '2px solid #F1F5F9', paddingBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <span style={{ fontSize: '12px', fontWeight: 800, color: '#4F46E5', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <span style={{ fontSize: '12px', fontWeight: 800, color: '#00A4EF', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   DemoStatra Grounded Report
                 </span>
                 <h3 style={{ fontSize: '20px', fontWeight: 900, margin: '4px 0 0 0', color: '#0F172A' }}>
@@ -402,7 +402,7 @@ export default function ConsultantPage() {
             </div>
 
             {/* Grounding Citation Box */}
-            <div style={{ marginTop: '2rem', padding: '1.25rem', background: '#F8FAFC', borderLeft: '4px solid #4F46E5', borderRadius: '8px' }}>
+            <div style={{ marginTop: '2rem', padding: '1.25rem', background: '#F8FAFC', borderLeft: '4px solid #00A4EF', borderRadius: '8px' }}>
               <div style={{ fontWeight: 800, color: '#334155', fontSize: '13px', marginBottom: '4px' }}>
                 📚 {lang === 'ko' ? '공식 데이터 근거 및 인용 (Verified Citations)' : 'Verified Citations'}
               </div>
@@ -441,7 +441,7 @@ export default function ConsultantPage() {
           >
             <div>
               <div style={{ fontSize: '32px', marginBottom: '1rem' }}>{svc.icon}</div>
-              <span style={{ fontSize: '12px', fontWeight: 800, color: '#6366F1', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '12px', fontWeight: 800, color: '#66C5F5', textTransform: 'uppercase' }}>
                 {svc.subtitle}
               </span>
               <h3 style={{ fontSize: '18px', fontWeight: 800, margin: '0.5rem 0 1rem 0', color: 'var(--fg)' }}>
@@ -451,7 +451,7 @@ export default function ConsultantPage() {
                 {lang === 'ko' ? svc.descKo : svc.descEn}
               </p>
             </div>
-            <div style={{ fontWeight: 700, fontSize: '14px', color: '#4F46E5', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ fontWeight: 700, fontSize: '14px', color: '#00A4EF', display: 'flex', alignItems: 'center', gap: '6px' }}>
               {lang === 'ko' ? '상담 및 지원 요청하기' : 'Request Assistance'}
               <span>➔</span>
             </div>

@@ -176,7 +176,7 @@ export default function AdminDataUpload() {
           onDrop={onDrop}
           onClick={() => fileInputRef.current?.click()}
           style={{
-            border: `2px dashed ${isDragging ? '#4F46E5' : file ? '#10B981' : '#d1d5db'}`,
+            border: `2px dashed ${isDragging ? '#00A4EF' : file ? '#10B981' : '#d1d5db'}`,
             borderRadius: '12px',
             padding: '2.5rem',
             textAlign: 'center',
@@ -231,7 +231,7 @@ export default function AdminDataUpload() {
                 border: '1px solid #d1d5db', fontSize: '14px', boxSizing: 'border-box',
                 outline: 'none', fontFamily: 'inherit',
               }}
-              onFocus={e => e.target.style.borderColor = '#4F46E5'}
+              onFocus={e => e.target.style.borderColor = '#00A4EF'}
               onBlur={e => e.target.style.borderColor = '#d1d5db'}
             />
           </div>
@@ -249,7 +249,7 @@ export default function AdminDataUpload() {
                 border: '1px solid #d1d5db', fontSize: '14px', boxSizing: 'border-box',
                 outline: 'none', fontFamily: 'inherit',
               }}
-              onFocus={e => e.target.style.borderColor = '#4F46E5'}
+              onFocus={e => e.target.style.borderColor = '#00A4EF'}
               onBlur={e => e.target.style.borderColor = '#d1d5db'}
             />
           </div>
@@ -272,7 +272,7 @@ export default function AdminDataUpload() {
                 padding: '11px 24px', borderRadius: '8px', fontWeight: 700, fontSize: '14px',
                 border: 'none', cursor: !file || !sourceGroup.trim() || step === STEP.PREVIEWING ? 'not-allowed' : 'pointer',
                 background: !file || !sourceGroup.trim() || step === STEP.PREVIEWING
-                  ? '#e5e7eb' : 'linear-gradient(135deg, #6366F1, #4F46E5)',
+                  ? '#e5e7eb' : 'linear-gradient(135deg, #66C5F5, #00A4EF)',
                 color: !file || !sourceGroup.trim() || step === STEP.PREVIEWING ? '#9ca3af' : '#fff',
                 transition: 'all 0.2s',
               }}
@@ -313,7 +313,7 @@ export default function AdminDataUpload() {
           {/* 통계 카드 */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
             {[
-              { label: '전체 파싱', value: preview.total, color: '#6366F1', icon: '📋' },
+              { label: '전체 파싱', value: preview.total, color: '#66C5F5', icon: '📋' },
               { label: '신규 (저장 예정)', value: preview.new_records, color: '#10B981', icon: '✅' },
               { label: '중복 감지', value: preview.duplicates, color: '#F59E0B', icon: '⚠️' },
               { label: '이메일 없음', value: preview.no_email, color: '#EF4444', icon: '📧' },
@@ -397,7 +397,7 @@ export default function AdminDataUpload() {
           <p style={{ color: '#166534', marginBottom: '1.5rem' }}>{result.message}</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', maxWidth: '400px', margin: '0 auto 1.5rem' }}>
             {[
-              { label: '전체', value: result.total, color: '#6366F1' },
+              { label: '전체', value: result.total, color: '#66C5F5' },
               { label: '저장 완료', value: result.inserted, color: '#10B981' },
               { label: '중복 건너뜀', value: result.skipped, color: '#F59E0B' },
             ].map(s => (
@@ -462,7 +462,7 @@ export default function AdminDataUpload() {
       </div>
 
       <style>{`
-        input:focus { outline: 2px solid #4F46E5; outline-offset: 1px; }
+        input:focus { outline: 2px solid #00A4EF; outline-offset: 1px; }
       `}</style>
     </div>
   );

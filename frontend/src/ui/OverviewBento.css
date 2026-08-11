@@ -164,7 +164,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, #0057B8, #06B6D4, #4F46E5, #0057B8);
+  background: linear-gradient(90deg, #0057B8, #06B6D4, #00A4EF, #0057B8);
   background-size: 200% 100%;
   animation: shimmerGlow 6s infinite linear;
 }
@@ -274,7 +274,7 @@
 }
 
 .bento-hero-title-highlight {
-  background: linear-gradient(135deg, #38BDF8 0%, #818CF8 50%, #22D3EE 100%);
+  background: linear-gradient(135deg, #38BDF8 0%, #99DDF8 50%, #22D3EE 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -460,7 +460,7 @@
 .bento-tone-blue   { border-top: 4px solid #0057B8; }
 .bento-tone-purple { border-top: 4px solid #7C3AED; }
 .bento-tone-coral  { border-top: 4px solid #F97316; }
-.bento-tone-indigo { border-top: 4px solid #4F46E5; }
+.bento-tone-indigo { border-top: 4px solid #00A4EF; }
 
 /* Bento Card Header */
 .bento-card-header {
@@ -942,7 +942,7 @@
 .orchestrator-hero-banner {
   margin-top: 24px;
   background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #311B92 100%);
-  border: 2px solid #6366F1;
+  border: 2px solid #66C5F5;
   border-radius: 20px;
   padding: 24px 28px;
   box-shadow: 0 16px 40px rgba(99, 102, 241, 0.25), 0 0 20px rgba(16, 185, 129, 0.15);
@@ -974,7 +974,7 @@
   align-items: center;
   padding: 5px 14px;
   border-radius: 20px;
-  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  background: linear-gradient(135deg, #66C5F5 0%, #00A4EF 100%);
   color: #FFFFFF;
   font-size: 13px;
   font-weight: 800;
@@ -1140,7 +1140,7 @@
   align-items: center;
   padding: 4px 12px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  background: linear-gradient(135deg, #66C5F5 0%, #8B5CF6 100%);
   color: #FFFFFF;
   font-size: 12px;
   font-weight: 800;

@@ -61,17 +61,17 @@ export default function AgentHub() {
       <section className="home-bento-hero" aria-labelledby="home-bento-hero-title" style={{ padding: '26px 32px' }}>
         <div className="bento-hero-top" style={{ margin: 0, gap: '8px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', width: '100%' }}>
-            <span className="bento-hero-eyebrow" style={{ fontSize: '12.5px', padding: '4px 14px', margin: '0 0 12px 0', background: 'rgba(79, 70, 229, 0.15)', color: '#818CF8', borderColor: 'rgba(79, 70, 229, 0.35)' }}>
+            <span className="bento-hero-eyebrow" style={{ fontSize: '12.5px', padding: '4px 14px', margin: '0 0 12px 0', background: 'rgba(79, 70, 229, 0.15)', color: '#99DDF8', borderColor: 'rgba(79, 70, 229, 0.35)' }}>
               ⚡ DEMO STATRA · AI BUSINESS SUPPORT PLATFORM
             </span>
             <h1 id="home-bento-hero-title" className="bento-hero-title" style={{ fontSize: '38px', fontWeight: 900, letterSpacing: '-0.7px', margin: '6px 0 8px' }}>
               {lang === 'ko' ? (
                 <>
-                  전시회 주최사의 업무생산성 향상을 위한 <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AX 플랫폼</span>
+                  전시회 주최사의 업무생산성 향상을 위한 <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #99DDF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AX 플랫폼</span>
                 </>
               ) : (
                 <>
-                  <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AX Platform</span> for enhancing the productivity of exhibition organizers
+                  <span className="bento-hero-title-highlight" style={{ background: 'linear-gradient(135deg, #99DDF8 0%, #A78BFA 50%, #F472B6 100%)', WebkitBackgroundClip: 'text' }}>AX Platform</span> for enhancing the productivity of exhibition organizers
                 </>
               )}
             </h1>
@@ -102,7 +102,7 @@ export default function AgentHub() {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ color: '#818CF8', fontWeight: 800, fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ color: '#99DDF8', fontWeight: 800, fontSize: '13.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span>🎼</span>
                 <span>{lang === 'ko' ? '오케스트라 지휘소' : 'Orchestrator Center'}</span>
               </span>
@@ -131,7 +131,7 @@ export default function AgentHub() {
                 padding: '8px 24px',
                 fontSize: '14px',
                 borderRadius: '12px',
-                background: 'linear-gradient(135deg, #4F46E5 0%, #6366F1 100%)',
+                background: 'linear-gradient(135deg, #00A4EF 0%, #66C5F5 100%)',
                 color: '#FFFFFF',
                 fontWeight: 900,
                 boxShadow: '0 6px 20px rgba(79, 70, 229, 0.45)',
@@ -160,7 +160,7 @@ export default function AgentHub() {
                   <span>{agent.step}. {lang === 'ko' ? agent.titleKo : agent.titleEn}</span>
                 </div>
                 {i < businessAgents.length - 1 && (
-                  <span className="chain-arrow" style={{ fontSize: '13px', color: '#818CF8', fontWeight: 800, margin: '0 2px' }} aria-hidden="true">⇄</span>
+                  <span className="chain-arrow" style={{ fontSize: '13px', color: '#99DDF8', fontWeight: 800, margin: '0 2px' }} aria-hidden="true">⇄</span>
                 )}
               </React.Fragment>
             ))}
@@ -199,8 +199,8 @@ export default function AgentHub() {
             </div>
           </div>
           <div className="bento-card-action">
-            <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
-            <span className="bento-arrow" aria-hidden="true" style={{ color: '#4F46E5' }}>→</span>
+            <span style={{ color: '#00A4EF' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
+            <span className="bento-arrow" aria-hidden="true" style={{ color: '#00A4EF' }}>→</span>
           </div>
         </article>
 
@@ -241,8 +241,8 @@ export default function AgentHub() {
             </div>
           </div>
           <div className="bento-card-action">
-            <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
-            <span className="bento-arrow" aria-hidden="true" style={{ color: '#4F46E5' }}>→</span>
+            <span style={{ color: '#00A4EF' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
+            <span className="bento-arrow" aria-hidden="true" style={{ color: '#00A4EF' }}>→</span>
           </div>
         </article>
 
@@ -272,8 +272,8 @@ export default function AgentHub() {
             </div>
           </div>
           <div className="bento-card-action">
-            <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
-            <span className="bento-arrow" aria-hidden="true" style={{ color: '#4F46E5' }}>→</span>
+            <span style={{ color: '#00A4EF' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
+            <span className="bento-arrow" aria-hidden="true" style={{ color: '#00A4EF' }}>→</span>
           </div>
         </article>
 
@@ -312,8 +312,8 @@ export default function AgentHub() {
             </div>
           </div>
           <div className="bento-card-action">
-            <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
-            <span className="bento-arrow" aria-hidden="true" style={{ color: '#4F46E5' }}>→</span>
+            <span style={{ color: '#00A4EF' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
+            <span className="bento-arrow" aria-hidden="true" style={{ color: '#00A4EF' }}>→</span>
           </div>
         </article>
 
@@ -363,8 +363,8 @@ export default function AgentHub() {
             </div>
           </div>
           <div className="bento-card-action">
-            <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
-            <span className="bento-arrow" aria-hidden="true" style={{ color: '#4F46E5' }}>→</span>
+            <span style={{ color: '#00A4EF' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
+            <span className="bento-arrow" aria-hidden="true" style={{ color: '#00A4EF' }}>→</span>
           </div>
         </article>
 

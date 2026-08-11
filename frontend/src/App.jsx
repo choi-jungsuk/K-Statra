@@ -365,7 +365,7 @@ export default function App() {
               </div>
               {currentUser ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#4F46E5', background: 'rgba(79, 70, 229, 0.08)', padding: '0.35rem 0.8rem', borderRadius: '12px', border: '1px solid rgba(79, 70, 229, 0.15)' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#00A4EF', background: 'rgba(79, 70, 229, 0.08)', padding: '0.35rem 0.8rem', borderRadius: '12px', border: '1px solid rgba(79, 70, 229, 0.15)' }}>
                     👤 {currentUser.name} ({currentUser.role === 'buyer' ? (lang === 'ko' ? '바이어' : 'Buyer') : (lang === 'ko' ? '공급사' : 'Supplier')})
                   </span>
                   <button
@@ -610,7 +610,7 @@ export default function App() {
           </div>
         ) : (
           <form className="login-form" onSubmit={handleSignupSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <div style={{ marginBottom: '0.25rem', padding: '0.5rem', background: '#eef2ff', color: '#4F46E5', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 700, textAlign: 'center' }}>
+            <div style={{ marginBottom: '0.25rem', padding: '0.5rem', background: '#eef2ff', color: '#00A4EF', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 700, textAlign: 'center' }}>
               📝 {signupForm.role === 'buyer' ? (lang === 'ko' ? '바이어(개인) 회원가입 진행 중' : 'Buyer Registration') : (lang === 'ko' ? '공급사(기업) 회원가입 진행 중' : 'Supplier Registration')}
             </div>
 

@@ -143,7 +143,7 @@ export default function AdminApplications() {
       {/* ── 통계 배너 ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
         {[
-          { label: '전체 접수', value: (stats.pending || 0) + (stats.approved || 0) + (stats.rejected || 0), color: '#6366F1', icon: '📋' },
+          { label: '전체 접수', value: (stats.pending || 0) + (stats.approved || 0) + (stats.rejected || 0), color: '#66C5F5', icon: '📋' },
           { label: '검토 중 (대기)', value: stats.pending || 0, color: '#F59E0B', icon: '⏳' },
           { label: '승인됨 (참가 확정)', value: stats.approved || 0, color: '#10B981', icon: '✅' },
           { label: '반려 / 보류', value: stats.rejected || 0, color: '#EF4444', icon: '❌' },

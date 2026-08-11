@@ -370,7 +370,7 @@ export default function Matches() {
                   </Button>
                   <Button 
                     onClick={() => navigate(`/schedule?companyName=${encodeURIComponent(match.company?.name || '')}&type=ONLINE`)}
-                    style={{ background: 'linear-gradient(135deg, #4F46E5 0%, #4338CA 100%)', border: 'none', flex: 1 }}
+                    style={{ background: 'linear-gradient(135deg, #00A4EF 0%, #4338CA 100%)', border: 'none', flex: 1 }}
                   >
                     🎥 {lang === 'ko' ? '화상 미팅' : 'Video Call'}
                   </Button>
@@ -772,7 +772,7 @@ export default function Matches() {
         }
 
         .radial-score-badge {
-          background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
+          background: linear-gradient(135deg, #00A4EF 0%, #3B82F6 100%);
           color: white;
           width: 64px;
           height: 64px;
@@ -825,7 +825,7 @@ export default function Matches() {
 
         .accuracy-bar-fill {
           height: 100%;
-          background: linear-gradient(90deg, #4F46E5, #06B6D4);
+          background: linear-gradient(90deg, #00A4EF, #06B6D4);
           border-radius: 999px;
         }
 
@@ -870,7 +870,7 @@ export default function Matches() {
         .match-pill.auto { background: rgba(190,18,60,0.06); color: #BE123C; border: 1px solid rgba(190,18,60,0.12); }
         .match-pill.industry { background: rgba(59,130,246,0.06); color: #2563EB; border: 1px solid rgba(59,130,246,0.12); }
         .match-pill.dart { background: rgba(16,185,129,0.06); color: #059669; border: 1px solid rgba(16,185,129,0.12); }
-        .match-pill.tags { background: rgba(79,70,229,0.06); color: #4F46E5; border: 1px solid rgba(79,70,229,0.12); }
+        .match-pill.tags { background: rgba(79,70,229,0.06); color: #00A4EF; border: 1px solid rgba(79,70,229,0.12); }
         .match-pill.needs { background: rgba(139,92,246,0.06); color: #7C3AED; border: 1px solid rgba(139,92,246,0.12); }
         .match-pill.vector { background: rgba(6,182,212,0.06); color: #0891B2; border: 1px solid rgba(6,182,212,0.12); }
         .match-pill.default { background: #f3f4f6; color: #475569; }

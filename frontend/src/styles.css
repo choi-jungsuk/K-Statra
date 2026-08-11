@@ -1816,13 +1816,13 @@ h3 {
 .trigger-badge-line2 {
   font-size: 11.5px;
   font-weight: 800;
-  color: #4F46E5;
+  color: #00A4EF;
 }
 
 .hermes-trigger-wrapper:hover .hermes-trigger-badge {
   transform: translateY(-4px);
   background: #ffffff;
-  border-color: #6366F1;
+  border-color: #66C5F5;
   box-shadow: 0 6px 22px rgba(99, 102, 241, 0.2);
 }
 

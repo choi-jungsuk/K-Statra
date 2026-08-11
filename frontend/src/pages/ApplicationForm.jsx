@@ -10,7 +10,7 @@ const EVENT_PRESETS = {
     name: '2026 KOAA SHOW (국제모빌리티산업전) — 부스 참가 신청',
     type: 'booth',
     badge: '🏢 전시회 부스 참가',
-    color: '#6366F1',
+    color: '#66C5F5',
     desc: '글로벌 모빌리티 바이어와 직접 만나는 아시아 최고 수준의 모빌리티 비즈니스 전문 전시회',
   },
   'detroit-gm-2026': {
@@ -36,7 +36,7 @@ export default function ApplicationForm() {
     name: `${eventId} 참가 신청`,
     type: 'booth',
     badge: '📋 참가 신청서',
-    color: '#4F46E5',
+    color: '#00A4EF',
     desc: '아인글로벌 해외 전시 및 시장개척단 참가 신청서입니다.',
   };
 
@@ -157,7 +157,7 @@ export default function ApplicationForm() {
                   onClick={() => navigate('/ax-data')}
                   style={{
                     padding: '12px 24px', borderRadius: '10px',
-                    background: 'linear-gradient(135deg, #6366F1, #4F46E5)',
+                    background: 'linear-gradient(135deg, #66C5F5, #00A4EF)',
                     color: '#fff', fontWeight: 700, border: 'none', cursor: 'pointer',
                     boxShadow: '0 4px 10px rgba(79, 70, 229, 0.25)',
                   }}

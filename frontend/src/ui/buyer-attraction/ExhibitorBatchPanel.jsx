@@ -86,7 +86,7 @@ export default function ExhibitorBatchPanel({ campaign, onImportExhibitors, onIm
               type="button"
               onClick={onImportFromDb}
               disabled={loading}
-              style={{ padding: '9px 16px', background: '#EEF2FF', color: '#4F46E5', border: '1px solid #C7D2FE', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}
+              style={{ padding: '9px 16px', background: '#EEF2FF', color: '#00A4EF', border: '1px solid #C7D2FE', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: 'pointer' }}
             >
               📥 DB 참가기업 자동 불러오기
             </button>
@@ -94,7 +94,7 @@ export default function ExhibitorBatchPanel({ campaign, onImportExhibitors, onIm
               type="button"
               onClick={handleSave}
               disabled={loading || exhibitors.length === 0}
-              style={{ padding: '9px 18px', background: '#4F46E5', color: '#FFFFFF', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: exhibitors.length === 0 ? 'not-allowed' : 'pointer' }}
+              style={{ padding: '9px 18px', background: '#00A4EF', color: '#FFFFFF', border: 'none', borderRadius: '8px', fontWeight: 700, fontSize: '13px', cursor: exhibitors.length === 0 ? 'not-allowed' : 'pointer' }}
             >
               💾 참가업체 배치 저장
             </button>
@@ -115,7 +115,7 @@ export default function ExhibitorBatchPanel({ campaign, onImportExhibitors, onIm
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
         style={{
-          border: dragOver ? '2px dashed #4F46E5' : '2px dashed #CBD5E1',
+          border: dragOver ? '2px dashed #00A4EF' : '2px dashed #CBD5E1',
           background: dragOver ? '#EEF2FF' : '#F8FAFC',
           padding: '30px 20px',
           borderRadius: '14px',
@@ -189,7 +189,7 @@ export default function ExhibitorBatchPanel({ campaign, onImportExhibitors, onIm
                     <td style={{ padding: '10px 14px', color: '#334155' }}>{ex.products || '—'}</td>
                     <td style={{ padding: '10px 14px', color: '#64748B' }}>{ex.industry || '—'}</td>
                     <td style={{ padding: '10px 14px' }}>
-                      <span style={{ background: '#EEF2FF', color: '#4F46E5', padding: '2px 8px', borderRadius: '4px', fontWeight: 700, fontSize: '12px' }}>
+                      <span style={{ background: '#EEF2FF', color: '#00A4EF', padding: '2px 8px', borderRadius: '4px', fontWeight: 700, fontSize: '12px' }}>
                         {ex.boothNumber || '미배정'}
                       </span>
                     </td>

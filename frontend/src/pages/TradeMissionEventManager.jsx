@@ -70,12 +70,12 @@ export default function TradeMissionEventManager() {
       <div style={{ marginBottom: 24 }}>
         <Link
           to="/ax-data?mode=trade-mission"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 4, textDecoration: 'none', color: '#4F46E5', fontWeight: 700, fontSize: 13, marginBottom: 12 }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 4, textDecoration: 'none', color: '#00A4EF', fontWeight: 700, fontSize: 13, marginBottom: 12 }}
         >
           ← 시장개척단 후보기업 발굴로 돌아가기
         </Link>
         <div>
-          <span style={{ fontSize: 12, fontWeight: 800, color: '#4F46E5', background: '#EEF2FF', padding: '4px 10px', borderRadius: 20 }}>
+          <span style={{ fontSize: 12, fontWeight: 800, color: '#00A4EF', background: '#EEF2FF', padding: '4px 10px', borderRadius: 20 }}>
             EVENT MANAGEMENT
           </span>
         </div>
@@ -189,7 +189,7 @@ export default function TradeMissionEventManager() {
           <button
             type="submit"
             disabled={creating}
-            style={{ padding: '10px 20px', background: '#4F46E5', color: '#FFF', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer' }}
+            style={{ padding: '10px 20px', background: '#00A4EF', color: '#FFF', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer' }}
           >
             {creating ? '생성 중...' : '신규 행사 등록'}
           </button>
@@ -218,7 +218,7 @@ export default function TradeMissionEventManager() {
                     <strong style={{ fontSize: 15, color: '#0F172A' }}>{ev.nameKo}</strong>
                   </div>
                   <div style={{ fontSize: 12, color: '#64748B' }}>
-                    목표국가: {ev.targetCountry} | 마감일: {ev.applicationDeadline} | 공개 URL: <code style={{ color: '#4F46E5' }}>/apply/trade-mission/{ev.slug}</code>
+                    목표국가: {ev.targetCountry} | 마감일: {ev.applicationDeadline} | 공개 URL: <code style={{ color: '#00A4EF' }}>/apply/trade-mission/{ev.slug}</code>
                   </div>
                 </div>
 
@@ -233,7 +233,7 @@ export default function TradeMissionEventManager() {
                   <Link
                     to={`/apply/trade-mission/${ev.slug}`}
                     target="_blank"
-                    style={{ padding: '8px 14px', background: '#4F46E5', color: '#FFF', borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: 'none' }}
+                    style={{ padding: '8px 14px', background: '#00A4EF', color: '#FFF', borderRadius: 8, fontSize: 12, fontWeight: 700, textDecoration: 'none' }}
                   >
                     👁️ 미리보기
                   </Link>

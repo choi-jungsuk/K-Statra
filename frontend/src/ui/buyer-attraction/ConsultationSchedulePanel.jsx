@@ -22,7 +22,7 @@ export default function ConsultationSchedulePanel({ appointments, loading }) {
           <div style={{ fontSize: '12px', color: '#10B981', marginTop: '4px', fontWeight: 600 }}>• 전시회 3일간 상담</div>
         </div>
         <div style={{ background: '#EEF2FF', padding: '18px 20px', borderRadius: '14px', border: '1px solid #C7D2FE', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-          <div style={{ fontSize: '13px', color: '#4F46E5', fontWeight: 700 }}>🏢 Pool A: 참가업체 부스 상담</div>
+          <div style={{ fontSize: '13px', color: '#00A4EF', fontWeight: 700 }}>🏢 Pool A: 참가업체 부스 상담</div>
           <div style={{ fontSize: '24px', fontWeight: 800, color: '#312E81', marginTop: '6px' }}>{boothCount}건</div>
           <div style={{ fontSize: '12px', color: '#4338CA', marginTop: '4px', fontWeight: 600 }}>• 개별 전시장 부스 방문 매칭</div>
         </div>
@@ -56,7 +56,7 @@ export default function ConsultationSchedulePanel({ appointments, loading }) {
             <button
               type="button"
               onClick={() => setFilterVenue('exhibitor_booth')}
-              style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', background: filterVenue === 'exhibitor_booth' ? '#4F46E5' : '#FFF', color: filterVenue === 'exhibitor_booth' ? '#FFF' : '#334155', fontSize: '12.5px', fontWeight: 700, cursor: 'pointer' }}
+              style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid #CBD5E1', background: filterVenue === 'exhibitor_booth' ? '#00A4EF' : '#FFF', color: filterVenue === 'exhibitor_booth' ? '#FFF' : '#334155', fontSize: '12.5px', fontWeight: 700, cursor: 'pointer' }}
             >
               🏢 부스 상담 (Pool A)
             </button>
@@ -95,11 +95,11 @@ export default function ConsultationSchedulePanel({ appointments, loading }) {
                 filtered.map((appt, idx) => (
                   <tr key={idx} style={{ borderBottom: '1px solid #F1F5F9' }}>
                     <td style={{ padding: '12px 16px', fontWeight: 700, color: '#0F172A' }}>{appt.date}</td>
-                    <td style={{ padding: '12px 16px', color: '#4F46E5', fontWeight: 800 }}>{appt.startTime} ~ {appt.endTime}</td>
+                    <td style={{ padding: '12px 16px', color: '#00A4EF', fontWeight: 800 }}>{appt.startTime} ~ {appt.endTime}</td>
                     <td style={{ padding: '12px 16px', fontWeight: 800, color: '#1E293B' }}>{appt.buyerName}</td>
                     <td style={{ padding: '12px 16px', fontWeight: 700 }}>{appt.companyName}</td>
                     <td style={{ padding: '12px 16px' }}>
-                      <span style={{ background: appt.venueType === 'exhibitor_booth' ? '#EEF2FF' : '#F0FDF4', color: appt.venueType === 'exhibitor_booth' ? '#4F46E5' : '#166534', padding: '3px 8px', borderRadius: '4px', fontWeight: 700, fontSize: '12px' }}>
+                      <span style={{ background: appt.venueType === 'exhibitor_booth' ? '#EEF2FF' : '#F0FDF4', color: appt.venueType === 'exhibitor_booth' ? '#00A4EF' : '#166534', padding: '3px 8px', borderRadius: '4px', fontWeight: 700, fontSize: '12px' }}>
                         {appt.venueType === 'exhibitor_booth' ? '전시회 부스 상담' : '글로벌 비즈니스 상담장'}
                       </span>
                     </td>
