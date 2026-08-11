@@ -223,8 +223,23 @@ export default function AgentHub() {
               ? '국가·품목별 시장, 관세, 규제, 지역전문가 정보를 확인합니다.'
               : 'Check market, tariff, regulation, and local expert info by country and product.'}
           </p>
-          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: '3rem' }}>🌍</span>
+          <div className="bento-visual-box" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%)', overflow: 'hidden', position: 'relative', borderRadius: '12px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+            <div style={{ position: 'absolute', width: '200%', height: '200%', background: 'repeating-linear-gradient(90deg, transparent, transparent 15px, rgba(99, 102, 241, 0.04) 15px, rgba(99, 102, 241, 0.04) 16px)', transform: 'rotate(-5deg)' }}></div>
+            <div style={{ position: 'absolute', bottom: 0, width: '100%', height: '50%', background: 'linear-gradient(180deg, transparent 0%, rgba(59, 130, 246, 0.15) 100%)' }}></div>
+            <div style={{ position: 'absolute', bottom: 0, width: '100%', height: '2px', background: 'rgba(147, 197, 253, 0.4)', boxShadow: '0 0 10px #3b82f6' }}></div>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', position: 'relative', width: '100%', height: '100%', paddingBottom: '30px', paddingRight: '20px' }}>
+              <div style={{ width: '20px', height: '35px', background: 'linear-gradient(135deg, rgba(255,255,255,0.85) 0%, #93c5fd 100%)', border: '1px solid rgba(255,255,255,0.7)', borderRadius: '3px', transform: 'perspective(150px) rotateX(15deg) rotateY(-20deg)', boxShadow: '-4px 6px 12px rgba(0,0,0,0.5), inset 2px 2px 4px rgba(255,255,255,0.8)', zIndex: 2 }}></div>
+              <div style={{ width: '22px', height: '65px', background: 'linear-gradient(135deg, rgba(147,197,253,0.7) 0%, #3b82f6 100%)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: '3px', transform: 'perspective(150px) rotateX(15deg) rotateY(-20deg) translateX(-8px)', boxShadow: '-4px 6px 12px rgba(0,0,0,0.5), inset 2px 2px 4px rgba(255,255,255,0.4)', zIndex: 1, marginLeft: '10px' }}></div>
+              <div style={{ width: '85px', height: '85px', borderRadius: '50%', background: 'conic-gradient(transparent 0% 25%, rgba(59, 130, 246, 0.85) 25% 100%)', transform: 'perspective(200px) rotateX(45deg) rotateY(-15deg) translateX(5px)', boxShadow: '-5px 15px 25px rgba(0,0,0,0.7), inset 2px -2px 10px rgba(255,255,255,0.2)', position: 'relative', border: '1px solid rgba(147, 197, 253, 0.4)', marginLeft: '15px', zIndex: 3 }}>
+                <div style={{ position: 'absolute', bottom: '-4px', left: '-2px', width: '100%', height: '100%', borderRadius: '50%', borderBottom: '5px solid #1e3a8a', borderLeft: '2px solid #1e3a8a' }}></div>
+                <div style={{ position: 'absolute', top: '-12px', right: '-12px', width: '100%', height: '100%', borderRadius: '50%', background: 'conic-gradient(rgba(255,255,255,0.95) 0% 25%, transparent 25% 100%)', filter: 'drop-shadow(-4px 10px 10px rgba(0,0,0,0.5))', zIndex: 4 }}>
+                   <div style={{ position: 'absolute', top: '2px', right: '-2px', width: '100%', height: '100%', borderRadius: '50%', borderTop: '2px solid #fff', borderRight: '4px solid #93c5fd', clipPath: 'polygon(50% 0, 100% 0, 100% 50%, 50% 50%)' }}></div>
+                </div>
+              </div>
+              <div style={{ position: 'absolute', bottom: '15px', right: '15px', background: 'rgba(15, 23, 42, 0.7)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '20px', padding: '4px 14px', color: '#fff', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.5px', boxShadow: '0 6px 16px rgba(0,0,0,0.6)', zIndex: 5 }}>
+                with AI
+              </div>
+            </div>
           </div>
           <div className="bento-card-action">
             <span style={{ color: '#4F46E5' }}>{lang === 'ko' ? '이동하기' : 'Go'}</span>
