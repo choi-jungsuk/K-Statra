@@ -435,13 +435,13 @@ h3 {
 }
 
 .brand-link {
-  color: var(--accent);
+  color: #0066CC;
   text-decoration: none;
   font-family: 'Arial Black', 'Segoe UI Black', 'NanumSquare', sans-serif;
   font-weight: 900;
   font-size: 32px;
   letter-spacing: -1.5px;
-  text-transform: lowercase;
+  text-transform: none;
   white-space: nowrap;
 }
 
@@ -502,13 +502,6 @@ h3 {
     letter-spacing: -1px;
   }
 
-  .logo-box {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    font-size: 20px;
-  }
-
   .avatar-btn {
     min-width: 60px !important;
     height: 32px !important;
@@ -524,21 +517,7 @@ h3 {
 }
 
 .brand-link:hover {
-  color: var(--accent);
-}
-
-.logo-box {
-  width: 48px;
-  height: 48px;
-  background: var(--accent);
-  color: #fff;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 26px;
-  box-shadow: 0 4px 12px rgba(0, 76, 153, 0.15);
+  color: #0066CC;
 }
 
 .controls-row {

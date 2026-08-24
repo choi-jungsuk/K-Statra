@@ -305,11 +305,8 @@ export default function App() {
       <header className="header">
         <div className="inner">
           <div className="brand">
-            <span className="logo-box" aria-hidden="true">
-              K
-            </span>
             <Link to="/" className="brand-link">
-              DemoStatra
+              Demostatra
             </Link>
           </div>
           <div className="header-right-col">
