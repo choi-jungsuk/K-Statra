@@ -13,7 +13,6 @@ const businessAgents = [
     copyKo: '전시회·시장개척단 조건에 맞는 참가기업 후보를 탐색하고 정보를 정리합니다.',
     copyEn: 'Find and organize exhibitor candidates matching exhibition requirements.',
     link: '/ax-data',
-    preview: 'list',
   },
   {
     id: 'market',
@@ -24,7 +23,6 @@ const businessAgents = [
     copyKo: '국가·품목별 시장, 규제, 관세, 지역전문가 정보를 확인합니다.',
     copyEn: 'Review market, tariff, regulation, and local expert information.',
     link: '/consultants',
-    preview: 'chips',
   },
   {
     id: 'buyer',
@@ -35,7 +33,6 @@ const businessAgents = [
     copyKo: '해외 바이어와 파트너 후보를 탐색하고 매칭 근거를 확인합니다.',
     copyEn: 'Search buyer and partner candidates with matching evidence.',
     link: '/partner-search',
-    preview: 'match',
   },
   {
     id: 'schedule',
@@ -46,7 +43,6 @@ const businessAgents = [
     copyKo: '온라인·현장 상담 일정과 승인 상태를 관리합니다.',
     copyEn: 'Manage online and onsite meeting schedules and approvals.',
     link: '/schedule',
-    preview: 'calendar',
   },
   {
     id: 'aftercare',
@@ -57,7 +53,6 @@ const businessAgents = [
     copyKo: '상담 결과와 후속 조치 상태를 체계적으로 관리합니다.',
     copyEn: 'Track meeting outcomes and follow-up actions systematically.',
     link: '/aftercare',
-    preview: 'checklist',
   },
 ];
 
@@ -72,13 +67,6 @@ function LineIcon({ name }) {
   return <svg className="demo-ops-icon" viewBox="0 0 24 24" aria-hidden="true">{paths[name]}</svg>;
 }
 
-function MiniPreview({ type }) {
-  if (type === 'chips') return <div className="demo-ops-preview demo-ops-preview-chips"><span>국가</span><span>품목</span><span>규제</span><i /></div>;
-  if (type === 'match') return <div className="demo-ops-preview demo-ops-preview-match"><b /><i /><b /><i /><b /></div>;
-  if (type === 'calendar') return <div className="demo-ops-preview demo-ops-preview-calendar">{Array.from({ length: 8 }, (_, index) => <i className={index === 1 || index === 6 ? 'is-active' : ''} key={index} />)}</div>;
-  if (type === 'checklist') return <div className="demo-ops-preview demo-ops-preview-list">{Array.from({ length: 3 }, (_, index) => <div key={index}><b>✓</b><i /></div>)}</div>;
-  return <div className="demo-ops-preview demo-ops-preview-list">{Array.from({ length: 3 }, (_, index) => <div key={index}><i /></div>)}</div>;
-}
 
 export default function AgentHub() {
   const { lang } = useI18n();
@@ -105,7 +93,6 @@ export default function AgentHub() {
             <span className="demo-ops-icon-box"><LineIcon name={agent.icon} /></span>
             <strong>{isKo ? agent.titleKo : agent.titleEn}</strong>
             <small>{isKo ? agent.copyKo : agent.copyEn}</small>
-            <MiniPreview type={agent.preview} />
             <span className="demo-ops-card-link">{isKo ? '업무 보기' : 'Open task'} <b aria-hidden="true">→</b></span>
           </button>)}
         </div>
