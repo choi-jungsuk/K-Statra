@@ -86,7 +86,7 @@ export default function AgentHub() {
       </section>
 
       <section className="demo-ops-workflow" aria-labelledby="demo-ops-workflow-title">
-        <div className="demo-ops-section-heading"><div><p>{isKo ? '업무 흐름' : 'WORKFLOW'}</p><h2 id="demo-ops-workflow-title">{isKo ? '필요한 업무부터 확인하세요.' : 'Start with the task you need.'}</h2></div><span>{isKo ? '5개 운영 단계' : '5 operational stages'}</span></div>
+        <div className="demo-ops-section-heading"><div><p>{isKo ? '업무 흐름' : 'WORKFLOW'}</p><h2 id="demo-ops-workflow-title">{isKo ? '참가기업 발굴서부터 사후관리까지, 하나의 흐름으로' : 'From exhibitor discovery to aftercare, in one workflow.'}</h2></div><span>{isKo ? '5개 운영 단계' : '5 operational stages'}</span></div>
         <div className="demo-ops-card-grid">
           {businessAgents.map((agent) => <button type="button" className="demo-ops-card" key={agent.id} onClick={() => navigate(agent.link)}>
             <span className="demo-ops-step">{agent.step}</span>
